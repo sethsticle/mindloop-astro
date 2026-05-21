@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+
+const details = [
+  { label: 'General Inquiries', value: 'hello@mindloop.com' },
+  { label: 'Press & Media', value: 'press@mindloop.com' },
+  { label: 'Support', value: 'help@mindloop.com' },
+];
+
+const inputCls = 'bg-transparent border-b border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-foreground transition-colors py-3 w-full mb-8';
+---
+<Base title="Contact - Mindloop" description="Have a question, partnership idea, or just want to say hello? Get in touch with the Mindloop team.">
+
+  <section class="min-h-[80vh] flex items-center pt-32 pb-20 px-8 md:px-28">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-16 w-full">
+
+      <div class="md:col-span-5 flex flex-col justify-center">
+        <h1 data-reveal class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05]">
+          Let's<span class="font-serif italic font-normal"> connect.</span>
+        </h1>
+        <p data-reveal data-delay="0.1" class="text-lg text-muted-foreground mt-6 mb-12">
+          Have a question, partnership idea, or just want to say hello? Drop us a line.
+        </p>
+        <div class="space-y-4">
+          {details.map(({ label, value }, i) => (
+            <div data-reveal data-delay={String(0.15 + i * 0.05)} class="flex gap-4 items-center">
+              <span class="text-sm text-muted-foreground w-40">{label}</span>
+              <a href={`mailto:${value}`} class="text-base font-medium hover:text-muted-foreground transition-colors">{value}</a>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="md:col-span-7 flex items-center justify-end">
+        <form
+          data-reveal
+          data-delay="0.2"
+          onsubmit="return false"
+          class="liquid-glass rounded-3xl p-8 md:p-12 w-full max-w-lg"
+        >
+          <input type="text" placeholder="Your Name" class={inputCls} />
+          <input type="email" placeholder="Email Address" class={inputCls} />
+          <textarea rows={4} placeholder="How can we help?" class={inputCls}></textarea>
+          <button
+            type="submit"
+            class="w-full bg-foreground text-background rounded-full py-4 font-medium hover:scale-[1.02] transition-transform"
+          >
+            Send Message
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+</Base>

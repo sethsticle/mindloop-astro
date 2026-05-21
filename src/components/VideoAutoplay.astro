@@ -1,0 +1,38 @@
+---
+/**
+ * VideoAutoplay - local MP4 background video with lazy loading.
+ *
+ * eager=false (default): video bytes are deferred until the element is
+ * ~300px from the viewport (handled by video-lazy.js). Use for below-fold
+ * videos to avoid unnecessary bandwidth on page load.
+ *
+ * eager=true: src is set immediately with preload="metadata". The faststart
+ * moov atom allows playback to start on the first few bytes. Use only for
+ * above-fold hero videos that must play as soon as the page loads.
+ * 
+ * fade boolean prop. When true: drops loop, adds data-fade attribute. Default is false so all existing usages are untouched.
+ */
+interface Props {
+  src: string;
+  class?: string;
+  eager?: boolean;
+  poster?: string;
+  fade?: boolean;
+  freeze?: boolean;
+}
+const { src, class: className = '', eager = false, poster, fade = false, freeze = false } = Astro.props;
+const managed = fade || freeze; // JS takes over looping when either is set
+---
+<video
+  data-video-src={src}
+  src={eager ? src : undefined}
+  preload={eager ? 'metadata' : 'none'}
+  class={className}
+  autoplay
+  muted
+  loop={!managed}
+  playsinline
+  poster={poster}
+  data-fade={fade ? '' : undefined}
+  data-freeze={freeze ? '' : undefined}
+></video>

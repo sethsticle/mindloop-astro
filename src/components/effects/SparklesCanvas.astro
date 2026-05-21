@@ -1,0 +1,176 @@
+---
+/**
+ * SparklesCanvas — reusable canvas sparkle animation wrapper.
+ * Drop any content into the slot; sparkles render behind it.
+ *
+ * Props:
+ *   density   — max simultaneous particles (default 65)
+ *   spawnRate — particles added per animation frame (default 1)
+ *   minSize   — smallest sparkle radius in px (default 0.4)
+ *   maxSize   — largest sparkle radius in px (default 2.2)
+ *   class     — forwarded to the wrapper div
+ *
+ * No npm dependencies. Pure canvas + RAF. Pauses off-screen via
+ * IntersectionObserver. Respects prefers-reduced-motion.
+ */
+interface Props {
+  density?: number;
+  spawnRate?: number;
+  minSize?: number;
+  maxSize?: number;
+  class?: string;
+}
+
+const {
+  density = 65,
+  spawnRate = 1,
+  minSize = 0.4,
+  maxSize = 2.2,
+  class: className = '',
+} = Astro.props;
+---
+
+<div class:list={['sparkles-host relative', className]}>
+  <canvas
+    data-sparkles-canvas
+    data-density={density}
+    data-spawn-rate={spawnRate}
+    data-min-size={minSize}
+    data-max-size={maxSize}
+    class="absolute inset-0 w-full h-full pointer-events-none"
+    aria-hidden="true"
+  ></canvas>
+  <div class="relative z-10">
+    <slot />
+  </div>
+</div>
+
+<script>
+  // Astro deduplicates identical component scripts — this block runs once
+  // and initialises every [data-sparkles-canvas] found in the document.
+  (function () {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function initCanvas(canvas: HTMLCanvasElement) {
+      const density   = parseInt(canvas.dataset.density   ?? '65',  10);
+      const spawnRate = parseInt(canvas.dataset.spawnRate  ?? '1',   10);
+      const minSize   = parseFloat(canvas.dataset.minSize  ?? '0.4');
+      const maxSize   = parseFloat(canvas.dataset.maxSize  ?? '2.2');
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      let logicalW = 0;
+      let logicalH = 0;
+      let rafId: number | null = null;
+
+      function resize() {
+        const dpr  = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        logicalW       = rect.width;
+        logicalH       = rect.height;
+        canvas.width   = Math.round(logicalW * dpr);
+        canvas.height  = Math.round(logicalH * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      class Particle {
+        x: number; y: number; size: number;
+        life: number; maxLife: number; vx: number; vy: number;
+
+        constructor() {
+          this.x       = Math.random() * logicalW;
+          this.y       = Math.random() * logicalH;
+          this.size    = minSize + Math.random() * (maxSize - minSize);
+          this.life    = 0;
+          this.maxLife = 50 + Math.random() * 100;
+          this.vx      = (Math.random() - 0.5) * 0.2;
+          this.vy      = (Math.random() - 0.5) * 0.2 - 0.12; // gentle upward drift
+        }
+
+        get opacity(): number {
+          // Bell curve: 0 → 1 → 0 over lifetime
+          return Math.sin((this.life / this.maxLife) * Math.PI);
+        }
+
+        get dead(): boolean {
+          return this.life >= this.maxLife;
+        }
+
+        update() {
+          this.life++;
+          this.x += this.vx;
+          this.y += this.vy;
+        }
+      }
+
+      function drawStar(x: number, y: number, size: number, opacity: number) {
+        ctx.save();
+        ctx.translate(x, y);
+
+        // 4-point star body
+        ctx.globalAlpha = opacity * 0.9;
+        ctx.beginPath();
+        for (let i = 0; i < 8; i++) {
+          const angle = (i * Math.PI) / 4 - Math.PI / 2;
+          const r     = i % 2 === 0 ? size : size * 0.3;
+          const px    = Math.cos(angle) * r;
+          const py    = Math.sin(angle) * r;
+          i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.fill();
+
+        // Soft radial glow
+        ctx.globalAlpha = opacity * 0.2;
+        const glow = size * 3;
+        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, glow);
+        grad.addColorStop(0, 'rgba(255,255,255,0.9)');
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.beginPath();
+        ctx.arc(0, 0, glow, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      const particles: Particle[] = [];
+
+      function animate() {
+        ctx.clearRect(0, 0, logicalW, logicalH);
+
+        for (let i = 0; i < spawnRate; i++) {
+          if (particles.length < density) {
+            particles.push(new Particle());
+          }
+        }
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.update();
+          if (p.dead) { particles.splice(i, 1); continue; }
+          drawStar(p.x, p.y, p.size, p.opacity);
+        }
+
+        rafId = requestAnimationFrame(animate);
+      }
+
+      function start() { if (!rafId) animate(); }
+      function stop()  { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
+
+      // Pause when scrolled out of view
+      const io = new IntersectionObserver((entries) => {
+        entries[0].isIntersecting ? start() : stop();
+      }, { threshold: 0.01 });
+
+      resize();
+      new ResizeObserver(resize).observe(canvas.parentElement as Element);
+
+      if (!reducedMotion) io.observe(canvas);
+    }
+
+    document.querySelectorAll<HTMLCanvasElement>('[data-sparkles-canvas]').forEach(initCanvas);
+  })();
+</script>

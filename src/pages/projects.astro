@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+
+const projects = [
+  {
+    title: 'The Signal Issue',
+    category: 'Editorial',
+    year: '2026',
+    desc: 'A deep-dive quarterly journal exploring where information becomes insight. Print and digital, no ads.',
+    accent: 'from-accent/20 to-transparent',
+  },
+  {
+    title: 'Loop Dashboard',
+    category: 'Product',
+    year: '2025',
+    desc: 'Analytics for writers who want to understand their audience without surrendering their editorial instincts.',
+    accent: 'from-foreground/5 to-transparent',
+  },
+  {
+    title: 'Quiet Web',
+    category: 'Research',
+    year: '2025',
+    desc: 'An ongoing study of low-friction, high-meaning digital environments. What does the browser look like when it steps out of the way?',
+    accent: 'from-accent/10 to-transparent',
+  },
+  {
+    title: 'Depth Index',
+    category: 'Data',
+    year: '2024',
+    desc: 'A scoring model for content quality that goes beyond engagement metrics. Built with a dozen independent editors.',
+    accent: 'from-foreground/5 to-transparent',
+  },
+  {
+    title: 'Mindloop API',
+    category: 'Engineering',
+    year: '2024',
+    desc: 'Open publishing infrastructure for independent newsletter creators. MIT licensed, self-hostable.',
+    accent: 'from-accent/15 to-transparent',
+  },
+  {
+    title: 'Founding Story',
+    category: 'Brand',
+    year: '2023',
+    desc: 'How three people in different cities decided the internet needed a reboot. The documentary, the essay, the archive.',
+    accent: 'from-foreground/5 to-transparent',
+  },
+];
+
+const categories = ['All', 'Editorial', 'Product', 'Research', 'Data', 'Engineering', 'Brand'];
+---
+<Base title="Projects - Mindloop" description="What we've built, researched, and shipped. A record of Mindloop's work in the world.">
+
+  <!-- Hero -->
+  <section class="pt-44 md:pt-56 pb-20 px-8 md:px-28 max-w-6xl mx-auto">
+    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Our Work</p>
+    <h1 data-reveal data-delay="0.05" class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05]">
+      Things we've<br /><span class="font-serif italic font-normal">built.</span>
+    </h1>
+    <p data-reveal data-delay="0.15" class="text-xl text-muted-foreground mt-10 max-w-2xl leading-relaxed">
+      From tools and research to editorial experiments and open-source infrastructure. Everything here began with a question we couldn't stop asking.
+    </p>
+  </section>
+
+  <!-- Category filter (decorative) -->
+  <section class="px-8 md:px-28 pb-12 max-w-6xl mx-auto">
+    <div data-reveal class="flex flex-wrap gap-2">
+      {categories.map((cat, i) => (
+        <span class={`px-4 py-1.5 rounded-full text-sm border transition-colors cursor-pointer ${i === 0 ? 'border-foreground text-foreground' : 'border-border/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground'}`}>
+          {cat}
+        </span>
+      ))}
+    </div>
+  </section>
+
+  <!-- Projects grid -->
+  <section class="pb-32 md:pb-44 px-8 md:px-28 border-t border-border/30 pt-16 max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {projects.map(({ title, category, year, desc, accent }, i) => (
+        <article data-reveal data-delay={String(0.05 * i)} class="liquid-glass rounded-2xl overflow-hidden group cursor-pointer hover:scale-[1.01] transition-transform">
+          <!-- Placeholder image -->
+          <div class={`aspect-video bg-gradient-to-br ${accent} bg-card relative overflow-hidden`}>
+            <div class="absolute inset-0 flex items-end p-4">
+              <span class="text-xs font-mono text-muted-foreground/60 tracking-widest uppercase">{category}</span>
+            </div>
+          </div>
+          <!-- Card body -->
+          <div class="p-6">
+            <div class="flex items-start justify-between gap-4 mb-3">
+              <h3 class="text-lg font-semibold tracking-[-0.3px] leading-snug">{title}</h3>
+              <span class="text-xs text-muted-foreground font-mono shrink-0 pt-1">{year}</span>
+            </div>
+            <p class="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+            <div class="mt-6 flex items-center gap-2 text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+              <span>View project</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="border-t border-border/30 py-24 md:py-32 px-8 md:px-28 text-center">
+    <h2 data-reveal class="text-3xl md:text-5xl font-medium tracking-[-1px]">
+      Something in mind? <span class="font-serif italic font-normal">Let's build it.</span>
+    </h2>
+    <p data-reveal data-delay="0.1" class="text-muted-foreground mt-4 max-w-lg mx-auto">
+      We take on a small number of collaborations each year. If your project fits what we care about, reach out.
+    </p>
+    <a data-reveal data-delay="0.2" href="/contact" class="inline-block mt-8 bg-foreground text-background rounded-lg px-8 py-3.5 font-semibold text-sm hover:scale-[1.03] active:scale-[0.98] transition-transform">
+      Start a Conversation
+    </a>
+  </section>
+
+</Base>

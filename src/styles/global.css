@@ -1,0 +1,170 @@
+@import "tailwindcss";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+
+  /* Monochrome palette */
+  --color-background: hsl(0 0% 0%);
+  --color-foreground: hsl(0 0% 100%);
+  --color-card: hsl(0 0% 5%);
+  --color-card-foreground: hsl(0 0% 100%);
+  --color-muted: hsl(0 0% 15%);
+  --color-muted-foreground: hsl(0 0% 65%);
+  --color-border: hsl(0 0% 20%);
+  --color-accent: hsl(170 15% 45%);
+
+  /* Custom tokens */
+  --color-hero-subtitle: hsl(210 17% 95%);
+}
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    margin: 0;
+  }
+}
+
+/* Footer entrance animation */
+@keyframes footer-in {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-footer-in {
+  animation: footer-in 1s 0.4s ease-out both;
+}
+
+/* Scroll reveal - replaces framer-motion fadeUp */
+.will-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Liquid glass effect - reused across Navbar social icons, hero form, CTA button, About bento cards, Contact form */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.45) 0%,
+    rgba(255,255,255,0.15) 20%,
+    rgba(255,255,255,0) 40%,
+    rgba(255,255,255,0) 60%,
+    rgba(255,255,255,0.15) 80%,
+    rgba(255,255,255,0.45) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+/* Hover: subtle top→bottom darkening overlay */
+.liquid-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.12) 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.liquid-glass:hover::after {
+  opacity: 1;
+}
+
+/* ─── Liquid Glass Animated ──────────────────────────────────────────────────
+   Rotating conic-gradient border — same mask trick as liquid-glass but the
+   gradient angle advances continuously. Drop-in replacement / additive class.
+   Usage: class="liquid-glass-animated rounded-lg …"
+────────────────────────────────────────────────────────────────────────────── */
+@property --lg-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes lg-spin {
+  to { --lg-angle: 360deg; }
+}
+
+.liquid-glass-animated {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+/* Rotating border layer */
+.liquid-glass-animated::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: conic-gradient(
+    from var(--lg-angle),
+    rgba(255,255,255,0)    0deg,
+    rgba(255,255,255,0.55) 60deg,
+    rgba(255,255,255,0.15) 120deg,
+    rgba(255,255,255,0)    180deg,
+    rgba(255,255,255,0.55) 240deg,
+    rgba(255,255,255,0.15) 300deg,
+    rgba(255,255,255,0)    360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: lg-spin 6s linear infinite;
+  animation-play-state: paused;
+}
+.liquid-glass-animated:hover::before {
+  animation-play-state: running;
+}
+/* Hover overlay — same behaviour as liquid-glass */
+.liquid-glass-animated::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.12) 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.liquid-glass-animated:hover::after {
+  opacity: 1;
+}

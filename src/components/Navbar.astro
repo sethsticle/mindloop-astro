@@ -1,0 +1,48 @@
+---
+import Logo from './Logo.astro';
+
+const links = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Mission', href: '/mission' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+<nav class="fixed top-0 left-0 right-0 z-50 px-8 md:px-16 py-4 flex items-center justify-between">
+  <a href="/" class="flex items-center gap-3 shrink-0">
+    <Logo className="w-8 h-8 text-foreground hover:text-accent transition-colors"/>
+    <span class="font-bold text-lg tracking-tight">Apto Designs</span>
+  </a>
+
+  <div class="hidden md:flex items-center gap-6 text-sm">
+    {links.map((l) => (
+      <a href={l.href} class="text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">{l.label}</a>
+    ))}
+  </div>
+
+  <div class="flex items-center gap-2 shrink-0">
+    <!-- Instagram -->
+    <a href="#" class="liquid-glass w-10 h-10 rounded-full flex items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+        <circle cx="12" cy="13" r="3"/>
+      </svg>
+    </a>
+    <!-- Email -->
+    <a href="#" class="liquid-glass w-10 h-10 rounded-full flex items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/>
+      </svg>
+    </a>
+    <!-- Send -->
+    <a href="#" class="liquid-glass w-10 h-10 rounded-full flex items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m22 2-7 20-4-9-9-4Z"/>
+        <path d="M22 2 11 13"/>
+      </svg>
+    </a>
+  </div>
+</nav>

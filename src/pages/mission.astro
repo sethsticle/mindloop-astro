@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import VideoAutoplay from '../components/VideoAutoplay.astro';
+
+const principles = [
+  {
+    number: '01',
+    title: 'Depth over velocity.',
+    body: 'We publish less so every word earns its place. Speed is the enemy of understanding. We deliberately slow down the cadence to let ideas breathe, mature, and actually land.',
+  },
+  {
+    number: '02',
+    title: 'Readers, not users.',
+    body: 'We refuse the engagement trap. No infinite scroll, no algorithmic nudges, no dark patterns fighting for minutes. A reader who finishes something changed is worth a thousand drive-by clicks.',
+  },
+  {
+    number: '03',
+    title: 'Writers as first-class citizens.',
+    body: 'Every product decision runs through a single filter: does this make a writer\'s life better, or just the platform\'s metrics? When those two conflict, the writer wins.',
+  },
+];
+---
+<Base title="Mission - Mindloop" description="We exist to restore signal. Read the principles that guide everything we build at Mindloop.">
+
+  <!-- Hero -->
+  <section class="pt-44 md:pt-56 pb-20 md:pb-32 px-8 md:px-28 max-w-6xl mx-auto">
+    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Our Mission</p>
+    <h1 data-reveal data-delay="0.05" class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05] max-w-4xl">
+      We exist to<br /><span class="font-serif italic font-normal">restore signal.</span>
+    </h1>
+    <p data-reveal data-delay="0.15" class="text-xl text-muted-foreground mt-10 max-w-2xl leading-relaxed">
+      The internet is drowning in content. Billions of words published daily, most of them forgettable. We started Mindloop because we believe the problem isn't too little content - it's too little meaning. We're fixing that, one newsletter at a time.
+    </p>
+  </section>
+
+  <!-- Mission video -->
+  <section class="px-8 md:px-28 pb-24 max-w-6xl mx-auto">
+    <div data-reveal class="relative rounded-3xl overflow-hidden">
+      <VideoAutoplay
+        src="/assets/video/mission.mp4"
+        class="w-full aspect-video object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent"></div>
+    </div>
+  </section>
+
+  <!-- Principles -->
+  <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 max-w-6xl mx-auto">
+    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-16">What we believe</p>
+    <div class="space-y-0 divide-y divide-border/20">
+      {principles.map(({ number, title, body }, i) => (
+        <div data-reveal data-delay={String(0.05 * i)} class="grid md:grid-cols-12 gap-8 py-12 md:py-16">
+          <span class="md:col-span-1 text-sm text-muted-foreground font-mono pt-1">{number}</span>
+          <div class="md:col-span-4">
+            <h3 class="text-2xl md:text-3xl font-medium tracking-[-0.5px]">{title}</h3>
+          </div>
+          <p class="md:col-span-6 text-muted-foreground leading-relaxed">{body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Pull quote -->
+  <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 text-center">
+    <blockquote data-reveal class="text-3xl md:text-5xl lg:text-6xl font-serif italic font-normal max-w-4xl mx-auto leading-tight text-foreground/90">
+      "The best newsletter is the one that makes you think longer after you close it."
+    </blockquote>
+    <p data-reveal data-delay="0.1" class="mt-8 text-muted-foreground text-sm tracking-wide">- Founding principle, 2023</p>
+    <a data-reveal data-delay="0.2" href="/vision" class="inline-block mt-16 text-sm text-muted-foreground hover:text-foreground transition-colors border-b border-border/50 hover:border-foreground pb-1">
+      Read our vision →
+    </a>
+  </section>
+
+</Base>

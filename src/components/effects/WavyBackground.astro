@@ -1,0 +1,169 @@
+---
+/**
+ * WavyBackground — canvas wave animation wrapper.
+ * Faithful port of Aceternity UI's WavyBackground, zero npm dependencies.
+ * Simplex noise replaced with 4-harmonic sine composition per wave layer —
+ * visually indistinguishable at this scale, no external package required.
+ *
+ * Props:
+ *   colors      — array of CSS color strings for each wave layer
+ *   waveWidth   — stroke width in px (default 50)
+ *   blur        — gaussian blur in px (default 10)
+ *   speed       — time increment per frame (default 0.0015; 0.003 = fast)
+ *   waveCount   — number of wave layers (default 5)
+ *   waveOpacity — global alpha for wave strokes (default 0.5)
+ *   class       — forwarded to the wrapper div
+ *
+ * Safari note: ctx.filter is unsupported in Safari. Detected at runtime;
+ * blur is applied via CSS filter on the canvas element instead.
+ */
+interface Props {
+  colors?: string[];
+  waveWidth?: number;
+  blur?: number;
+  speed?: number;
+  waveCount?: number;
+  waveOpacity?: number;
+  class?: string;
+}
+
+const {
+  colors = [
+    'rgba(30, 82, 76, 0.75)',
+    'rgba(18, 52, 74, 0.85)',
+    'rgba(48, 98, 88, 0.55)',
+    'rgba(12, 38, 60, 0.90)',
+    'rgba(40, 72, 68, 0.65)',
+  ],
+  waveWidth = 50,
+  blur = 10,
+  speed = 0.015,
+  waveCount = 5,
+  waveOpacity = 0.5,
+  class: className = '',
+} = Astro.props;
+---
+
+<div class:list={['wavy-host relative overflow-hidden', className]}>
+  <canvas
+    data-wavy-canvas
+    data-colors={JSON.stringify(colors)}
+    data-wave-width={waveWidth}
+    data-blur={blur}
+    data-speed={speed}
+    data-wave-count={waveCount}
+    data-wave-opacity={waveOpacity}
+    class="absolute inset-0 w-full h-full pointer-events-none"
+    aria-hidden="true"
+  ></canvas>
+  <div class="relative z-10">
+    <slot />
+  </div>
+</div>
+
+<script>
+  (function () {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Safari does not support ctx.filter — apply blur via CSS on the element instead
+    const isSafari =
+      typeof navigator !== 'undefined' &&
+      /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    function initCanvas(canvas: HTMLCanvasElement) {
+      const colors: string[]  = JSON.parse(canvas.dataset.colors     ?? '[]');
+      const waveWidth         = parseFloat(canvas.dataset.waveWidth  ?? '50');
+      const blur              = parseFloat(canvas.dataset.blur        ?? '10');
+      const speed             = parseFloat(canvas.dataset.speed       ?? '0.0015');
+      const waveCount         = parseInt(canvas.dataset.waveCount     ?? '5',  10);
+      const waveOpacity       = parseFloat(canvas.dataset.waveOpacity ?? '0.5');
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      let logicalW = 0;
+      let logicalH = 0;
+      let t        = 0;
+      let rafId: number | null = null;
+
+      function resize() {
+        const dpr  = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        logicalW       = rect.width;
+        logicalH       = rect.height;
+        canvas.width   = Math.round(logicalW * dpr);
+        canvas.height  = Math.round(logicalH * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        // Reapply filter after resize resets canvas state
+        if (!isSafari) ctx.filter = `blur(${blur}px)`;
+      }
+
+      /**
+       * Multi-harmonic sine wave — replaces simplex noise.
+       * Four overlapping sine components at different frequencies and phases
+       * per layer produce smooth, organic undulation without any library.
+       */
+      function waveY(x: number, layer: number, time: number): number {
+        const l = layer * 0.9;
+        return (
+          Math.sin(x * 0.0040 +  time        + l * 1.10) * 58 +
+          Math.sin(x * 0.0090 - (time * 0.7) + l * 0.85 + 1.0) * 26 +
+          Math.sin(x * 0.0024 +  time * 0.55 + l * 2.00 + 2.3) * 40 +
+          Math.sin(x * 0.0160 - (time * 1.2) + l * 0.40 + 0.6) * 13
+        );
+      }
+
+      function drawWaves() {
+        for (let i = 0; i < waveCount; i++) {
+          ctx.beginPath();
+          ctx.lineWidth   = waveWidth;
+          ctx.strokeStyle = colors[i % colors.length];
+
+          for (let x = 0; x <= logicalW; x += 4) {
+            const y = waveY(x, i, t) + logicalH * 0.55;
+            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+
+          ctx.stroke();
+          ctx.closePath();
+        }
+      }
+
+      function render() {
+        // Trail effect: semi-transparent fill over previous frame instead of clearRect.
+        // Waves "fade out" rather than vanish instantly — matches Aceternity behaviour.
+        ctx.globalAlpha = 0.18;
+        ctx.fillStyle   = '#000000';
+        ctx.fillRect(0, 0, logicalW, logicalH);
+
+        ctx.globalAlpha = waveOpacity;
+        t += speed;
+        drawWaves();
+
+        ctx.globalAlpha = 1;
+        rafId = requestAnimationFrame(render);
+      }
+
+      function start() { if (!rafId) render(); }
+      function stop()  {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      }
+
+      // Pause RAF when section is off-screen
+      const io = new IntersectionObserver(
+        (entries) => { entries[0].isIntersecting ? start() : stop(); },
+        { threshold: 0.01 }
+      );
+
+      if (isSafari) canvas.style.filter = `blur(${blur}px)`;
+
+      resize();
+      new ResizeObserver(resize).observe(canvas.parentElement as Element);
+
+      if (!reducedMotion) io.observe(canvas);
+    }
+
+    document.querySelectorAll<HTMLCanvasElement>('[data-wavy-canvas]').forEach(initCanvas);
+  })();
+</script>
