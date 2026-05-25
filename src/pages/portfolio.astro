@@ -1,5 +1,6 @@
 ---
-import Base from '../layouts/Base.astro';
+import Base from '../layouts/BaseV2.astro';
+import CTAV2 from '../components/CTAV2.astro';
 
 const featured = {
   title: 'Editorial Platform',
@@ -8,154 +9,167 @@ const featured = {
   year: '2026',
   desc: 'A full publishing environment built for independent writers - from draft to distribution, analytics to archive. Designed to get out of the way.',
   tags: ['Product', 'Design', 'Engineering'],
+  img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1400&auto=format&q=80',
 };
 
 const works = [
-  {
-    title: 'The Signal Issue',
-    client: 'Self-published',
-    type: 'Editorial Design',
-    year: '2026',
-    wide: false,
-  },
-  {
-    title: 'Brand Identity',
-    client: 'Mindloop',
-    type: 'Visual Identity',
-    year: '2025',
-    wide: false,
-  },
-  {
-    title: 'Writer Dashboard',
-    client: 'Internal',
-    type: 'UX Design',
-    year: '2025',
-    wide: true,
-  },
-  {
-    title: 'Quiet Web Research',
-    client: 'Open Research',
-    type: 'Strategy & Research',
-    year: '2025',
-    wide: false,
-  },
-  {
-    title: 'Community Architecture',
-    client: 'Partners',
-    type: 'Systems Design',
-    year: '2024',
-    wide: false,
-  },
+  { title: 'The Signal Issue',       client: 'Self-published',  type: 'Editorial Design',      year: '2026', wide: false, img: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=800&auto=format&q=80' },
+  { title: 'Brand Identity',         client: 'Mindloop',        type: 'Visual Identity',        year: '2025', wide: false, img: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&auto=format&q=80' },
+  { title: 'Writer Dashboard',       client: 'Internal',        type: 'UX Design',              year: '2025', wide: true,  img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&q=80' },
+  { title: 'Quiet Web Research',     client: 'Open Research',   type: 'Strategy & Research',    year: '2025', wide: false, img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&q=80' },
+  { title: 'Community Architecture', client: 'Partners',        type: 'Systems Design',         year: '2024', wide: false, img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&auto=format&q=80' },
+
 ];
 
 const stats = [
-  { value: '12', label: 'projects shipped' },
-  { value: '4', label: 'open-source tools' },
-  { value: '7K+', label: 'readers reached' },
-  { value: '3', label: 'years in the work' },
+  { value: '12',  label: 'projects shipped' },
+  { value: '4',   label: 'open-source tools' },
+  { value: '7K+', label: 'readers reached'  },
+  { value: '3',   label: 'years in the work' },
 ];
+
 ---
+
 <Base title="Portfolio - Mindloop" description="Selected work from Mindloop. Design, engineering, and editorial projects built with intention.">
 
-  <!-- Hero -->
-  <section class="pt-44 md:pt-56 pb-20 px-8 md:px-28 max-w-7xl mx-auto">
-    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Selected Work</p>
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-      <h1 data-reveal data-delay="0.05" class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05]">
-        Work that<br /><span class="font-serif italic font-normal">matters.</span>
-      </h1>
-      <p data-reveal data-delay="0.15" class="text-lg text-muted-foreground max-w-sm leading-relaxed md:text-right pb-2">
-        A curated selection of projects across editorial, product, brand, and open-source. Quality over volume - always.
-      </p>
-    </div>
-  </section>
+  <!-- Full-page wrapper anchors the tall stalk -->
+  <div class="relative">
 
-  <!-- Stats bar -->
-  <section class="border-t border-border/30 px-8 md:px-28 py-10 max-w-7xl mx-auto">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-      {stats.map(({ value, label }, i) => (
-        <div data-reveal data-delay={String(0.05 * i)}>
-          <p class="text-4xl md:text-5xl font-medium tracking-[-1px]" style="color: var(--color-accent)">{value}</p>
-          <p class="text-sm text-muted-foreground mt-1">{label}</p>
-        </div>
-      ))}
-    </div>
-  </section>
+    <!-- Tall stalk — absolute, scrolls with page content -->
+    <img
+      src="/assets/images/plant-5-tall.webp"
+      alt=""
+      aria-hidden="true"
+      class="absolute pointer-events-none"
+      style="
+        right: -40%;
+        top: 8%;
+        height: 150vh;
+        width: auto;
+        z-index: 0;
+        opacity: 0.65;
+        -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 55%, rgba(0,0,0,0) 100%);
+        mask-image: linear-gradient(to left, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 55%, rgba(0,0,0,0) 100%);
+      "
+    />
 
-  <!-- Featured work -->
-  <section class="border-t border-border/30 pt-16 pb-6 px-8 md:px-28 max-w-7xl mx-auto">
-    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Featured</p>
-    <div data-reveal data-delay="0.05" class="liquid-glass rounded-3xl overflow-hidden group cursor-pointer hover:scale-[1.005] transition-transform">
-      <!-- Large placeholder -->
-      <div class="aspect-[16/7] bg-gradient-to-br from-accent/15 via-card to-background relative">
-        <div class="absolute inset-0 flex items-center justify-center">
-          <span class="text-xs font-mono text-muted-foreground/40 tracking-[6px] uppercase">Visual placeholder</span>
-        </div>
-      </div>
-      <div class="p-8 md:p-12 grid md:grid-cols-3 gap-8 items-end">
-        <div class="md:col-span-2">
-          <div class="flex flex-wrap gap-2 mb-4">
-            {featured.tags.map(tag => (
-              <span class="px-3 py-1 rounded-full border border-border/40 text-xs text-muted-foreground">{tag}</span>
-            ))}
-          </div>
-          <h2 class="text-3xl md:text-4xl font-medium tracking-[-0.5px]">{featured.title}</h2>
-          <p class="text-muted-foreground mt-3 leading-relaxed max-w-xl">{featured.desc}</p>
-        </div>
-        <div class="md:text-right">
-          <p class="text-xs text-muted-foreground uppercase tracking-widest">{featured.type}</p>
-          <p class="text-sm text-muted-foreground mt-1">{featured.client}</p>
-          <p class="text-sm font-mono text-muted-foreground mt-1">{featured.year}</p>
-          <div class="mt-6 inline-flex items-center gap-2 text-sm text-foreground group-hover:gap-3 transition-all">
-            <span>View case study</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- Page content at z-5, above bg parallax plants, below fg parallax plants -->
+    <div class="relative" style="z-index: 5;">
 
-  <!-- Works grid (bento) -->
-  <section class="pb-32 md:pb-44 px-8 md:px-28 pt-6 max-w-7xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {works.map(({ title, client, type, year, wide }, i) => (
-        <article
-          data-reveal
-          data-delay={String(0.05 * i)}
-          class={`liquid-glass rounded-2xl overflow-hidden group cursor-pointer hover:scale-[1.01] transition-transform ${wide ? 'lg:col-span-2' : ''}`}
-        >
-          <div class={`${wide ? 'aspect-[3/1]' : 'aspect-square'} bg-gradient-to-br from-foreground/5 to-card relative`}>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-xs font-mono text-muted-foreground/30 tracking-widest uppercase">{type}</span>
+      <!-- Hero -->
+      <section class="pt-44 md:pt-56 pb-20 px-8 md:px-28 max-w-7xl mx-auto">
+        <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Selected Work</p>
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+          <h1 data-reveal data-delay="0.05" class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05]">
+            Work that<br /><span class="font-serif italic font-normal">matters.</span>
+          </h1>
+          <p data-reveal data-delay="0.15" class="text-lg text-muted-foreground max-w-sm leading-relaxed md:text-right pb-2">
+            A curated selection of projects across editorial, product, brand, and open-source. Quality over volume - always.
+          </p>
+        </div>
+      </section>
+
+      <!-- Stats bar -->
+      <section class="border-t border-border/30 px-8 md:px-28 py-10 max-w-7xl mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map(({ value, label }, i) => (
+            <div data-reveal data-delay={String(0.05 * i)}>
+              <p class="text-4xl md:text-5xl font-medium tracking-[-1px]" style="color: var(--color-accent)">{value}</p>
+              <p class="text-sm text-muted-foreground mt-1">{label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Featured work — astronaut sits on top-left outer edge of card -->
+      <section class="border-t border-border/30 pt-16 pb-6 px-8 md:px-28 max-w-7xl mx-auto">
+        <!-- Outer wrapper is overflow-visible; astronaut is a sibling outside liquid-glass -->
+        <div class="relative overflow-visible mt-16 md:mt-0">
+          <img
+            src="/assets/images/sitting-astronaught.webp"
+            alt=""
+            aria-hidden="true"
+            class="absolute pointer-events-none"
+            style="
+              top: 0;
+              left: clamp(-3.5rem, calc(-2rem - 2.5vw), -2.5rem);
+              transform: translateY(-52%);
+              width: clamp(100px, 10vw, 140px);
+              height: auto;
+              z-index: 10;
+            "
+          />
+          <div data-reveal data-delay="0.05" class="liquid-glass rounded-3xl overflow-hidden group cursor-pointer hover:scale-[1.005] transition-transform">
+            <div class="aspect-[16/7] relative overflow-hidden">
+              <img src={featured.img} alt={featured.title} class="absolute inset-0 w-full h-full object-cover" />
+            </div>
+            <div class="p-8 md:p-12 grid md:grid-cols-3 gap-8 items-end">
+              <div class="md:col-span-2">
+                <div class="flex flex-wrap gap-2 mb-4">
+                  {featured.tags.map(tag => (
+                    <span class="px-3 py-1 rounded-full border border-border/40 text-xs text-muted-foreground">{tag}</span>
+                  ))}
+                </div>
+                <h2 class="text-3xl md:text-4xl font-medium tracking-[-0.5px]">{featured.title}</h2>
+                <p class="text-muted-foreground mt-3 leading-relaxed max-w-xl">{featured.desc}</p>
+              </div>
+              <div class="md:text-right">
+                <p class="text-xs tracking-[3px] uppercase text-muted-foreground mb-4">Featured</p>
+                <p class="text-xs text-muted-foreground uppercase tracking-widest">{featured.type}</p>
+                <p class="text-sm text-muted-foreground mt-1">{featured.client}</p>
+                <p class="text-sm font-mono text-muted-foreground mt-1">{featured.year}</p>
+                <div class="mt-6 inline-flex items-center gap-2 text-sm text-foreground group-hover:gap-3 transition-all">
+                  <span>View case study</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="p-6 flex items-end justify-between">
-            <div>
-              <h3 class="font-semibold tracking-[-0.3px]">{title}</h3>
-              <p class="text-sm text-muted-foreground mt-1">{client}</p>
-            </div>
-            <span class="text-xs font-mono text-muted-foreground shrink-0 ml-4">{year}</span>
-          </div>
-        </article>
-      ))}
-    </div>
-  </section>
+        </div>
+      </section>
 
-  <!-- CTA -->
-  <section class="border-t border-border/30 py-24 md:py-32 px-8 md:px-28 text-center">
-    <h2 data-reveal class="text-3xl md:text-5xl font-medium tracking-[-1px]">
-      Ready to make<span class="font-serif italic font-normal"> something good?</span>
-    </h2>
-    <div data-reveal data-delay="0.1" class="flex flex-wrap justify-center gap-4 mt-10">
-      <a href="/contact" class="bg-foreground text-background rounded-lg px-8 py-3.5 font-semibold text-sm hover:scale-[1.03] active:scale-[0.98] transition-transform inline-block">
-        Work with Us
-      </a>
-      <a href="/projects" class="liquid-glass rounded-lg px-8 py-3.5 text-foreground font-semibold text-sm hover:scale-[1.03] active:scale-[0.98] transition-transform inline-block">
-        See All Projects
-      </a>
+      <!-- Works grid -->
+      <section class="pb-32 md:pb-44 px-8 md:px-28 pt-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {works.map(({ title, client, type, year, wide, img }, i) => (
+            <article
+              data-reveal
+              data-delay={String(0.05 * i)}
+              class={`liquid-glass rounded-2xl overflow-hidden group cursor-pointer hover:scale-[1.01] transition-transform ${wide ? 'lg:col-span-2' : ''}`}
+            >
+              <div class={`${wide ? 'aspect-[3/1]' : 'aspect-square'} relative overflow-hidden`}>
+                <img src={img} alt={title} class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              </div>
+              <div class="p-6 flex items-end justify-between">
+                <div>
+                  <h3 class="font-semibold tracking-[-0.3px]">{title}</h3>
+                  <p class="text-sm text-muted-foreground mt-1">{client}</p>
+                </div>
+                <span class="text-xs font-mono text-muted-foreground shrink-0 ml-4">{year}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <CTAV2 class="border-t border-border/30 py-24 md:py-32 px-8 md:px-28 text-center">
+        <h2 data-reveal class="text-3xl md:text-5xl font-medium tracking-[-1px]">
+          Ready to make<span class="font-serif italic font-normal"> something good?</span>
+        </h2>
+        <div data-reveal data-delay="0.1" class="flex flex-wrap justify-center gap-4 mt-10">
+          <a href="/contact" class="bg-foreground text-background rounded-lg px-8 py-3.5 font-semibold text-sm hover:scale-[1.03] active:scale-[0.98] transition-transform inline-block">
+            Work with Us
+          </a>
+          <a href="/projects" class="liquid-glass rounded-lg px-8 py-3.5 text-foreground font-semibold text-sm hover:scale-[1.03] active:scale-[0.98] transition-transform inline-block">
+            See All Projects
+          </a>
+        </div>
+      </CTAV2>
+
     </div>
-  </section>
+  </div>
 
 </Base>

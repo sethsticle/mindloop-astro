@@ -1,0 +1,276 @@
+---
+/**
+ * CTAV2 — CTA section with a star-field + comet canvas background.
+ * Stars reuse the same drawing logic as SparklesCanvas.
+ * Comets spawn from off-screen edges, travel diagonally, and fade in/out.
+ * Logo removed vs the WavyBackground CTA (v1).
+ *
+ * Tweak constants in the <script> block:
+ *   STAR_DENSITY  — max simultaneous star particles
+ *   COMET_MAX     — max comets on screen at once (keep ≤ 3)
+ *   COMET_SPEED   — px/frame at head of comet
+ */
+interface Props {
+  class?: string;
+  noClip?: boolean;
+}
+const { class: className = '', noClip = false } = Astro.props;
+---
+
+<div class:list={['ctav2-host relative', { 'overflow-hidden': !noClip }, className]}>
+  <canvas
+    data-ctav2-canvas
+    class="absolute inset-0 w-full h-full pointer-events-none"
+    aria-hidden="true"
+  ></canvas>
+  <div class="relative z-10">
+    <slot />
+  </div>
+</div>
+
+<script>
+  (function () {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Tuning constants ──────────────────────────────────────────────────
+    const STAR_DENSITY  = 90;
+    const STAR_SPAWN    = 1;
+    const STAR_MIN_SIZE = 0.4;
+    const STAR_MAX_SIZE = 2.8;
+    const COMET_MAX     = 3;
+    const COMET_SPEED_MIN = 5;
+    const COMET_SPEED_MAX = 10;
+    const COMET_TAIL_MIN  = 140;
+    const COMET_TAIL_MAX  = 280;
+    const COMET_SPAWN_INTERVAL = 220; // frames between spawn attempts
+    // ─────────────────────────────────────────────────────────────────────
+
+    function initCanvas(canvas: HTMLCanvasElement) {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      let W = 0, H = 0, rafId: number | null = null, frame = 0;
+
+      function resize() {
+        const dpr  = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        W = rect.width;  H = rect.height;
+        canvas.width  = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, 0, dpr, 0, 0);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      // ── Stars ────────────────────────────────────────────────────────
+      class Star {
+        x: number; y: number; size: number;
+        life = 0; maxLife: number; vx: number; vy: number;
+
+        constructor() {
+          this.x       = Math.random() * W;
+          this.y       = Math.random() * H;
+          this.size    = STAR_MIN_SIZE + Math.random() * (STAR_MAX_SIZE - STAR_MIN_SIZE);
+          this.maxLife = 50 + Math.random() * 100;
+          this.vx      = (Math.random() - 0.5) * 0.2;
+          this.vy      = (Math.random() - 0.5) * 0.2 - 0.1;
+        }
+
+        get opacity() { return Math.sin((this.life / this.maxLife) * Math.PI); }
+        get dead()    { return this.life >= this.maxLife; }
+        update()      { this.life++; this.x += this.vx; this.y += this.vy; }
+      }
+
+      function drawStar(x: number, y: number, size: number, opacity: number) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.globalAlpha = opacity * 0.9;
+        ctx.beginPath();
+        for (let i = 0; i < 8; i++) {
+          const angle = (i * Math.PI) / 4 - Math.PI / 2;
+          const r     = i % 2 === 0 ? size : size * 0.3;
+          i === 0
+            ? ctx.moveTo(Math.cos(angle) * r, Math.sin(angle) * r)
+            : ctx.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
+        }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.fill();
+        ctx.globalAlpha = opacity * 0.2;
+        const glow = size * 3;
+        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, glow);
+        grad.addColorStop(0, 'rgba(255,255,255,0.9)');
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.beginPath();
+        ctx.arc(0, 0, glow, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // ── Comets ───────────────────────────────────────────────────────
+      class Comet {
+        x: number; y: number;
+        vx: number; vy: number;
+        speed: number;
+        tailLength: number;
+        headSize: number;
+        life = 0; maxLife: number;
+
+        constructor() {
+          const speed  = COMET_SPEED_MIN + Math.random() * (COMET_SPEED_MAX - COMET_SPEED_MIN);
+          this.speed   = speed;
+          // Travel direction: generally diagonal top→bottom, left→right or right→left
+          // Base angles: 35°–55° (top-left→bottom-right) or 125°–145° (top-right→bottom-left)
+          const goRight = Math.random() > 0.5;
+          const angle   = goRight
+            ? (35 + Math.random() * 20) * Math.PI / 180
+            : (125 + Math.random() * 20) * Math.PI / 180;
+          this.vx = Math.cos(angle) * speed;
+          this.vy = Math.sin(angle) * speed;
+
+          this.tailLength = COMET_TAIL_MIN + Math.random() * (COMET_TAIL_MAX - COMET_TAIL_MIN);
+          this.headSize   = 2 + Math.random() * 3;
+
+          // Spawn from top edge or the opposite horizontal edge to direction of travel
+          const spawnEdge = Math.random();
+          if (spawnEdge < 0.6) {
+            // Top edge
+            this.x = Math.random() * W;
+            this.y = -this.tailLength;
+          } else if (goRight) {
+            // Left edge
+            this.x = -this.tailLength;
+            this.y = Math.random() * H * 0.7;
+          } else {
+            // Right edge
+            this.x = W + this.tailLength;
+            this.y = Math.random() * H * 0.7;
+          }
+
+          // Live long enough to cross the canvas
+          const diag   = Math.sqrt(W * W + H * H);
+          this.maxLife = Math.ceil(diag / speed) + 60;
+        }
+
+        get opacity() {
+          // Fade in over first 30 frames, fade out over last 60
+          const fadeIn  = Math.min(1, this.life / 30);
+          const fadeOut = Math.min(1, (this.maxLife - this.life) / 60);
+          return Math.min(fadeIn, fadeOut);
+        }
+
+        get dead() {
+          return (
+            this.life >= this.maxLife ||
+            this.x < -this.tailLength - 50 ||
+            this.x > W + this.tailLength + 50 ||
+            this.y > H + this.tailLength + 50
+          );
+        }
+
+        update() {
+          this.life++;
+          this.x += this.vx;
+          this.y += this.vy;
+        }
+
+        draw() {
+          const op = this.opacity;
+          if (op <= 0) return;
+
+          // Tail direction is opposite to velocity
+          const norm = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+          const tx   = this.x - (this.vx / norm) * this.tailLength;
+          const ty   = this.y - (this.vy / norm) * this.tailLength;
+
+          // Tail gradient: transparent at tail end → white at head
+          const grad = ctx.createLinearGradient(tx, ty, this.x, this.y);
+          grad.addColorStop(0, `rgba(255,255,255,0)`);
+          grad.addColorStop(0.6, `rgba(200,220,255,${(op * 0.3).toFixed(3)})`);
+          grad.addColorStop(1,   `rgba(255,255,255,${(op * 0.85).toFixed(3)})`);
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(tx, ty);
+          ctx.lineTo(this.x, this.y);
+          ctx.strokeStyle = grad;
+          ctx.lineWidth   = this.headSize * 0.8;
+          ctx.lineCap     = 'round';
+          ctx.stroke();
+
+          // Head glow
+          const hglow = ctx.createRadialGradient(
+            this.x, this.y, 0,
+            this.x, this.y, this.headSize * 5
+          );
+          hglow.addColorStop(0, `rgba(255,255,255,${(op * 0.9).toFixed(3)})`);
+          hglow.addColorStop(0.3, `rgba(200,230,255,${(op * 0.4).toFixed(3)})`);
+          hglow.addColorStop(1,   'rgba(255,255,255,0)');
+
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.headSize * 5, 0, Math.PI * 2);
+          ctx.fillStyle = hglow;
+          ctx.fill();
+
+          // Solid head dot
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.headSize, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${op.toFixed(3)})`;
+          ctx.fill();
+
+          ctx.restore();
+        }
+      }
+
+      const stars:  Star[]  = [];
+      const comets: Comet[] = [];
+
+      function animate() {
+        ctx.clearRect(0, 0, W, H);
+        frame++;
+
+        // Spawn stars
+        for (let i = 0; i < STAR_SPAWN; i++) {
+          if (stars.length < STAR_DENSITY) stars.push(new Star());
+        }
+
+        // Attempt comet spawn
+        if (frame % COMET_SPAWN_INTERVAL === 0 && comets.length < COMET_MAX) {
+          comets.push(new Comet());
+        }
+
+        // Draw comets (behind stars)
+        for (let i = comets.length - 1; i >= 0; i--) {
+          const c = comets[i];
+          c.update();
+          if (c.dead) { comets.splice(i, 1); continue; }
+          c.draw();
+        }
+
+        // Draw stars
+        for (let i = stars.length - 1; i >= 0; i--) {
+          const s = stars[i];
+          s.update();
+          if (s.dead) { stars.splice(i, 1); continue; }
+          drawStar(s.x, s.y, s.size, s.opacity);
+        }
+
+        rafId = requestAnimationFrame(animate);
+      }
+
+      function start() { if (!rafId) animate(); }
+      function stop()  { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
+
+      const io = new IntersectionObserver(
+        (entries) => { entries[0].isIntersecting ? start() : stop(); },
+        { threshold: 0.01 }
+      );
+
+      resize();
+      new ResizeObserver(resize).observe(canvas.parentElement as Element);
+      if (!reducedMotion) io.observe(canvas);
+    }
+
+    document.querySelectorAll<HTMLCanvasElement>('[data-ctav2-canvas]').forEach(initCanvas);
+  })();
+</script>

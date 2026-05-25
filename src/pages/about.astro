@@ -1,5 +1,6 @@
 ---
-import Base from '../layouts/Base.astro';
+import BaseV2 from '../layouts/BaseV2.astro';
+import ParallaxPlants from '../components/ParallaxPlants.astro';
 
 const cards = [
   {
@@ -21,34 +22,118 @@ const cards = [
     svg: `<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>`,
   },
 ];
+
+const principles = [
+  {
+    number: '01',
+    title: 'Depth over velocity.',
+    body: 'We publish less so every word earns its place. Speed is the enemy of understanding. We deliberately slow down the cadence to let ideas breathe, mature, and actually land.',
+  },
+  {
+    number: '02',
+    title: 'Readers, not users.',
+    body: 'We refuse the engagement trap. No infinite scroll, no algorithmic nudges, no dark patterns fighting for minutes. A reader who finishes something changed is worth a thousand drive-by clicks.',
+  },
+  {
+    number: '03',
+    title: "Writers as first-class citizens.",
+    body: "Every product decision runs through a single filter: does this make a writer's life better, or just the platform's metrics? When those two conflict, the writer wins.",
+  },
+];
+
+const plants = [
+  { src: '/assets/images/plant-3.webp',    style: 'top: -8vh; right: -10vw; width: 42vw; opacity: 0.11; rotate: 12deg; z-index: 0;',   speed: 0.1,  blur: 0  },
+  { src: '/assets/images/plant-5-tall.webp',style: 'top: 8vh; right: -2vw; height: 130vh; width: auto; opacity: 0.2; rotate: 4deg; z-index: 1;', speed: 0.22, blur: 0  },
+  { src: '/assets/images/plant-1.webp',    style: 'top: 62vh; left: -8vw; width: 30vw; opacity: 0.17; rotate: -16deg; z-index: 1;',    speed: 0.25, blur: 0  },
+  { src: '/assets/images/plant-6.webp',    style: 'top: 38vh; right: 2vw; width: 22vw; opacity: 0.3; rotate: -9deg; z-index: 2;',      speed: 0.4,  blur: 2  },
+  { src: '/assets/images/plant-2.webp',    style: 'top: 82vh; left: 1vw; width: 24vw; opacity: 0.28; rotate: 11deg; z-index: 2;',      speed: 0.42, blur: 2  },
+  { src: '/assets/images/plant-4.webp',    style: 'top: 42vh; left: -14vw; width: 34vw; opacity: 0.48; rotate: 24deg; z-index: 10;',   speed: 0.65, blur: 6  },
+  { src: '/assets/images/plant-1.webp',    style: 'top: 68vh; right: -14vw; width: 38vw; opacity: 0.55; rotate: -30deg; z-index: 11;', speed: 0.82, blur: 10 },
+];
 ---
-<Base title="About - Mindloop" description="A small collective building a quieter, deeper internet. Meet the people behind Mindloop.">
 
-  <section class="pt-44 md:pt-56 pb-20 md:pb-32 px-6 text-center max-w-4xl mx-auto">
-    <h1 data-reveal class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05]">
-      Built for the<span class="font-serif italic font-normal"> curious.</span>
-    </h1>
-    <p data-reveal data-delay="0.1" class="text-xl text-muted-foreground mt-8 leading-relaxed">
-      We are a small collective of engineers, writers, and designers who believe the internet needs less noise and a lot more signal. Mindloop is our answer.
-    </p>
-  </section>
+<BaseV2 title="About - Mindloop" description="A small collective building a quieter, deeper internet. Meet the people behind Mindloop.">
 
-  <section class="py-20 md:py-32 border-t border-border/30">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-6xl mx-auto px-8">
-      {cards.map(({ title, desc, span, svg }, i) => (
-        <div
-          data-reveal
-          data-delay={String(0.05 * i)}
-          class={`liquid-glass rounded-3xl p-10 md:p-16 flex flex-col justify-between aspect-square md:aspect-auto md:h-[400px] ${span}`}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground mb-8" set:html={svg} />
-          <div>
-            <h3 class="text-2xl md:text-3xl font-medium tracking-[-0.5px]">{title}</h3>
-            <p class="text-muted-foreground mt-3 max-w-xl">{desc}</p>
+  <ParallaxPlants plants={plants} />
+
+  <!-- Page content -->
+  <div class="relative" style="z-index: 5;">
+
+    <!-- ── Hero ───────────────────────────────────────────────────────── -->
+    <section class="pt-44 md:pt-56 pb-20 md:pb-32 px-6 text-center max-w-4xl mx-auto">
+      <h1 data-reveal class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05]">
+        Built for the<span class="font-serif italic font-normal"> curious.</span>
+      </h1>
+      <p data-reveal data-delay="0.1" class="text-xl text-muted-foreground mt-8 leading-relaxed">
+        We are a small collective of engineers, writers, and designers who believe the internet needs less noise and a lot more signal. Mindloop is our answer.
+      </p>
+    </section>
+
+    <!-- ── Cards ─────────────────────────────────────────────────────── -->
+    <section class="py-20 md:py-32 border-t border-border/30">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-6xl mx-auto px-8">
+        {cards.map(({ title, desc, span, svg }, i) => (
+          <div
+            data-reveal
+            data-delay={String(0.05 * i)}
+            class={`liquid-glass rounded-3xl p-10 md:p-16 flex flex-col justify-between aspect-square md:aspect-auto md:h-[400px] ${span}`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32" height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.25"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-muted-foreground mb-8"
+              set:html={svg}
+            />
+            <div>
+              <h3 class="text-2xl md:text-3xl font-medium tracking-[-0.5px]">{title}</h3>
+              <p class="text-muted-foreground mt-3 max-w-xl">{desc}</p>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-  </section>
+        ))}
+      </div>
+    </section>
 
-</Base>
+    <!-- ── Mission ───────────────────────────────────────────────────── -->
+    <section class="pt-24 md:pt-32 border-t border-border/30 px-8 md:px-28 max-w-6xl mx-auto">
+      <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Our Mission</p>
+      <h2 data-reveal data-delay="0.05" class="text-5xl md:text-7xl font-medium tracking-[-2px] leading-[1.05] max-w-4xl">
+        We exist to<br /><span class="font-serif italic font-normal">restore signal.</span>
+      </h2>
+      <p data-reveal data-delay="0.15" class="text-xl text-muted-foreground mt-10 max-w-2xl leading-relaxed">
+        The internet is drowning in content. Billions of words published daily, most of them forgettable. We started Mindloop because we believe the problem isn't too little content — it's too little meaning. We're fixing that, one newsletter at a time.
+      </p>
+    </section>
+
+    <!-- Principles -->
+    <section class="py-24 md:py-32 border-t border-border/30 mt-16 px-8 md:px-28 max-w-6xl mx-auto">
+      <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-16">What we believe</p>
+      <div class="space-y-0 divide-y divide-border/20">
+        {principles.map(({ number, title, body }, i) => (
+          <div data-reveal data-delay={String(0.05 * i)} class="grid md:grid-cols-12 gap-8 py-12 md:py-16">
+            <span class="md:col-span-1 text-sm text-muted-foreground font-mono pt-1">{number}</span>
+            <div class="md:col-span-4">
+              <h3 class="text-2xl md:text-3xl font-medium tracking-[-0.5px]">{title}</h3>
+            </div>
+            <p class="md:col-span-6 text-muted-foreground leading-relaxed">{body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Pull quote -->
+    <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 text-center">
+      <blockquote data-reveal class="text-3xl md:text-5xl lg:text-6xl font-serif italic font-normal max-w-4xl mx-auto leading-tight text-foreground/90">
+        "The best newsletter is the one that makes you think longer after you close it."
+      </blockquote>
+      <p data-reveal data-delay="0.1" class="mt-8 text-muted-foreground text-sm tracking-wide">— Founding principle, 2023</p>
+    </section>
+
+  </div>
+
+</BaseV2>

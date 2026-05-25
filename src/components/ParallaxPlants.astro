@@ -1,0 +1,45 @@
+---
+interface Plant {
+  src: string;
+  style: string;
+  speed: number;
+  blur: number;
+}
+interface Props {
+  plants: Plant[];
+}
+const { plants } = Astro.props;
+---
+
+{plants.map((p) => (
+  <img
+    src={p.src}
+    alt=""
+    aria-hidden="true"
+    data-parallax={String(p.speed)}
+    class="fixed pointer-events-none select-none"
+    style={`${p.style} filter: blur(${p.blur}px); will-change: transform;`}
+  />
+))}
+
+<script>
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const layers = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
+    let ticking = false;
+    function update() {
+      const y = window.scrollY;
+      for (const el of layers) {
+        const speed = parseFloat(el.dataset.parallax ?? '0');
+        el.style.transform = `translateY(${y * speed}px)`;
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
+</script>

@@ -1,8 +1,8 @@
 ---
-import Base from "../layouts/Base.astro";
-import Logo from "../components/Logo.astro";
+import Base from "../layouts/BaseV2.astro";
 import VideoAutoplay from "../components/VideoAutoplay.astro";
-import WavyBackground from "../components/effects/WavyBackground.astro";
+import MissionV2 from "../components/MissionV2.astro";
+import CTAV2 from "../components/CTAV2.astro";
 
 const platforms = [
   {
@@ -178,7 +178,7 @@ const solutionItems = [
 
 
 
-  <!-- ── Mission ───────────────────────────────────────────────────────── -->
+  <!-- ── Mission V1 (kept as reference, swapped out for MissionV2 below) ──
   <section
     class="pt-0 pb-32 md:pb-44 px-6 md:px-12 max-w-5xl mx-auto text-center"
   >
@@ -214,6 +214,10 @@ const solutionItems = [
       noise, less friction, and more meaning for everyone involved.
     </p>
   </section>
+  ── Mission V1 end ──────────────────────────────────────────────────── -->
+
+  <!-- ── Mission V2 — sticky scroll carousel ──────────────────────────── -->
+  <MissionV2 />
 
   <!-- ── Solution ──────────────────────────────────────────────────────── -->
   <section
@@ -235,11 +239,26 @@ const solutionItems = [
       > content
     </h2>
 
+    <!-- Solution V1 (kept as reference)
     <div data-reveal data-delay="0.2" class="my-12">
       <VideoAutoplay
         src="/assets/video/solution.mp4"
         class="aspect-[3/1] object-cover rounded-2xl w-full"
       />
+    </div>
+    Solution V1 end -->
+
+    <!-- Solution V2 — static image with edge gradient fade -->
+    <div data-reveal data-delay="0.2" class="relative my-12 rounded-2xl overflow-hidden">
+      <img
+        src="/assets/images/solution.webp"
+        alt="GoHighLevel connecting social media platforms — a unified solution for client growth"
+        class="w-full aspect-[2/1] object-cover rounded-2xl"
+        loading="lazy"
+      />
+      <!-- Edge fades — blends the image into the dark page background -->
+      <div class="absolute inset-0 rounded-2xl pointer-events-none" style="background: linear-gradient(to right, #000 0%, transparent 12%, transparent 88%, #000 100%);"></div>
+      <div class="absolute inset-0 rounded-2xl pointer-events-none" style="background: linear-gradient(to bottom, #000 0%, transparent 15%, transparent 80%, #000 100%);"></div>
     </div>
 
     <div class="grid md:grid-cols-4 gap-8">
@@ -254,14 +273,22 @@ const solutionItems = [
     </div>
   </section>
 
-  <!-- ── CTA ───────────────────────────────────────────────────────────── -->
+  <!-- ── CTA V1 (kept as reference) ──────────────────────────────────────
   <WavyBackground class="border-t border-border/30 py-32 md:py-44">
     <div class="flex flex-col items-center text-center px-6 max-w-3xl mx-auto">
       <Logo className="w-10 h-10" />
+      ...
+    </div>
+  </WavyBackground>
+  CTA V1 end ──────────────────────────────────────────────────────────── -->
+
+  <!-- ── CTA V2 — star-field + comet canvas, no logo ───────────────────── -->
+  <CTAV2 class="border-t border-border/30 py-32 md:py-44">
+    <div class="flex flex-col items-center text-center px-6 max-w-3xl mx-auto">
       <h2
         data-reveal
         data-delay="0.1"
-        class="font-serif italic text-5xl md:text-6xl mt-8 leading-tight"
+        class="font-serif italic text-5xl md:text-6xl leading-tight"
       >
         Start Your Journey
       </h2>
@@ -290,5 +317,5 @@ const solutionItems = [
         </button>
       </div>
     </div>
-  </WavyBackground>
+  </CTAV2>
 </Base>

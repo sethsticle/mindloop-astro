@@ -1,0 +1,190 @@
+---
+/**
+ * FooterV2 — glass footer card over the astronaut landscape background.
+ * Swaps the SparklesCanvas starfield for a static image background.
+ * Extra bottom padding lets the astronaut + terrain show beneath the card.
+ * Original Footer.astro is untouched.
+ */
+
+interface LinkGroup {
+  title: string;
+  items: { label: string; href: string }[];
+}
+
+const navGroups: LinkGroup[] = [
+  {
+    title: "Explore",
+    items: [
+      { label: "About",     href: "/about" },
+      { label: "Mission",   href: "/mission" },
+      { label: "Vision",    href: "/vision" },
+      { label: "Projects",  href: "/projects" },
+      { label: "Portfolio", href: "/portfolio" },
+    ],
+  },
+  {
+    title: "Platform",
+    items: [
+      { label: "Newsletter",    href: "#" },
+      { label: "Community",     href: "#" },
+      { label: "Writer Tools",  href: "#" },
+      { label: "Distribution",  href: "#" },
+    ],
+  },
+  {
+    title: "Company",
+    items: [
+      { label: "Contact",      href: "/contact" },
+      { label: "Privacy",      href: "#" },
+      { label: "Terms",        href: "#" },
+      { label: "Report Issue", href: "#" },
+    ],
+  },
+];
+
+const socials = [
+  {
+    label: "Spotify",
+    svg: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13 1.5V10a3 3 0 1 1-1.5-2.6V4.2L5.5 5.5V13a3 3 0 1 1-1.5-2.6V4L13 1.5z"/></svg>`,
+  },
+  {
+    label: "Facebook",
+    svg: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8a8 8 0 1 0-9.25 7.903V10.25H4.719V8H6.75V6.258c0-2.005 1.194-3.112 3.022-3.112.875 0 1.79.156 1.79.156v1.968h-1.008c-.993 0-1.304.617-1.304 1.25V8h2.219l-.355 2.25H9.25v5.653A8.003 8.003 0 0 0 16 8z"/></svg>`,
+  },
+  {
+    label: "Twitter",
+    svg: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.6 1h2.454l-5.36 6.128L16 15h-4.937l-3.867-5.059L2.771 15H.316l5.733-6.555L0 1h5.063l3.495 4.623L12.601 1zm-.86 12.573h1.36L4.323 2.394H2.865l8.875 11.179z"/></svg>`,
+  },
+  {
+    label: "YouTube",
+    svg: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"/></svg>`,
+  },
+  {
+    label: "Instagram",
+    svg: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/></svg>`,
+  },
+];
+
+const legalLinks = [
+  { label: 'Privacy', href: '#' },
+  { label: 'Terms',   href: '#' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+
+<div class="footer-v2-host relative border-t border-border/20 overflow-hidden">
+
+  <!-- Background image -->
+  <div
+    class="absolute inset-0 w-full h-full"
+    style="
+      background-image: url('/assets/images/footer-bg.webp');
+      background-size: cover;
+      background-position: center top;
+    "
+    aria-hidden="true"
+  ></div>
+
+  <!-- Top fade: bleed from page background into the image -->
+  <div class="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-background to-transparent pointer-events-none z-20" aria-hidden="true"></div>
+
+  <!-- Left / right edge softening -->
+  <div class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background/60 to-transparent pointer-events-none z-20" aria-hidden="true"></div>
+  <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background/60 to-transparent pointer-events-none z-20" aria-hidden="true"></div>
+
+  <div class="relative z-30 px-4 md:px-8 pt-24 pb-56 md:pb-72">
+
+    <!-- Glass footer card -->
+    <footer class="liquid-glass animate-footer-in w-full rounded-3xl p-6 md:p-10 text-white/70 max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 mb-10">
+
+        <!-- Brand block -->
+        <div class="md:col-span-5">
+          <a href="/" class="flex items-center gap-2.5 mb-4 text-white group">
+            <div class="w-7 h-7 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white/60 transition-colors">
+              <div class="w-2.5 h-2.5 rounded-full border border-white/50 group-hover:border-white/80 transition-colors"></div>
+            </div>
+            <span class="text-xl font-medium tracking-tight">Apto Designs</span>
+          </a>
+          <p class="text-sm leading-relaxed max-w-sm">
+            Where curiosity meets clarity — a space for readers, writers,
+            and the conversations that carry ideas forward.
+          </p>
+        </div>
+
+        <!-- Nav link groups
+             Mobile: Explore left col, Platform+Company stacked in right col.
+             sm+:    three equal columns via sm:contents unwrapping the inner wrapper. -->
+        <div class="md:col-span-7 flex gap-8 sm:grid sm:grid-cols-3">
+          <!-- Explore — always first / left column -->
+          <div class="flex-1">
+            <h4 class="text-sm uppercase tracking-wider text-white font-medium mb-4">
+              {navGroups[0].title}
+            </h4>
+            <ul class="text-xs space-y-2">
+              {navGroups[0].items.map((item) => (
+                <li>
+                  <a href={item.href} class="hover:text-white transition-colors">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Platform + Company: stacked in one flex column on mobile,
+               unwrapped into two separate grid cells on sm+ via sm:contents -->
+          <div class="flex-1 flex flex-col gap-8 sm:contents">
+            {navGroups.slice(1).map((group) => (
+              <div>
+                <h4 class="text-sm uppercase tracking-wider text-white font-medium mb-4">
+                  {group.title}
+                </h4>
+                <ul class="text-xs space-y-2">
+                  {group.items.map((item) => (
+                    <li>
+                      <a href={item.href} class="hover:text-white transition-colors">
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom bar inside glass card -->
+      <div class="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">
+        <p class="text-xs opacity-60">© {new Date().getFullYear()} Apto Designs. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <span class="text-[10px] uppercase tracking-widest opacity-50">Follow along:</span>
+          <div class="flex items-center gap-4">
+            {socials.map((s) => (
+              <a
+                href="#"
+                aria-label={s.label}
+                class="opacity-70 hover:opacity-100 hover:text-white transition-all"
+                set:html={s.svg}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Legal strip below the glass card -->
+    <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 mt-6">
+      {legalLinks.map((l) => (
+        <a
+          href={l.href}
+          class="text-muted-foreground text-xs hover:text-foreground transition-colors"
+        >
+          {l.label}
+        </a>
+      ))}
+    </div>
+
+  </div>
+</div>

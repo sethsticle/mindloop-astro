@@ -1,0 +1,246 @@
+---
+/**
+ * MissionV2 — horizontal drag/snap carousel over the astronaut hand image.
+ *
+ * Swap carousel images by editing the array below — landscape aspect ratio works best.
+ * Cards snap to centre. The centred card scales up; flanking cards scale down.
+ * Arrow buttons provided for desktop; touch/swipe works natively.
+ */
+
+const carouselImages = [
+  { src: "https://picsum.photos/seed/ml-card-1/800/500", alt: "Placeholder image 1" },
+  { src: "https://picsum.photos/seed/ml-card-2/800/500", alt: "Placeholder image 2" },
+  { src: "https://picsum.photos/seed/ml-card-3/800/500", alt: "Placeholder image 3" },
+  { src: "https://picsum.photos/seed/ml-card-4/800/500", alt: "Placeholder image 4" },
+];
+---
+
+<section
+  class="mission-v2 relative w-full overflow-hidden"
+  style="min-height: 100svh;"
+  aria-label="Portfolio carousel"
+>
+  <!-- Background image -->
+  <img
+    src="/assets/images/holding-hand.webp"
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 w-full h-full object-cover object-center"
+  />
+
+  <!-- 4-edge vignette -->
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="
+      background:
+        radial-gradient(ellipse 80% 55% at 50% 50%, transparent 25%, rgba(0,0,0,0.5) 65%, rgba(0,0,0,0.93) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 20%, transparent 72%, rgba(0,0,0,0.88) 100%);
+    "
+    aria-hidden="true"
+  ></div>
+
+  <!-- Carousel area — sits in the upper portion above the hand -->
+  <div class="absolute inset-x-0 flex flex-col" style="top: 10%; bottom: 42%;">
+
+    <!-- Counter -->
+    <p
+      id="mv2-counter"
+      class="text-center text-white/50 text-xs tracking-[3px] uppercase mb-5 shrink-0"
+      aria-live="polite"
+    >
+      01 / 0{carouselImages.length}
+    </p>
+
+    <!-- Scroll track -->
+    <div
+      id="mv2-track"
+      class="flex-1 overflow-x-auto flex items-center"
+      style="
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        /* Padding centres the first/last card in the viewport */
+        padding-inline: calc(50vw - clamp(130px, 20vw, 250px));
+        gap: clamp(2rem, 5vw, 4rem);
+      "
+    >
+      {carouselImages.map((img, i) => (
+        <div
+          class="mv2-card flex-none"
+          data-index={i}
+          style="
+            width: clamp(260px, 40vw, 500px);
+            height: 100%;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            scroll-snap-align: center;
+            transform-origin: center center;
+            transition:
+              transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              opacity  0.5s ease,
+              box-shadow 0.5s ease;
+          "
+        >
+          <img
+            src={img.src}
+            alt={img.alt}
+            loading={i === 0 ? "eager" : "lazy"}
+            style="width: 100%; height: 100%; object-fit: cover; display: block;"
+          />
+        </div>
+      ))}
+    </div>
+
+    <!-- Dots + arrow buttons -->
+    <div class="shrink-0 flex items-center justify-center gap-5 mt-5">
+      <!-- Prev arrow -->
+      <button
+        id="mv2-prev"
+        aria-label="Previous slide"
+        class="liquid-glass w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors"
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="9 2 4 7 9 12"/>
+        </svg>
+      </button>
+
+      <!-- Dots -->
+      <div class="flex items-center gap-2.5" role="tablist" aria-label="Carousel slides">
+        {carouselImages.map((_, i) => (
+          <button
+            class="mv2-dot"
+            role="tab"
+            aria-selected={i === 0 ? "true" : "false"}
+            aria-label={`Slide ${i + 1}`}
+            data-index={i}
+            style="
+              width: 6px; height: 6px;
+              border-radius: 50%;
+              border: none; padding: 0; cursor: pointer;
+              background: rgba(255,255,255,0.35);
+              transition: background 0.4s ease, transform 0.4s ease;
+            "
+          ></button>
+        ))}
+      </div>
+
+      <!-- Next arrow -->
+      <button
+        id="mv2-next"
+        aria-label="Next slide"
+        class="liquid-glass w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors"
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="5 2 10 7 5 12"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* Hide scrollbar cross-browser */
+  #mv2-track::-webkit-scrollbar { display: none; }
+</style>
+
+<script>
+  (function () {
+    const track   = document.getElementById('mv2-track') as HTMLElement | null;
+    const counter = document.getElementById('mv2-counter') as HTMLElement | null;
+    const prevBtn = document.getElementById('mv2-prev') as HTMLButtonElement | null;
+    const nextBtn = document.getElementById('mv2-next') as HTMLButtonElement | null;
+    const cards   = Array.from(document.querySelectorAll<HTMLElement>('.mv2-card'));
+    const dots    = Array.from(document.querySelectorAll<HTMLButtonElement>('.mv2-dot'));
+
+    if (!track || !cards.length) return;
+
+    const COUNT = cards.length;
+
+    // ── Scale / opacity per normalised distance (0 = active, 1 = adjacent) ──
+    function styleCard(card: HTMLElement, dist: number) {
+      // dist is a continuous value: 0 at centre, 1 at one card away, etc.
+      const clamped  = Math.min(dist, 2);
+      const proximity = Math.max(0, 1 - clamped / 1.5); // 1 → 0 over 1.5 card widths
+      const scale    = 0.78 + proximity * 0.27;  // 0.78 → 1.05 (slight lift at centre)
+      const opacity  = 0.35 + proximity * 0.65;
+      const shadow   = proximity > 0.7
+        ? `0 ${Math.round(proximity * 28)}px ${Math.round(proximity * 60)}px rgba(0,0,0,0.6)`
+        : 'none';
+      card.style.transform  = `scale(${scale.toFixed(3)})`;
+      card.style.opacity    = opacity.toFixed(3);
+      card.style.boxShadow  = shadow;
+    }
+
+    function updateFromScroll() {
+      const viewCentre = track!.scrollLeft + track!.clientWidth / 2;
+      let closestDist  = Infinity;
+      let activeIdx    = 0;
+
+      cards.forEach((card, i) => {
+        const cardCentre = card.offsetLeft + card.offsetWidth / 2;
+        const dist       = Math.abs(cardCentre - viewCentre) / card.offsetWidth;
+        styleCard(card, dist);
+        if (dist < closestDist) { closestDist = dist; activeIdx = i; }
+      });
+
+      // Counter
+      if (counter) {
+        const n = String(activeIdx + 1).padStart(2, '0');
+        const t = String(COUNT).padStart(2, '0');
+        counter.textContent = `${n} / ${t}`;
+      }
+
+      // Dots
+      dots.forEach((dot, i) => {
+        const isActive = i === activeIdx;
+        dot.style.background = isActive ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)';
+        dot.style.transform  = isActive ? 'scale(1.5)' : 'scale(1)';
+        dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+    }
+
+    function scrollToIndex(idx: number, behavior: ScrollBehavior = 'smooth') {
+      const card = cards[Math.max(0, Math.min(COUNT - 1, idx))];
+      if (!card) return;
+      const cardCentre  = card.offsetLeft + card.offsetWidth / 2;
+      const trackCentre = track!.clientWidth / 2;
+      track!.scrollTo({ left: cardCentre - trackCentre, behavior });
+    }
+
+    function activeIndex(): number {
+      const viewCentre = track!.scrollLeft + track!.clientWidth / 2;
+      let closest = 0, minDist = Infinity;
+      cards.forEach((card, i) => {
+        const d = Math.abs(card.offsetLeft + card.offsetWidth / 2 - viewCentre);
+        if (d < minDist) { minDist = d; closest = i; }
+      });
+      return closest;
+    }
+
+    // Arrow buttons
+    prevBtn?.addEventListener('click', () => scrollToIndex(activeIndex() - 1));
+    nextBtn?.addEventListener('click', () => scrollToIndex(activeIndex() + 1));
+
+    // Dot clicks
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        scrollToIndex(parseInt(dot.dataset.index ?? '0', 10));
+      });
+    });
+
+    // Scroll listener
+    track.addEventListener('scroll', updateFromScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      // Re-snap to current index after resize
+      scrollToIndex(activeIndex(), 'instant' as ScrollBehavior);
+      updateFromScroll();
+    }, { passive: true });
+
+    // Initial paint — defer one frame so layout is complete
+    requestAnimationFrame(() => {
+      scrollToIndex(0, 'instant' as ScrollBehavior);
+      updateFromScroll();
+    });
+  })();
+</script>
