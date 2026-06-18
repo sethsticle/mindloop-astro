@@ -1,4 +1,7 @@
 ---
+import Logo from "./Logo.astro";
+import LogoV2 from "./LogoV2.astro";
+
 /**
  * FooterV2 — glass footer card over the astronaut landscape background.
  * Swaps the SparklesCanvas starfield for a static image background.
@@ -101,10 +104,9 @@ const legalLinks = [
         <!-- Brand block -->
         <div class="md:col-span-5">
           <a href="/" class="flex items-center gap-2.5 mb-4 text-white group">
-            <div class="w-7 h-7 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white/60 transition-colors">
-              <div class="w-2.5 h-2.5 rounded-full border border-white/50 group-hover:border-white/80 transition-colors"></div>
-            </div>
-            <span class="text-xl font-medium tracking-tight">Apto Designs</span>
+            <!-- <Logo className="h-10 w-auto "/> -->
+             <LogoV2 imgClass="h-10 w-auto" />
+            <!-- <span class="text-xl font-medium tracking-tight mt-2">Marketing Solutions</span> -->
           </a>
           <p class="text-sm leading-relaxed max-w-sm">
             Where curiosity meets clarity — a space for readers, writers,
@@ -157,7 +159,7 @@ const legalLinks = [
 
       <!-- Bottom bar inside glass card -->
       <div class="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">
-        <p class="text-xs opacity-60">© {new Date().getFullYear()} Apto Designs. All rights reserved.</p>
+        <p class="text-xs opacity-60">© {new Date().getFullYear()} MLD Marketing Solutions. All rights reserved.</p>
         <div class="flex items-center gap-4">
           <span class="text-[10px] uppercase tracking-widest opacity-50">Follow along:</span>
           <div class="flex items-center gap-4">

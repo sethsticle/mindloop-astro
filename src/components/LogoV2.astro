@@ -1,0 +1,14 @@
+---
+interface Props {
+  imgClass?: string;
+}
+const { imgClass = 'h-8 w-auto' } = Astro.props;
+---
+
+<div class="flex flex-row items-center gap-3 ">
+  <img src="/mld-logo.png" alt="MLD Marketing Solutions logo" class={imgClass} />
+  <span class="hidden md:flex flex-col font-bold text-xs tracking-tight text-foreground leading-tight mt-2">
+      <span class="text-[1rem]">Marketing</span>
+      <span class="text-[1rem]">Solutions</span>
+    </span>
+</div>

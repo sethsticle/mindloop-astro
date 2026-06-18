@@ -1,36 +1,21 @@
 ---
 import Base from '../layouts/BaseV2.astro';
 import CTAV2 from '../components/CTAV2.astro';
+import { caseStudies } from '../data/caseStudies';
 
-const featured = {
-  title: 'Editorial Platform',
-  client: 'Internal - Mindloop',
-  type: 'Product Design & Engineering',
-  year: '2026',
-  desc: 'A full publishing environment built for independent writers - from draft to distribution, analytics to archive. Designed to get out of the way.',
-  tags: ['Product', 'Design', 'Engineering'],
-  img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1400&auto=format&q=80',
-};
-
-const works = [
-  { title: 'The Signal Issue',       client: 'Self-published',  type: 'Editorial Design',      year: '2026', wide: false, img: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=800&auto=format&q=80' },
-  { title: 'Brand Identity',         client: 'Mindloop',        type: 'Visual Identity',        year: '2025', wide: false, img: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&auto=format&q=80' },
-  { title: 'Writer Dashboard',       client: 'Internal',        type: 'UX Design',              year: '2025', wide: true,  img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&q=80' },
-  { title: 'Quiet Web Research',     client: 'Open Research',   type: 'Strategy & Research',    year: '2025', wide: false, img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&q=80' },
-  { title: 'Community Architecture', client: 'Partners',        type: 'Systems Design',         year: '2024', wide: false, img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&auto=format&q=80' },
-
-];
+const featured = caseStudies.find(cs => cs.featured)!;
+const works = caseStudies.filter(cs => !cs.featured);
 
 const stats = [
-  { value: '12',  label: 'projects shipped' },
-  { value: '4',   label: 'open-source tools' },
-  { value: '7K+', label: 'readers reached'  },
-  { value: '3',   label: 'years in the work' },
+  { value: '40+',  label: 'campaigns delivered' },
+  { value: '5',    label: 'industries served' },
+  { value: '3.8x', label: 'average ROAS' },
+  { value: '4',    label: 'years in the market' },
 ];
 
 ---
 
-<Base title="Portfolio - Mindloop" description="Selected work from Mindloop. Design, engineering, and editorial projects built with intention.">
+<Base title="Portfolio - MLD Marketing Solutions" description="Selected campaigns, brand strategies and digital projects from MLD Marketing Solutions.">
 
   <!-- Full-page wrapper anchors the tall stalk -->
   <div class="relative">
@@ -64,7 +49,7 @@ const stats = [
             Work that<br /><span class="font-serif italic font-normal">matters.</span>
           </h1>
           <p data-reveal data-delay="0.15" class="text-lg text-muted-foreground max-w-sm leading-relaxed md:text-right pb-2">
-            A curated selection of projects across editorial, product, brand, and open-source. Quality over volume - always.
+            Campaigns, brand identities, and digital strategies built for measurable results. Quality over volume - always.
           </p>
         </div>
       </section>
@@ -99,7 +84,7 @@ const stats = [
               z-index: 10;
             "
           />
-          <div data-reveal data-delay="0.05" class="liquid-glass rounded-3xl overflow-hidden group cursor-pointer hover:scale-[1.005] transition-transform">
+          <a href={`/case-studies/${featured.slug}`} data-reveal data-delay="0.05" class="liquid-glass rounded-3xl overflow-hidden group hover:scale-[1.005] transition-transform block">
             <div class="aspect-[16/7] relative overflow-hidden">
               <img src={featured.img} alt={featured.title} class="absolute inset-0 w-full h-full object-cover" />
             </div>
@@ -126,18 +111,19 @@ const stats = [
                 </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
       </section>
 
       <!-- Works grid -->
       <section class="pb-32 md:pb-44 px-8 md:px-28 pt-6 max-w-7xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {works.map(({ title, client, type, year, wide, img }, i) => (
-            <article
+          {works.map(({ slug, title, client, year, wide, img }, i) => (
+            <a
+              href={`/case-studies/${slug}`}
               data-reveal
               data-delay={String(0.05 * i)}
-              class={`liquid-glass rounded-2xl overflow-hidden group cursor-pointer hover:scale-[1.01] transition-transform ${wide ? 'lg:col-span-2' : ''}`}
+              class={`liquid-glass rounded-2xl overflow-hidden group hover:scale-[1.01] transition-transform ${wide ? 'lg:col-span-2' : ''}`}
             >
               <div class={`${wide ? 'aspect-[3/1]' : 'aspect-square'} relative overflow-hidden`}>
                 <img src={img} alt={title} class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -149,7 +135,7 @@ const stats = [
                 </div>
                 <span class="text-xs font-mono text-muted-foreground shrink-0 ml-4">{year}</span>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       </section>

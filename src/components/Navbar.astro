@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import LogoV2 from './LogoV2.astro';
 
 const links = [
   { label: 'Home', href: '/' },
@@ -11,12 +12,13 @@ const links = [
 ];
 ---
 <nav class="fixed top-0 left-0 right-0 z-50 px-8 md:px-16 py-4 flex items-center justify-between">
-  <a href="/" class="flex items-center gap-3 shrink-0">
-    <Logo className="w-8 h-8 text-foreground hover:text-accent transition-colors"/>
-    <span class="font-bold text-lg tracking-tight">Apto Designs</span>
+  <a href="/" class="flex items-center gap-5 shrink-0  justify-center text-center ">
+    <!-- <Logo className="h-14 w-auto"/> -->
+     <LogoV2 imgClass="h-10 w-auto" />
+    
   </a>
 
-  <div class="hidden md:flex items-center gap-6 text-sm">
+  <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 text-sm">
     {links.map((l) => (
       <a href={l.href} class="text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">{l.label}</a>
     ))}

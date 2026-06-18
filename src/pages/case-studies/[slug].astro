@@ -1,0 +1,219 @@
+---
+import BaseV2 from '../../layouts/BaseV2.astro';
+import { caseStudies, type CaseStudy } from '../../data/caseStudies';
+
+export function getStaticPaths() {
+  return caseStudies.map(cs => ({
+    params: { slug: cs.slug },
+    props: { study: cs },
+  }));
+}
+
+interface Props { study: CaseStudy; }
+const { study } = Astro.props;
+
+const currentIndex = caseStudies.findIndex(cs => cs.slug === study.slug);
+const next = caseStudies[(currentIndex + 1) % caseStudies.length];
+---
+
+<BaseV2
+  title={`${study.title} — MLD Marketing Solutions`}
+  description={study.desc}
+>
+
+  <!-- Back link -->
+  <div class="pt-28 md:pt-32 px-6 md:px-16 max-w-7xl mx-auto">
+    <a
+      href="/portfolio"
+      class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+      </svg>
+      Portfolio
+    </a>
+  </div>
+
+  <!-- Hero image -->
+  <div class="mt-8 px-6 md:px-16 max-w-7xl mx-auto">
+    <div class="w-full aspect-[4/3] md:aspect-[21/9] rounded-2xl overflow-hidden">
+      <img
+        src={study.img}
+        alt={study.title}
+        class="w-full h-full object-cover"
+        loading="eager"
+      />
+    </div>
+  </div>
+
+  <!-- Title block -->
+  <div class="mt-10 px-6 md:px-16 max-w-7xl mx-auto">
+    <div class="flex flex-wrap gap-2 mb-5">
+      {study.tags.map(tag => (
+        <span class="px-3 py-1 rounded-full border border-border/40 text-xs text-muted-foreground">
+          {tag}
+        </span>
+      ))}
+    </div>
+    <h1
+      data-reveal
+      class="text-4xl md:text-6xl font-medium tracking-[-1.5px] leading-tight max-w-3xl"
+    >
+      {study.title}
+    </h1>
+    <p
+      data-reveal
+      data-delay="0.08"
+      class="text-muted-foreground mt-4 text-lg leading-relaxed max-w-2xl"
+    >
+      {study.desc}
+    </p>
+  </div>
+
+  <!-- Metadata strip -->
+  <div class="mt-12 px-6 md:px-16 max-w-7xl mx-auto border-t border-b border-border/30 py-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div>
+        <p class="text-xs uppercase tracking-widest text-muted-foreground mb-2">Client</p>
+        <p class="text-sm font-medium">{study.client}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-widest text-muted-foreground mb-2">Service</p>
+        <p class="text-sm font-medium">{study.type}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-widest text-muted-foreground mb-2">Year</p>
+        <p class="text-sm font-medium">{study.year}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-widest text-muted-foreground mb-2">Format</p>
+        <p class="text-sm font-medium">Case Study</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Brief -->
+  <section class="mt-20 md:mt-28 px-6 md:px-16 max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-12 gap-8 md:gap-16">
+      <div class="md:col-span-3">
+        <p class="text-xs uppercase tracking-[3px] text-muted-foreground md:sticky md:top-28">
+          The Brief
+        </p>
+      </div>
+      <div data-reveal class="md:col-span-9">
+        <p class="text-xl md:text-2xl leading-relaxed text-foreground/80">
+          {study.challenge}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full-width image break -->
+  <div class="mt-16 md:mt-20 px-6 md:px-16 max-w-7xl mx-auto">
+    <div class="w-full aspect-[4/3] md:aspect-[2/1] rounded-2xl overflow-hidden">
+      <img
+        src={study.gallery[0]}
+        alt=""
+        aria-hidden="true"
+        class="w-full h-full object-cover"
+        loading="lazy"
+      />
+    </div>
+  </div>
+
+  <!-- Our Approach -->
+  <section class="mt-20 md:mt-28 px-6 md:px-16 max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-12 gap-8 md:gap-16">
+      <div class="md:col-span-3">
+        <p class="text-xs uppercase tracking-[3px] text-muted-foreground md:sticky md:top-28">
+          Our Approach
+        </p>
+      </div>
+      <div data-reveal class="md:col-span-9">
+        <p class="text-xl md:text-2xl leading-relaxed text-foreground/80">
+          {study.solution}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery grid -->
+  <section class="mt-16 px-6 md:px-16 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div data-reveal class="aspect-[4/3] rounded-2xl overflow-hidden">
+        <img
+          src={study.gallery[1]}
+          alt=""
+          aria-hidden="true"
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+      <div data-reveal data-delay="0.08" class="aspect-[4/3] rounded-2xl overflow-hidden">
+        <img
+          src={study.gallery[2]}
+          alt=""
+          aria-hidden="true"
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="mt-20 md:mt-28 px-6 md:px-16 max-w-7xl mx-auto">
+    <p class="text-xs uppercase tracking-[3px] text-muted-foreground mb-10">Results</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {study.results.map(({ value, label }, i) => (
+        <div
+          data-reveal
+          data-delay={String(0.06 * i)}
+          class="liquid-glass rounded-2xl p-6 md:p-8"
+        >
+          <p
+            class="text-3xl md:text-4xl font-medium tracking-[-0.5px]"
+            style="color: var(--color-accent)"
+          >
+            {value}
+          </p>
+          <p class="text-sm text-muted-foreground mt-2 leading-snug">{label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Next case study -->
+  <section class="mt-24 md:mt-36 px-6 md:px-16 max-w-7xl mx-auto border-t border-border/30 pt-12">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+      <div>
+        <p class="text-xs uppercase tracking-[3px] text-muted-foreground mb-3">Next Case Study</p>
+        <h3 class="text-2xl md:text-3xl font-medium tracking-[-0.5px]">{next.title}</h3>
+        <p class="text-sm text-muted-foreground mt-1">{next.client}</p>
+      </div>
+      <a
+        href={`/case-studies/${next.slug}`}
+        class="liquid-glass shrink-0 rounded-full px-8 py-3.5 text-sm font-medium inline-flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-transform"
+      >
+        View Case Study
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Back to portfolio -->
+  <div class="mt-8 mb-32 px-6 md:px-16 max-w-7xl mx-auto">
+    <a
+      href="/portfolio"
+      class="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+      </svg>
+      Back to Portfolio
+    </a>
+  </div>
+
+</BaseV2>

@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import FooterV2 from '../components/FooterV2.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title?: string;
@@ -22,7 +23,7 @@ const { title = 'Mindloop', description = 'A newsletter and content platform for
   <body>
     <Navbar />
     <slot />
-    <FooterV2 />
+    <FooterV2 /> <!-- New footer with updated design and content -->
     <script src="/scripts/reveal.js" defer></script>
     <script src="/scripts/video-lazy.js" defer></script>
     <script src="/scripts/video-fade.js" defer></script>

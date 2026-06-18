@@ -3,6 +3,7 @@ import Base from "../layouts/BaseV2.astro";
 import VideoAutoplay from "../components/VideoAutoplay.astro";
 import MissionV2 from "../components/MissionV2.astro";
 import CTAV2 from "../components/CTAV2.astro";
+import StatsGrid from "../components/StatsGrid.astro";
 
 const platforms = [
   {
@@ -29,7 +30,7 @@ const solutionItems = [
   },
   {
     title: "Writer Tools",
-    desc: "Everything makers need to publish, polish, and grow.",
+    desc: "Everything makers need to publish, polish and grow.",
   },
   {
     title: "Community",
@@ -42,7 +43,7 @@ const solutionItems = [
 ];
 ---
 
-<Base title="Zeno - Be Amazed">
+<Base title="MLD Marketing Solutions">
   <!-- ── Hero ─────────────────────────────────────────────────────────── -->
   <section class="relative min-h-screen w-full overflow-hidden">
     <VideoAutoplay
@@ -57,7 +58,7 @@ const solutionItems = [
     </div>
 
     <div
-      class="relative z-10 flex flex-col items-center text-center px-6 pt-28 md:pt-32 pb-32 max-w-5xl mx-auto"
+      class="relative z-10 flex flex-col items-center text-center px-6 pt-28 md:pt-32 pb-32 max-w-5xl mx-auto "
     >
       <div data-reveal class="flex items-center gap-3 mb-8">
         <div class="flex -space-x-2">
@@ -176,7 +177,25 @@ const solutionItems = [
     </p>
   </section>
 
-
+  <!-- ── Stats ─────────────────────────────────────────────────────────── -->
+  <section class="px-6 md:px-12 py-32 md:py-44 max-w-6xl mx-auto text-center">
+    <p
+      data-reveal
+      class="text-xs tracking-[3px] uppercase text-muted-foreground"
+    >
+      Results
+    </p>
+    <h2
+      data-reveal
+      data-delay="0.1"
+      class="text-4xl md:text-6xl font-medium tracking-[-1px] mt-6 leading-tight max-w-3xl mx-auto"
+    >
+      Results that <span class="font-serif italic font-normal">speak</span> for themselves
+    </h2>
+    <div data-reveal data-delay="0.2" class="mt-16">
+      <StatsGrid />
+    </div>
+  </section>
 
   <!-- ── Mission V1 (kept as reference, swapped out for MissionV2 below) ──
   <section
@@ -201,7 +220,7 @@ const solutionItems = [
       </span><span class="text-foreground">clarity</span><span
         class="text-muted-foreground"
       >
-        - where readers find depth, writers find reach, and every newsletter
+        - where readers find depth, writers find reach and every newsletter
         becomes a conversation worth having.</span
       >
     </p>
@@ -210,8 +229,8 @@ const solutionItems = [
       data-delay="0.2"
       class="text-xl md:text-2xl lg:text-3xl font-medium mt-10 text-muted-foreground"
     >
-      A platform where content, community, and insight flow together - with less
-      noise, less friction, and more meaning for everyone involved.
+      A platform where content, community and insight flow together - with less
+      noise, less friction and more meaning for everyone involved.
     </p>
   </section>
   ── Mission V1 end ──────────────────────────────────────────────────── -->

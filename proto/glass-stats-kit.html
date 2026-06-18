@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glass Stats Kit</title>
+<style>
+  :root {
+    --yellow:    #F69422;
+    --teal:      #0CA99E;
+    --navy:      #1A254C;
+    --bg:        #060608;
+    --fg:        rgba(255, 255, 255, 0.9);
+    --muted:     rgba(255, 255, 255, 0.45);
+    --dim:       rgba(255, 255, 255, 0.2);
+    --glass-bg:      rgba(255, 255, 255, 0.01);
+    --glass-blur:    4px;
+    --glass-inset:   rgba(255, 255, 255, 0.1);
+    --glass-border-w: 1.4px;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--bg);
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: var(--fg);
+    margin: 0;
+    padding: 0;
+  }
+
+  .wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 64px 24px;
+  }
+
+  .page-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.3);
+    margin: 0 0 10px;
+  }
+
+  .page-title {
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    margin: 0 0 48px;
+    color: var(--fg);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  /* ── Glass card ────────────────────────────────────────── */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: none;
+    border-radius: 20px;
+    box-shadow: inset 0 1px 1px var(--glass-inset);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    user-select: none;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--glass-border-w);
+    background: linear-gradient(
+      180deg,
+      rgba(255,255,255,0.45) 0%,
+      rgba(255,255,255,0.15) 20%,
+      rgba(255,255,255,0)    40%,
+      rgba(255,255,255,0)    60%,
+      rgba(255,255,255,0.15) 80%,
+      rgba(255,255,255,0.45) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      180deg,
+      rgba(255,255,255,0.06) 0%,
+      rgba(0,0,0,0.12) 100%
+    );
+    opacity: 0;
+    transition: opacity 250ms ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glass-card:hover::after {
+    opacity: 1;
+  }
+
+  .card-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Typography ────────────────────────────────────────── */
+  .card-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin: 0 0 20px;
+  }
+
+  .card-caption {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 8px 0 0;
+  }
+
+  /* ── Card 1: Counter ───────────────────────────────────── */
+  .counter-value {
+    font-size: 48px;
+    font-weight: 500;
+    color: var(--yellow);
+    letter-spacing: -1.5px;
+    line-height: 1;
+  }
+
+  .counter-line {
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--yellow) 0%, transparent 100%);
+    border-radius: 1px;
+    margin: 16px 0 12px;
+  }
+
+  /* ── Card 2: Donut ─────────────────────────────────────── */
+  .donut-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 4px 0 8px;
+  }
+
+  /* ── Card 3: Progress ──────────────────────────────────── */
+  .progress-value {
+    font-size: 48px;
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -1.5px;
+    line-height: 1;
+  }
+
+  .progress-track {
+    height: 8px;
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 16px 0 12px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--yellow) 0%, var(--teal) 100%);
+    will-change: transform;
+  }
+
+  /* ── Card 4: Gauge ─────────────────────────────────────── */
+  .gauge-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 4px 0 8px;
+  }
+
+  /* ── Card 5: Sparkline ─────────────────────────────────── */
+  .spark-svg {
+    width: 100%;
+    display: block;
+    margin: 4px 0 0;
+  }
+
+  .spark-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-top: 8px;
+    color: var(--muted);
+  }
+
+  .spark-stats .spark-end {
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* ── Card 6: Stacked ───────────────────────────────────── */
+  .bar-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 100px;
+    margin: 4px 0 0;
+  }
+
+  .bar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .bar-pct-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg);
+    min-height: 18px;
+    line-height: 1;
+  }
+
+  .bar-track {
+    width: 100%;
+    height: 100px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .bar-fill {
+    width: 100%;
+    height: 0%;
+    border-radius: 6px;
+    will-change: transform;
+  }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-text {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <p class="page-label">Glass Stats Kit</p>
+  <h1 class="page-title">Animated Statistics</h1>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+// ── Data model ───────────────────────────────────────────────
+const stats = [
+  {
+    id:      'counter',
+    label:   'Total Reach',
+    target:  84720,
+    suffix:  '',
+    caption: 'across all active campaigns',
+    color:   '#F69422',
+  },
+  {
+    id:      'donut',
+    label:   'Conversion Rate',
+    target:  68,
+    caption: 'above industry average',
+    colorA:  '#F69422',
+    colorB:  '#0CA99E',
+  },
+  {
+    id:      'progress',
+    label:   'Campaign Progress',
+    target:  74,
+    caption: 'of Q2 target reached',
+    colorA:  '#F69422',
+    colorB:  '#0CA99E',
+  },
+  {
+    id:      'gauge',
+    label:   'Engagement Score',
+    target:  81,
+    caption: 'out of 100 benchmark',
+    color:   '#0CA99E',
+  },
+  {
+    id:      'sparkline',
+    label:   'Weekly Impressions',
+    points:  [12, 19, 15, 28, 22, 35, 31, 44, 38, 52, 47, 61],
+    caption: 'past 12 weeks',
+    color:   '#0CA99E',
+    dot:     '#F69422',
+  },
+  {
+    id:      'stacked',
+    label:   'Channel Breakdown',
+    segments: [
+      { label: 'Organic',  value: 44, color: '#F69422' },
+      { label: 'Paid',     value: 31, color: '#0CA99E' },
+      { label: 'Referral', value: 25, color: '#1A254C' },
+    ],
+    caption: 'share of total traffic',
+  },
+];
+
+// ── Easing ───────────────────────────────────────────────────
+function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+function easeInOutQuad(t) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; }
+
+// ── Reduced motion ───────────────────────────────────────────
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function dur(ms) { return reducedMotion ? 0 : ms; }
+
+// ── Card builders ────────────────────────────────────────────
+
+function buildCounter(data) {
+  const card = document.createElement('div');
+  card.className = 'glass-card';
+
+  card.innerHTML = `
+    <div class="card-inner">
+      <p class="card-label">${data.label}</p>
+      <div class="counter-value" id="cval">0</div>
+      <div class="counter-line"></div>
+      <p class="card-caption">${data.caption}</p>
+    </div>
+  `;
+
+  const el = card.querySelector('#cval');
+  el.removeAttribute('id');
+
+  function animateCounter(target, duration) {
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      el.textContent = Math.floor(easeOutQuart(t) * target).toLocaleString();
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = target.toLocaleString();
+    }
+    if (duration === 0) { el.textContent = target.toLocaleString(); return; }
+    requestAnimationFrame(tick);
+  }
+
+  card._play = function() {
+    el.textContent = '0';
+    animateCounter(data.target, dur(1600));
+  };
+
+  return card;
+}
+
+function buildDonut(data) {
+  const circ = 2 * Math.PI * 58; // 364.42
+
+  const card = document.createElement('div');
+  card.className = 'glass-card';
+
+  card.innerHTML = `
+    <div class="card-inner">
+      <p class="card-label">${data.label}</p>
+      <div class="donut-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160" style="overflow:visible">
+          <defs>
+            <linearGradient id="donut-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="${data.colorA}"/>
+              <stop offset="100%" stop-color="${data.colorB}"/>
+            </linearGradient>
+          </defs>
+          <circle cx="80" cy="80" r="58" fill="none"
+            stroke="rgba(255,255,255,0.06)" stroke-width="14"
+            shape-rendering="geometricPrecision"/>
+          <circle class="donut-arc" cx="80" cy="80" r="58" fill="none"
+            stroke="url(#donut-grad)" stroke-width="14" stroke-linecap="round"
+            transform="rotate(-90 80 80)"
+            stroke-dasharray="${circ.toFixed(1)}"
+            stroke-dashoffset="${circ.toFixed(1)}"
+            shape-rendering="geometricPrecision"
+            style="will-change:stroke-dashoffset"/>
+          <text class="donut-label" x="80" y="86" text-anchor="middle"
+            font-size="28" font-weight="500" fill="rgba(255,255,255,0.9)"
+            font-family="system-ui,-apple-system,sans-serif">0%</text>
+        </svg>
+      </div>
+      <p class="card-caption">${data.caption}</p>
+    </div>
+  `;
+
+  const arc   = card.querySelector('.donut-arc');
+  const label = card.querySelector('.donut-label');
+
+  function animate(target, duration) {
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const e = easeOutQuart(t);
+      const offset = circ * (1 - (e * target / 100));
+      arc.setAttribute('stroke-dashoffset', offset.toFixed(2));
+      label.textContent = Math.floor(e * target) + '%';
+      if (t < 1) requestAnimationFrame(tick);
+      else {
+        arc.setAttribute('stroke-dashoffset', (circ * (1 - target/100)).toFixed(2));
+        label.textContent = target + '%';
+      }
+    }
+    if (duration === 0) {
+      arc.setAttribute('stroke-dashoffset', (circ * (1 - target/100)).toFixed(2));
+      label.textContent = target + '%';
+      return;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  card._play = function() {
+    arc.setAttribute('stroke-dashoffset', circ.toFixed(1));
+    label.textContent = '0%';
+    animate(data.target, dur(1400));
+  };
+
+  return card;
+}
+
+function buildProgress(data) {
+  const card = document.createElement('div');
+  card.className = 'glass-card';
+
+  card.innerHTML = `
+    <div class="card-inner">
+      <p class="card-label">${data.label}</p>
+      <div class="progress-value">0%</div>
+      <div class="progress-track">
+        <div class="progress-fill"></div>
+      </div>
+      <p class="card-caption">${data.caption}</p>
+    </div>
+  `;
+
+  const fill  = card.querySelector('.progress-fill');
+  const label = card.querySelector('.progress-value');
+
+  function animate(target, duration) {
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const e = easeOutQuart(t);
+      fill.style.width = (e * target) + '%';
+      label.textContent = Math.floor(e * target) + '%';
+      if (t < 1) requestAnimationFrame(tick);
+      else {
+        fill.style.width = target + '%';
+        label.textContent = target + '%';
+      }
+    }
+    if (duration === 0) {
+      fill.style.width = target + '%';
+      label.textContent = target + '%';
+      return;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  card._play = function() {
+    fill.style.width = '0%';
+    label.textContent = '0%';
+    animate(data.target, dur(1400));
+  };
+
+  return card;
+}
+
+function buildGauge(data) {
+  // Arc: M 20 110 A 80 80 0 0 1 180 110  →  π * 80 = 251.33
+  const arcLen = Math.PI * 80;
+
+  const card = document.createElement('div');
+  card.className = 'glass-card';
+
+  card.innerHTML = `
+    <div class="card-inner">
+      <p class="card-label">${data.label}</p>
+      <div class="gauge-wrap">
+        <svg width="200" height="120" viewBox="0 0 200 120" overflow="visible">
+          <path d="M 20 110 A 80 80 0 0 1 180 110"
+            fill="none" stroke="rgba(255,255,255,0.06)"
+            stroke-width="14" stroke-linecap="round"
+            shape-rendering="geometricPrecision"/>
+          <path class="gauge-arc" d="M 20 110 A 80 80 0 0 1 180 110"
+            fill="none" stroke="${data.color}"
+            stroke-width="14" stroke-linecap="round"
+            stroke-dasharray="${arcLen.toFixed(1)}"
+            stroke-dashoffset="${arcLen.toFixed(1)}"
+            shape-rendering="geometricPrecision"
+            style="will-change:stroke-dashoffset"/>
+          <text class="gauge-label" x="100" y="103" text-anchor="middle"
+            font-size="32" font-weight="500" fill="rgba(255,255,255,0.9)"
+            font-family="system-ui,-apple-system,sans-serif">0</text>
+          <text x="100" y="118" text-anchor="middle"
+            font-size="11" fill="rgba(255,255,255,0.4)"
+            font-family="system-ui,-apple-system,sans-serif">/ 100</text>
+        </svg>
+      </div>
+      <p class="card-caption">${data.caption}</p>
+    </div>
+  `;
+
+  const arc   = card.querySelector('.gauge-arc');
+  const label = card.querySelector('.gauge-label');
+
+  function animate(target, duration) {
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const e = easeOutQuart(t);
+      const offset = arcLen * (1 - (e * target / 100));
+      arc.setAttribute('stroke-dashoffset', offset.toFixed(2));
+      label.textContent = Math.floor(e * target);
+      if (t < 1) requestAnimationFrame(tick);
+      else {
+        arc.setAttribute('stroke-dashoffset', (arcLen * (1 - target/100)).toFixed(2));
+        label.textContent = target;
+      }
+    }
+    if (duration === 0) {
+      arc.setAttribute('stroke-dashoffset', (arcLen * (1 - target/100)).toFixed(2));
+      label.textContent = target;
+      return;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  card._play = function() {
+    arc.setAttribute('stroke-dashoffset', arcLen.toFixed(1));
+    label.textContent = '0';
+    animate(data.target, dur(1400));
+  };
+
+  return card;
+}
+
+function buildSparkline(data) {
+  const pts = data.points;
+  const minVal = Math.min(...pts);
+  const maxVal = Math.max(...pts);
+  const W = 280, H = 80, padY = 8, innerH = H - padY * 2;
+
+  const coords = pts.map((v, i) => {
+    const x = (i / (pts.length - 1)) * W;
+    const y = padY + innerH - ((v - minVal) / (maxVal - minVal)) * innerH;
+    return [x, y];
+  });
+
+  const lineD = coords.map((c, i) => `${i === 0 ? 'M' : 'L'} ${c[0].toFixed(2)},${c[1].toFixed(2)}`).join(' ');
+
+  const areaD = lineD
+    + ` L ${coords[coords.length-1][0].toFixed(2)},80`
+    + ` L ${coords[0][0].toFixed(2)},80 Z`;
+
+  const [lastX, lastY] = coords[coords.length - 1];
+
+  const card = document.createElement('div');
+  card.className = 'glass-card';
+
+  card.innerHTML = `
+    <div class="card-inner">
+      <p class="card-label">${data.label}</p>
+      <svg class="spark-svg" height="80" viewBox="0 0 280 80" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="spark-area" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="${data.color}" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="${data.color}" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path class="spark-area-path" d="${areaD}"
+          fill="url(#spark-area)" opacity="0.15"/>
+        <path class="spark-line" d="${lineD}"
+          stroke="${data.color}" stroke-width="2" fill="none"
+          stroke-linecap="round" stroke-linejoin="round"
+          shape-rendering="geometricPrecision"
+          style="will-change:stroke-dashoffset"/>
+        <circle class="spark-dot" cx="${lastX.toFixed(2)}" cy="${lastY.toFixed(2)}"
+          r="4" fill="${data.dot}" opacity="0"/>
+      </svg>
+      <div class="spark-stats">
+        <span>${minVal}</span>
+        <span class="spark-end">${maxVal}</span>
+      </div>
+      <p class="card-caption">${data.caption}</p>
+    </div>
+  `;
+
+  const line = card.querySelector('.spark-line');
+  const dot  = card.querySelector('.spark-dot');
+  let totalLen = 0;
+
+  function initLen() {
+    totalLen = line.getTotalLength();
+    line.setAttribute('stroke-dasharray', totalLen);
+    line.setAttribute('stroke-dashoffset', totalLen);
+  }
+
+  function animate(duration) {
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const e = easeInOutQuad(t);
+      line.setAttribute('stroke-dashoffset', (totalLen * (1 - e)).toFixed(2));
+      if (t >= 0.9) {
+        const dotProgress = Math.min((t - 0.9) / 0.1, 1);
+        dot.setAttribute('opacity', dotProgress.toFixed(3));
+      }
+      if (t < 1) requestAnimationFrame(tick);
+      else {
+        line.setAttribute('stroke-dashoffset', '0');
+        dot.setAttribute('opacity', '1');
+      }
+    }
+    if (duration === 0) {
+      line.setAttribute('stroke-dashoffset', '0');
+      dot.setAttribute('opacity', '1');
+      return;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  card._play = function() {
+    if (totalLen === 0) initLen();
+    line.setAttribute('stroke-dashoffset', totalLen);
+    dot.setAttribute('opacity', '0');
+    animate(dur(1600));
+  };
+
+  // initLen called after DOM insertion
+  card._initLen = initLen;
+
+  return card;
+}
+
+function buildStacked(data) {
+  const card = document.createElement('div');
+  card.className = 'glass-card';
+
+  const barsHTML = data.segments.map(seg => `
+    <div class="bar-col">
+      <div class="bar-pct-label">0</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="background:${seg.color}"></div>
+      </div>
+    </div>
+  `).join('');
+
+  const legendHTML = data.segments.map(seg => `
+    <div class="legend-item">
+      <div class="legend-dot" style="background:${seg.color}"></div>
+      <span class="legend-text">${seg.label}</span>
+    </div>
+  `).join('');
+
+  card.innerHTML = `
+    <div class="card-inner">
+      <p class="card-label">${data.label}</p>
+      <div class="bar-group">${barsHTML}</div>
+      <div class="legend">${legendHTML}</div>
+      <p class="card-caption">${data.caption}</p>
+    </div>
+  `;
+
+  const fills  = [...card.querySelectorAll('.bar-fill')];
+  const labels = [...card.querySelectorAll('.bar-pct-label')];
+  let rafIds = [];
+
+  function animate(segments, duration) {
+    // cancel any running animations
+    rafIds.forEach(id => cancelAnimationFrame(id));
+    rafIds = [];
+
+    segments.forEach((seg, i) => {
+      const stagger = dur(i * 120);
+      const fill    = fills[i];
+      const label   = labels[i];
+
+      // reset
+      fill.style.height = '0%';
+      label.textContent = '0';
+
+      if (duration === 0 && stagger === 0) {
+        fill.style.height = seg.value + '%';
+        label.textContent = seg.value;
+        return;
+      }
+
+      const delayStart = performance.now() + stagger;
+
+      function tick(now) {
+        if (now < delayStart) {
+          rafIds.push(requestAnimationFrame(tick));
+          return;
+        }
+        const t = Math.min((now - delayStart) / (duration || 1), 1);
+        const e = easeOutQuart(t);
+        fill.style.height  = (e * seg.value).toFixed(2) + '%';
+        label.textContent  = Math.floor(e * seg.value);
+        if (t < 1) rafIds.push(requestAnimationFrame(tick));
+        else {
+          fill.style.height = seg.value + '%';
+          label.textContent = seg.value;
+        }
+      }
+      rafIds.push(requestAnimationFrame(tick));
+    });
+  }
+
+  card._play = function() {
+    fills.forEach(f => { f.style.height = '0%'; });
+    labels.forEach(l => { l.textContent = '0'; });
+    animate(data.segments, dur(1200));
+  };
+
+  return card;
+}
+
+// ── Mount cards ──────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.getElementById('grid');
+
+  const builders = {
+    counter:  buildCounter,
+    donut:    buildDonut,
+    progress: buildProgress,
+    gauge:    buildGauge,
+    sparkline: buildSparkline,
+    stacked:  buildStacked,
+  };
+
+  stats.forEach(data => {
+    const card = builders[data.id](data);
+    grid.appendChild(card);
+    // Sparkline needs path length after DOM insertion
+    if (data.id === 'sparkline' && card._initLen) {
+      card._initLen();
+    }
+  });
+
+  // ── Animation trigger system ─────────────────────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target._play();
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.glass-card').forEach(card => {
+    observer.observe(card);
+    card.addEventListener('mouseenter', () => card._play());
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+---
+// SVG constants computed at build time so the script never needs to recalculate them.
+// Values are passed to the DOM via data-* attributes and read by the animation script.
+
+const CIRC    = parseFloat((2 * Math.PI * 58).toFixed(1)); // donut r=58 → 364.4
+const ARC_LEN = parseFloat((Math.PI * 80).toFixed(1));     // gauge semicircle r=80 → 251.3
+
+// Sparkline: normalise 12 weekly impression values into a 280×80 SVG viewport.
+const sparkPts = [12, 19, 15, 28, 22, 35, 31, 44, 38, 52, 47, 61];
+const SW = 280, SH = 80, padY = 8, innerH = SH - padY * 2;
+const sMin = Math.min(...sparkPts);
+const sMax = Math.max(...sparkPts);
+const coords = sparkPts.map((v, i) => ({
+  x: parseFloat(((i / (sparkPts.length - 1)) * SW).toFixed(2)),
+  y: parseFloat((padY + innerH - ((v - sMin) / (sMax - sMin)) * innerH).toFixed(2)),
+}));
+const lineD  = coords.map((c, i) => `${i === 0 ? 'M' : 'L'} ${c.x},${c.y}`).join(' ');
+const lastC  = coords[coords.length - 1];
+const areaD  = `${lineD} L ${lastC.x},80 L ${coords[0].x},80 Z`;
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+  <!-- 1 ─ Animated counter ─────────────────────────────────────────── -->
+  <div class="liquid-glass rounded-2xl p-7 cursor-default select-none"
+       data-card="counter" data-target="84720">
+    <p class="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-5">Total Reach</p>
+    <div data-stat="value"
+         class="text-5xl font-medium leading-none tracking-[-0.06em] text-brand-yellow">
+      0
+    </div>
+    <div class="h-0.5 w-full rounded-sm my-4"
+         style="background:linear-gradient(90deg,#F69422 0%,transparent 100%)"></div>
+    <p class="text-xs text-muted-foreground">across all active campaigns</p>
+  </div>
+
+  <!-- 2 ─ Donut chart ──────────────────────────────────────────────── -->
+  <div class="liquid-glass rounded-2xl p-7 cursor-default select-none"
+       data-card="donut" data-target="68" data-circ={CIRC}>
+    <p class="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-3">Conversion Rate</p>
+    <div class="flex justify-center my-1">
+      <svg width="160" height="160" viewBox="0 0 160 160" style="overflow:visible" aria-hidden="true">
+        <defs>
+          <linearGradient id="donut-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#F69422"/>
+            <stop offset="100%" stop-color="#0CA99E"/>
+          </linearGradient>
+        </defs>
+        <!-- background ring -->
+        <circle cx="80" cy="80" r="58" fill="none"
+          stroke="rgba(255,255,255,0.06)" stroke-width="14"
+          shape-rendering="geometricPrecision"/>
+        <!-- animated ring — stroke-dashoffset driven by JS -->
+        <circle data-stat="arc" cx="80" cy="80" r="58" fill="none"
+          stroke="url(#donut-grad)" stroke-width="14" stroke-linecap="round"
+          transform="rotate(-90 80 80)"
+          stroke-dasharray={CIRC} stroke-dashoffset={CIRC}
+          shape-rendering="geometricPrecision"
+          style="will-change:stroke-dashoffset"/>
+        <text data-stat="label" x="80" y="86" text-anchor="middle"
+          font-size="28" font-weight="500" fill="rgba(255,255,255,0.9)"
+          font-family="system-ui,-apple-system,sans-serif">0%</text>
+      </svg>
+    </div>
+    <p class="text-xs text-muted-foreground">above industry average</p>
+  </div>
+
+  <!-- 3 ─ Progress bar ─────────────────────────────────────────────── -->
+  <div class="liquid-glass rounded-2xl p-7 cursor-default select-none"
+       data-card="progress" data-target="74">
+    <p class="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-5">Campaign Progress</p>
+    <div data-stat="value"
+         class="text-5xl font-medium leading-none tracking-[-0.06em]">0%</div>
+    <div class="h-2 w-full rounded-full overflow-hidden my-4"
+         style="background:rgba(255,255,255,0.06)">
+      <div data-stat="fill" class="h-full w-0 rounded-full"
+           style="background:linear-gradient(90deg,#F69422 0%,#0CA99E 100%);will-change:width"></div>
+    </div>
+    <p class="text-xs text-muted-foreground">of Q2 target reached</p>
+  </div>
+
+  <!-- 4 ─ Radial gauge ─────────────────────────────────────────────── -->
+  <div class="liquid-glass rounded-2xl p-7 cursor-default select-none"
+       data-card="gauge" data-target="81" data-arclen={ARC_LEN}>
+    <p class="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-3">Engagement Score</p>
+    <div class="flex justify-center my-1">
+      <svg width="200" height="120" viewBox="0 0 200 120" overflow="visible" aria-hidden="true">
+        <!-- background arc -->
+        <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none"
+          stroke="rgba(255,255,255,0.06)" stroke-width="14" stroke-linecap="round"
+          shape-rendering="geometricPrecision"/>
+        <!-- animated arc -->
+        <path data-stat="arc" d="M 20 110 A 80 80 0 0 1 180 110" fill="none"
+          stroke="#0CA99E" stroke-width="14" stroke-linecap="round"
+          stroke-dasharray={ARC_LEN} stroke-dashoffset={ARC_LEN}
+          shape-rendering="geometricPrecision"
+          style="will-change:stroke-dashoffset"/>
+        <text data-stat="label" x="100" y="103" text-anchor="middle"
+          font-size="32" font-weight="500" fill="rgba(255,255,255,0.9)"
+          font-family="system-ui,-apple-system,sans-serif">0</text>
+        <text x="100" y="118" text-anchor="middle"
+          font-size="11" fill="rgba(255,255,255,0.4)"
+          font-family="system-ui,-apple-system,sans-serif">/ 100</text>
+      </svg>
+    </div>
+    <p class="text-xs text-muted-foreground">out of 100 benchmark</p>
+  </div>
+
+  <!-- 5 ─ Sparkline ───────────────────────────────────────────────── -->
+  <div class="liquid-glass rounded-2xl p-7 cursor-default select-none"
+       data-card="sparkline">
+    <p class="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-2">Weekly Impressions</p>
+    <svg class="w-full block mt-1" height="80" viewBox="0 0 280 80"
+         preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="spark-area-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#0CA99E" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#0CA99E" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- area fill under the line -->
+      <path d={areaD} fill="url(#spark-area-grad)" opacity="0.15"/>
+      <!-- animated line — stroke-dashoffset reveal -->
+      <path data-stat="line" d={lineD}
+        stroke="#0CA99E" stroke-width="2" fill="none"
+        stroke-linecap="round" stroke-linejoin="round"
+        shape-rendering="geometricPrecision"
+        style="will-change:stroke-dashoffset"/>
+      <!-- terminal dot — fades in at end of line reveal -->
+      <circle data-stat="dot" cx={lastC.x} cy={lastC.y}
+        r="4" fill="#F69422" opacity="0"/>
+    </svg>
+    <div class="flex justify-between text-[13px] mt-2 text-muted-foreground">
+      <span>{sMin}</span>
+      <span class="text-foreground/90">{sMax}</span>
+    </div>
+    <p class="text-xs text-muted-foreground mt-2">past 12 weeks</p>
+  </div>
+
+  <!-- 6 ─ Stacked bars ────────────────────────────────────────────── -->
+  <!--
+    data-value on each bar-fill is read by the animation script.
+    bar-label and bar-fill are queried in DOM order so they must stay paired.
+  -->
+  <div class="liquid-glass rounded-2xl p-7 cursor-default select-none"
+       data-card="stacked">
+    <p class="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-2">Channel Breakdown</p>
+
+    <div class="flex items-end gap-3 h-[100px] mt-1">
+      <!-- Organic -->
+      <div class="flex flex-col items-center gap-1.5 flex-1">
+        <div data-stat="bar-label" class="text-[13px] font-medium min-h-[18px] leading-none">0</div>
+        <div class="w-full h-[100px] rounded-md overflow-hidden flex items-end"
+             style="background:rgba(255,255,255,0.04)">
+          <div data-stat="bar-fill" data-value="44" class="w-full h-0 rounded-md"
+               style="background:#F69422;will-change:height"></div>
+        </div>
+      </div>
+      <!-- Paid -->
+      <div class="flex flex-col items-center gap-1.5 flex-1">
+        <div data-stat="bar-label" class="text-[13px] font-medium min-h-[18px] leading-none">0</div>
+        <div class="w-full h-[100px] rounded-md overflow-hidden flex items-end"
+             style="background:rgba(255,255,255,0.04)">
+          <div data-stat="bar-fill" data-value="31" class="w-full h-0 rounded-md"
+               style="background:#0CA99E;will-change:height"></div>
+        </div>
+      </div>
+      <!-- Referral -->
+      <div class="flex flex-col items-center gap-1.5 flex-1">
+        <div data-stat="bar-label" class="text-[13px] font-medium min-h-[18px] leading-none">0</div>
+        <div class="w-full h-[100px] rounded-md overflow-hidden flex items-end"
+             style="background:rgba(255,255,255,0.04)">
+          <div data-stat="bar-fill" data-value="25" class="w-full h-0 rounded-md"
+               style="background:#1A254C;will-change:height"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-4 flex-wrap mt-4">
+      <div class="flex items-center gap-1.5">
+        <div class="w-3 h-3 rounded-full shrink-0" style="background:#F69422"></div>
+        <span class="text-[10px] text-muted-foreground uppercase tracking-[0.08em]">Organic</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <div class="w-3 h-3 rounded-full shrink-0" style="background:#0CA99E"></div>
+        <span class="text-[10px] text-muted-foreground uppercase tracking-[0.08em]">Paid</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <div class="w-3 h-3 rounded-full shrink-0" style="background:#1A254C"></div>
+        <span class="text-[10px] text-muted-foreground uppercase tracking-[0.08em]">Referral</span>
+      </div>
+    </div>
+    <p class="text-xs text-muted-foreground mt-2">share of total traffic</p>
+  </div>
+
+</div>
+
+<script>
+  // ── Easing + reduced-motion ──────────────────────────────────────────
+  const rm  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dur = (ms) => rm ? 0 : ms;
+  const easeOutQuart  = (t) => 1 - Math.pow(1 - t, 4);
+  const easeInOutQuad = (t) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+  // Shared rAF runner. Calls onTick(easedT, rawT) each frame, onDone when complete.
+  function animate(duration, easeFn, onTick, onDone) {
+    if (duration === 0) { onDone(); return; }
+    const start = performance.now();
+    (function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      onTick(easeFn(t), t);
+      if (t < 1) requestAnimationFrame(tick);
+      else onDone();
+    })(performance.now());
+  }
+
+  // ── Per-card init functions ──────────────────────────────────────────
+
+  function initCounter(card) {
+    const el     = card.querySelector('[data-stat="value"]');
+    const target = Number(card.dataset.target);
+    card._play = () => {
+      el.textContent = '0';
+      animate(dur(1600), easeOutQuart,
+        (e) => { el.textContent = Math.floor(e * target).toLocaleString(); },
+        ()  => { el.textContent = target.toLocaleString(); }
+      );
+    };
+  }
+
+  function initDonut(card) {
+    const arc    = card.querySelector('[data-stat="arc"]');
+    const label  = card.querySelector('[data-stat="label"]');
+    const target = Number(card.dataset.target);
+    const circ   = Number(card.dataset.circ);
+    card._play = () => {
+      arc.setAttribute('stroke-dashoffset', circ);
+      label.textContent = '0%';
+      animate(dur(1400), easeOutQuart,
+        (e) => {
+          arc.setAttribute('stroke-dashoffset', (circ * (1 - e * target / 100)).toFixed(2));
+          label.textContent = Math.floor(e * target) + '%';
+        },
+        () => {
+          arc.setAttribute('stroke-dashoffset', (circ * (1 - target / 100)).toFixed(2));
+          label.textContent = target + '%';
+        }
+      );
+    };
+  }
+
+  function initProgress(card) {
+    const fill   = card.querySelector('[data-stat="fill"]');
+    const label  = card.querySelector('[data-stat="value"]');
+    const target = Number(card.dataset.target);
+    card._play = () => {
+      fill.style.width    = '0%';
+      label.textContent   = '0%';
+      animate(dur(1400), easeOutQuart,
+        (e) => {
+          fill.style.width  = (e * target).toFixed(2) + '%';
+          label.textContent = Math.floor(e * target) + '%';
+        },
+        () => {
+          fill.style.width  = target + '%';
+          label.textContent = target + '%';
+        }
+      );
+    };
+  }
+
+  function initGauge(card) {
+    const arc    = card.querySelector('[data-stat="arc"]');
+    const label  = card.querySelector('[data-stat="label"]');
+    const target = Number(card.dataset.target);
+    const arcLen = Number(card.dataset.arclen);
+    card._play = () => {
+      arc.setAttribute('stroke-dashoffset', arcLen);
+      label.textContent = '0';
+      animate(dur(1400), easeOutQuart,
+        (e) => {
+          arc.setAttribute('stroke-dashoffset', (arcLen * (1 - e * target / 100)).toFixed(2));
+          label.textContent = String(Math.floor(e * target));
+        },
+        () => {
+          arc.setAttribute('stroke-dashoffset', (arcLen * (1 - target / 100)).toFixed(2));
+          label.textContent = String(target);
+        }
+      );
+    };
+  }
+
+  function initSparkline(card) {
+    const line   = card.querySelector('[data-stat="line"]');
+    const dot    = card.querySelector('[data-stat="dot"]');
+    // getTotalLength is safe here — Astro module scripts run after DOM parse
+    const total  = line.getTotalLength();
+    line.setAttribute('stroke-dasharray',  total);
+    line.setAttribute('stroke-dashoffset', total);
+    card._play = () => {
+      line.setAttribute('stroke-dashoffset', total);
+      dot.setAttribute('opacity', '0');
+      animate(dur(1600), easeInOutQuad,
+        (e, t) => {
+          line.setAttribute('stroke-dashoffset', (total * (1 - e)).toFixed(2));
+          // dot fades in over the last 10% of the animation
+          if (t >= 0.9) dot.setAttribute('opacity', Math.min((t - 0.9) / 0.1, 1).toFixed(3));
+        },
+        () => {
+          line.setAttribute('stroke-dashoffset', '0');
+          dot.setAttribute('opacity', '1');
+        }
+      );
+    };
+  }
+
+  function initStacked(card) {
+    const fills  = [...card.querySelectorAll('[data-stat="bar-fill"]')];
+    const labels = [...card.querySelectorAll('[data-stat="bar-label"]')];
+    const D      = dur(1200);
+    let rafIds   = [];
+
+    card._play = () => {
+      rafIds.forEach(id => cancelAnimationFrame(id));
+      rafIds = [];
+
+      fills.forEach((fill, i) => {
+        const target = Number(fill.dataset.value);
+        const label  = labels[i];
+        fill.style.height = '0%';
+        label.textContent = '0';
+
+        if (D === 0) {
+          fill.style.height = target + '%';
+          label.textContent = String(target);
+          return;
+        }
+
+        const delayStart = performance.now() + i * 120;
+
+        function tick(now) {
+          if (now < delayStart) { rafIds.push(requestAnimationFrame(tick)); return; }
+          const t = Math.min((now - delayStart) / D, 1);
+          const e = easeOutQuart(t);
+          fill.style.height = (e * target).toFixed(2) + '%';
+          label.textContent = String(Math.floor(e * target));
+          if (t < 1) rafIds.push(requestAnimationFrame(tick));
+          else { fill.style.height = target + '%'; label.textContent = String(target); }
+        }
+        rafIds.push(requestAnimationFrame(tick));
+      });
+    };
+  }
+
+  // ── Wire up all cards ────────────────────────────────────────────────
+  const inits = {
+    counter:   initCounter,
+    donut:     initDonut,
+    progress:  initProgress,
+    gauge:     initGauge,
+    sparkline: initSparkline,
+    stacked:   initStacked,
+  };
+
+  document.querySelectorAll('[data-card]').forEach(card => {
+    inits[card.dataset.card]?.(card);
+  });
+
+  // ── IntersectionObserver — fires play() on scroll into view ─────────
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target._play?.();
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('[data-card]').forEach(card => {
+    observer.observe(card);
+    card.addEventListener('mouseenter', () => card._play?.());
+  });
+</script>
