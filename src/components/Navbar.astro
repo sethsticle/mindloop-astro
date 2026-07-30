@@ -4,11 +4,11 @@ import LogoV2 from './LogoV2.astro';
 
 const links = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
+  { label: 'Our Mission', href: '/about' },
+  { label: 'The Engine Room', href: '/vision' },
+  { label: 'Mission Log', href: '/portfolio' },
+  { label: 'Open a Transmission', href: '/contact' },
   // { label: 'Projects', href: '/projects' },
-  { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Contact', href: '/contact' },
-  // { label: 'Vision', href: '/vision' },
 ];
 ---
 <nav class="fixed top-0 left-0 right-0 z-50 px-8 md:px-16 py-4 flex items-center justify-between">
@@ -48,3 +48,13 @@ const links = [
     </a>
   </div>
 </nav>
+
+<script>
+  // Adds the .nav-scrolled pill (see global.css) once the user scrolls past the hero.
+  const nav = document.querySelector('nav');
+  if (nav) {
+    const updateNav = () => nav.classList.toggle('nav-scrolled', window.scrollY > 20);
+    updateNav();
+    window.addEventListener('scroll', updateNav, { passive: true });
+  }
+</script>

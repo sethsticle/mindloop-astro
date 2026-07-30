@@ -7,38 +7,57 @@ import StatsGrid from "../components/StatsGrid.astro";
 
 const platforms = [
   {
-    name: "ChatGPT",
-    desc: "Conversational answers shaping how people learn and decide.",
+    name: "Strategy",
+    desc: "Every campaign starts with a plan built around real audience insight and business goals.",
     svg: `<path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>`,
   },
   {
-    name: "Perplexity",
-    desc: "Synthesized research replacing the traditional ten blue links.",
+    name: "Creativity",
+    desc: "Bold, scroll-stopping content designed to be instantly recognisable and genuinely engaging.",
     svg: `<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>`,
   },
   {
-    name: "Google AI",
-    desc: "Generative overviews answering before you ever click through.",
+    name: "Digital Solutions",
+    desc: "Cutting-edge tools and platforms that launch brands into new markets and accelerate growth.",
     svg: `<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>`,
   },
 ];
 
 const solutionItems = [
   {
-    title: "Curated Feed",
-    desc: "Hand-picked writing that respects your time and attention.",
+    title: "Social Media Management",
+    desc: "Day-to-day content and community management that turns followers into a genuine audience.",
   },
   {
-    title: "Writer Tools",
-    desc: "Everything makers need to publish, polish and grow.",
+    title: "Brand & Creative Content",
+    desc: "Visual identity, photography and video built to be instantly recognisable.",
   },
   {
-    title: "Community",
-    desc: "Conversations that turn readers into collaborators.",
+    title: "Organic Growth Strategy",
+    desc: "A lasting presence, not just rented attention - the core of every campaign we run.",
   },
   {
-    title: "Distribution",
-    desc: "Reach that meets your work where it deserves to be.",
+    title: "Digital Strategy & Advertising",
+    desc: "Strategy, creativity and technology working together to accelerate growth.",
+  },
+];
+
+const faqs = [
+  {
+    q: "What does MLD Marketing Solutions actually do?",
+    a: "We're a full-service marketing agency built around social media management, brand content, organic growth strategy and digital advertising - combining strategy, creativity and cutting-edge digital solutions to launch brands into new markets.",
+  },
+  {
+    q: "Why organic marketing first?",
+    a: "We believe the strongest growth comes from building a lasting presence, not just buying attention. More than 85% of our clients' marketing success is driven by organic growth strategies - attracting the right audience, building trust, and establishing authority.",
+  },
+  {
+    q: "What kind of brands do you work with?",
+    a: "Everything from local service stations and dealerships to national telecom and motorsport brands. If you're ambitious about growth, there's a place for you in our orbit.",
+  },
+  {
+    q: "How do I start a mission with MLD?",
+    a: "Open a transmission. Reach out through the contact page and our crew will get back to you to talk through where your brand wants to go next.",
   },
 ];
 ---
@@ -46,112 +65,56 @@ const solutionItems = [
 <Base title="MLD Marketing Solutions">
   <!-- ── Hero ─────────────────────────────────────────────────────────── -->
   <section class="relative min-h-screen w-full overflow-hidden">
-    <VideoAutoplay
-      src="/assets/video/hero.mp4"
-      class="absolute inset-0 w-full h-full object-cover z-0"
-      eager
-      freeze
-    />
-    <div
-      class="absolute bottom-0 w-full h-64 bg-linear-to-t from-background from-10% to-transparent z-[1]"
-    >
-    </div>
+    <VideoAutoplay src="/assets/video/hero.mp4" class="absolute inset-0 z-0 h-full w-full object-cover" eager freeze />
+    <div class="from-background absolute bottom-0 z-[1] h-64 w-full bg-linear-to-t from-10% to-transparent"></div>
 
-    <div
-      class="relative z-10 flex flex-col items-center text-center px-6 pt-28 md:pt-32 pb-32 max-w-5xl mx-auto "
-    >
-      <div data-reveal class="flex items-center gap-3 mb-8">
+    <div class="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 pt-28 pb-32 text-center md:pt-32">
+      <div data-reveal class="mb-8 flex items-center gap-3">
         <div class="flex -space-x-2">
-          <img
-            src="/assets/images/avatar-1.jpg"
-            alt=""
-            class="w-8 h-8 rounded-full border-2 border-background"
-          />
-          <img
-            src="/assets/images/avatar-2.jpg"
-            alt=""
-            class="w-8 h-8 rounded-full border-2 border-background"
-          />
-          <img
-            src="/assets/images/avatar-3.jpg"
-            alt=""
-            class="w-8 h-8 rounded-full border-2 border-background"
-          />
+          <img src="/assets/images/avatar-1.jpg" alt="" class="border-background h-8 w-8 rounded-full border-2" />
+          <img src="/assets/images/avatar-2.jpg" alt="" class="border-background h-8 w-8 rounded-full border-2" />
+          <img src="/assets/images/avatar-3.jpg" alt="" class="border-background h-8 w-8 rounded-full border-2" />
         </div>
-        <span class="text-muted-foreground text-sm"
-          >7,000+ people already subscribed</span
-        >
+        <span class="text-muted-foreground text-sm">60+ brands growing with MLD</span>
       </div>
 
-      <h1
-        data-reveal
-        data-delay="0.1"
-        class="text-5xl md:text-7xl lg:text-8xl font-medium tracking-[-2px] leading-[1.05]"
-      >
-        Let's <span class="font-serif italic font-normal">Collaborate</span> on Ideas That Matter
+      <h1 data-reveal data-delay="0.1" class="text-5xl leading-[1.05] font-medium tracking-[-2px] md:text-7xl lg:text-8xl">
+        Helping Ambitious Brands <br /><span class="font-serif font-normal italic">Reach New Frontiers</span>
       </h1>
 
-      <p
-        data-reveal
-        data-delay="0.2"
-        class="text-lg mt-8 max-w-2xl py-2"
-        style="color: var(--color-hero-subtitle)"
-      >
-        Join our feed for meaningful updates, news around technology and a
-        shared journey toward depth and direction.
+      <p data-reveal data-delay="0.2" class="mt-8 max-w-2xl py-2 text-lg" style="color: var(--color-hero-subtitle)">
+        We combine strategy, creativity, and cutting-edge digital solutions to launch brands into new markets, accelerate growth, and create lasting impact.
       </p>
 
       <form
         data-reveal
         data-delay="0.3"
         onsubmit="return false"
-        class="liquid-glass rounded-full p-2 max-w-lg w-full flex items-center gap-2 mt-10"
-      >
-        <input
-          type="email"
-          placeholder="Enter your email"
-          class="flex-1 bg-transparent outline-none px-4 py-2 text-foreground placeholder:text-muted-foreground"
-        />
+        class="liquid-glass mt-10 flex w-full max-w-lg flex-col items-stretch gap-2 rounded-3xl p-2 sm:flex-row sm:items-center sm:rounded-full">
+        <input type="email" placeholder="Enter your email" class="text-foreground placeholder:text-muted-foreground min-w-0 flex-1 bg-transparent px-4 py-3 outline-none sm:py-2" />
         <button
           type="submit"
-          class="bg-foreground text-background rounded-full px-8 py-3 text-sm font-semibold tracking-wide hover:scale-[1.03] active:scale-[0.98] transition-transform"
-        >
-          SUBSCRIBE
+          class="bg-foreground text-background rounded-full px-8 py-3 text-sm font-semibold tracking-wide whitespace-nowrap transition-transform hover:scale-[1.03] active:scale-[0.98]">
+          ENTER OUR ORBIT
         </button>
       </form>
     </div>
-
   </section>
 
   <!-- ── Search Changed ────────────────────────────────────────────────── -->
-  <section
-    class="px-6 md:px-12 pt-52 md:pt-64 pb-6 md:pb-9 text-center max-w-6xl mx-auto "
-  >
-    <h2
-      data-reveal
-      class="text-5xl md:text-7xl lg:text-8xl font-medium tracking-[-2px] leading-[1.05]"
-    >
-      Search has <span class="font-serif italic font-normal">changed.</span> Have
-      you?
+  <section class="mx-auto max-w-6xl px-6 pt-52 pb-6 text-center md:px-12 md:pt-64 md:pb-9">
+    <h2 data-reveal class="text-5xl leading-[1.05] font-medium tracking-[-2px] md:text-7xl lg:text-8xl">
+      Attention is earned, <span class="font-serif font-normal italic"><br />not bought.</span>
     </h2>
-    <p
-      data-reveal
-      data-delay="0.1"
-      class="text-muted-foreground text-lg max-w-2xl mx-auto mt-8 mb-24"
-    >
-      The way people discover ideas has shifted. The question is whether your
-      voice still reaches them.
+    <p data-reveal data-delay="0.1" class="text-muted-foreground mx-auto mt-8 mb-24 max-w-2xl text-lg">
+      The way brands build trust has shifted. The question is whether yours still reaches the right audience.
     </p>
 
-    <div class="grid md:grid-cols-3 gap-12 md:gap-8 mb-20">
+    <div class="mb-20 grid gap-12 md:grid-cols-3 md:gap-8">
       {
         platforms.map(({ name, desc, svg }, i) => (
-          <div
-            data-reveal
-            data-delay={String(0.1 * i)}
-            class="flex flex-col items-center"
-          >
-            <div class="w-[200px] h-[200px] flex items-center justify-center liquid-glass-animated rounded-3xl">
+          <div data-reveal data-delay={String(0.1 * i)} class="flex flex-col items-center">
+            <div class="liquid-glass-animated flex h-[200px] w-[200px] items-center justify-center rounded-3xl">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="48"
@@ -165,32 +128,21 @@ const solutionItems = [
                 set:html={svg}
               />
             </div>
-            <h3 class="font-semibold text-base mt-6">{name}</h3>
-            <p class="text-muted-foreground text-sm mt-2 max-w-xs">{desc}</p>
+            <h3 class="mt-6 text-base font-semibold">{name}</h3>
+            <p class="text-muted-foreground mt-2 max-w-xs text-sm">{desc}</p>
           </div>
         ))
       }
     </div>
 
-    <p data-reveal class="text-muted-foreground text-sm">
-      If you don't answer the questions, someone else will.
-    </p>
+    <p data-reveal class="text-muted-foreground text-sm">If you don't build the presence, someone else will.</p>
   </section>
 
   <!-- ── Stats ─────────────────────────────────────────────────────────── -->
-  <section class="px-6 md:px-12 py-32 md:py-44 max-w-6xl mx-auto text-center">
-    <p
-      data-reveal
-      class="text-xs tracking-[3px] uppercase text-muted-foreground"
-    >
-      Results
-    </p>
-    <h2
-      data-reveal
-      data-delay="0.1"
-      class="text-4xl md:text-6xl font-medium tracking-[-1px] mt-6 leading-tight max-w-3xl mx-auto"
-    >
-      Results that <span class="font-serif italic font-normal">speak</span> for themselves
+  <section class="mx-auto max-w-6xl px-6 py-32 text-center md:px-12 md:py-44">
+    <p data-reveal class="text-muted-foreground text-xs tracking-[3px] uppercase">Results</p>
+    <h2 data-reveal data-delay="0.1" class="mx-auto mt-6 max-w-3xl text-4xl leading-tight font-medium tracking-[-1px] md:text-6xl">
+      Results that <span class="font-serif font-normal italic">speak</span> for themselves
     </h2>
     <div data-reveal data-delay="0.2" class="mt-16">
       <StatsGrid />
@@ -239,23 +191,10 @@ const solutionItems = [
   <MissionV2 />
 
   <!-- ── Solution ──────────────────────────────────────────────────────── -->
-  <section
-    class="py-32 md:py-44 px-6 md:px-12 border-t border-border/30 max-w-7xl mx-auto"
-  >
-    <p
-      data-reveal
-      class="text-xs tracking-[3px] uppercase text-muted-foreground text-center"
-    >
-      Solution
-    </p>
-    <h2
-      data-reveal
-      data-delay="0.1"
-      class="text-4xl md:text-6xl font-medium tracking-[-1px] text-center mt-6 leading-tight max-w-4xl mx-auto"
-    >
-      The platform for <span class="font-serif italic font-normal"
-        >meaningful</span
-      > content
+  <section class="border-border/30 mx-auto max-w-7xl border-t px-6 py-32 md:px-12 md:py-44">
+    <p data-reveal class="text-muted-foreground text-center text-xs tracking-[3px] uppercase">Solution</p>
+    <h2 data-reveal data-delay="0.1" class="mx-auto mt-6 max-w-4xl text-center text-4xl leading-tight font-medium tracking-[-1px] md:text-6xl">
+      The engine room behind <span class="font-serif font-normal italic">every</span> mission
     </h2>
 
     <!-- Solution V1 (kept as reference)
@@ -268,28 +207,31 @@ const solutionItems = [
     Solution V1 end -->
 
     <!-- Solution V2 — static image with edge gradient fade -->
-    <div data-reveal data-delay="0.2" class="relative my-12 rounded-2xl overflow-hidden">
+    <div data-reveal data-delay="0.2" class="relative my-12 overflow-hidden rounded-2xl">
       <img
         src="/assets/images/solution.webp"
         alt="GoHighLevel connecting social media platforms — a unified solution for client growth"
-        class="w-full aspect-[2/1] object-cover rounded-2xl"
+        class="aspect-[2/1] w-full rounded-2xl object-cover"
         loading="lazy"
       />
       <!-- Edge fades — blends the image into the dark page background -->
-      <div class="absolute inset-0 rounded-2xl pointer-events-none" style="background: linear-gradient(to right, #000 0%, transparent 12%, transparent 88%, #000 100%);"></div>
-      <div class="absolute inset-0 rounded-2xl pointer-events-none" style="background: linear-gradient(to bottom, #000 0%, transparent 15%, transparent 80%, #000 100%);"></div>
+      <div class="pointer-events-none absolute inset-0 rounded-2xl" style="background: linear-gradient(to right, #000 0%, transparent 12%, transparent 88%, #000 100%);"></div>
+      <div class="pointer-events-none absolute inset-0 rounded-2xl" style="background: linear-gradient(to bottom, #000 0%, transparent 15%, transparent 80%, #000 100%);"></div>
     </div>
 
-    <div class="grid md:grid-cols-4 gap-8">
+    <div class="grid gap-8 md:grid-cols-4">
       {
         solutionItems.map(({ title, desc }, i) => (
           <div data-reveal data-delay={String(0.05 * i)}>
-            <h3 class="font-semibold text-base">{title}</h3>
-            <p class="text-muted-foreground text-sm mt-2">{desc}</p>
+            <h3 class="text-base font-semibold">{title}</h3>
+            <p class="text-muted-foreground mt-2 text-sm">{desc}</p>
           </div>
         ))
       }
     </div>
+    <p data-reveal data-delay="0.3" class="mt-16 text-center">
+      <a href="/vision" class="text-muted-foreground hover:text-foreground border-border/50 hover:border-foreground border-b pb-1 text-sm transition-colors"> Explore the Engine Room → </a>
+    </p>
   </section>
 
   <!-- ── CTA V1 (kept as reference) ──────────────────────────────────────
@@ -302,39 +244,39 @@ const solutionItems = [
   CTA V1 end ──────────────────────────────────────────────────────────── -->
 
   <!-- ── CTA V2 — star-field + comet canvas, no logo ───────────────────── -->
-  <CTAV2 class="border-t border-border/30 py-32 md:py-44">
-    <div class="flex flex-col items-center text-center px-6 max-w-3xl mx-auto">
-      <h2
-        data-reveal
-        data-delay="0.1"
-        class="font-serif italic text-5xl md:text-6xl leading-tight"
-      >
-        Start Your Journey
-      </h2>
-      <p
-        data-reveal
-        data-delay="0.2"
-        class="text-muted-foreground text-lg mt-6 max-w-xl"
-      >
-        Subscribe to read or step in to write. Either way, it begins with a
-        single, deliberate move.
-      </p>
-      <div
-        data-reveal
-        data-delay="0.3"
-        class="flex flex-wrap justify-center gap-4 mt-10"
-      >
-        <button
-          class="bg-foreground text-background rounded-lg px-8 py-3.5 font-semibold text-sm hover:scale-[1.03] active:scale-[0.98] transition-transform"
-        >
-          Subscribe Now
-        </button>
-        <button
-          class="liquid-glass rounded-lg px-8 py-3.5 text-foreground font-semibold text-sm hover:scale-[1.03] active:scale-[0.98] transition-transform"
-        >
-          Start Writing
-        </button>
+  <CTAV2 class="border-border/30 border-t py-32 md:py-44">
+    <div class="mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
+      <h2 data-reveal data-delay="0.1" class="font-serif text-5xl leading-tight italic md:text-6xl">Start Your Mission</h2>
+      <p data-reveal data-delay="0.2" class="text-muted-foreground mt-6 max-w-xl text-lg">Enter our orbit or open a transmission. Either way, it begins with a single, deliberate move.</p>
+      <div data-reveal data-delay="0.3" class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href="/contact" class="bg-foreground text-background inline-block rounded-lg px-8 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.03] active:scale-[0.98]">
+          Board the Mothership
+        </a>
+        <a href="/vision" class="liquid-glass text-foreground inline-block rounded-lg px-8 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.03] active:scale-[0.98]">
+          Explore the Engine Room
+        </a>
       </div>
     </div>
   </CTAV2>
+
+  <!-- ── FAQ — Mission Control ────────────────────────────────────────── -->
+  <!-- NOTE: no FAQ content was supplied in the client brief. Questions below are
+       inferred from the case studies / About Us copy and should be reviewed
+       with the client before treating as final. -->
+  <section class="border-border/30 mx-auto max-w-4xl border-t px-6 py-32 md:px-12 md:py-44">
+    <p data-reveal class="text-muted-foreground text-center text-xs tracking-[3px] uppercase">Mission Control</p>
+    <h2 data-reveal data-delay="0.1" class="mt-6 mb-16 text-center text-4xl leading-tight font-medium tracking-[-1px] md:text-6xl">
+      Frequently asked <span class="font-serif font-normal italic">questions</span>
+    </h2>
+    <div class="divide-border/20 space-y-0 divide-y">
+      {
+        faqs.map(({ q, a }, i) => (
+          <div data-reveal data-delay={String(0.05 * i)} class="py-8">
+            <h3 class="text-lg font-semibold">{q}</h3>
+            <p class="text-muted-foreground mt-3 text-sm leading-relaxed">{a}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 </Base>

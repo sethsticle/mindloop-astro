@@ -2,34 +2,39 @@
 import Base from '../layouts/BaseV2.astro';
 import VideoAutoplay from '../components/VideoAutoplay.astro';
 
-const principles = [
+const timeline = [
   {
     number: '01',
-    title: 'Depth over velocity.',
-    body: 'We publish less so every word earns its place. Speed is the enemy of understanding. We deliberately slow down the cadence to let ideas breathe, mature, and actually land.',
+    title: 'The Launch.',
+    body: 'Nearly a decade ago, Dolby launched MLD from a little one-bedroom apartment, armed with little more than a dream, determination, and a less-than-stellar WiFi connection.',
   },
   {
     number: '02',
-    title: 'Readers, not users.',
-    body: 'We refuse the engagement trap. No infinite scroll, no algorithmic nudges, no dark patterns fighting for minutes. A reader who finishes something changed is worth a thousand drive-by clicks.',
+    title: 'The Crew Joins.',
+    body: 'What began as a solo mission quickly gained momentum when Sasha came aboard, bringing the creative fuel that would help shape MLD\'s trajectory. Together, they navigated challenges, embraced opportunities, and committed themselves to delivering exceptional results for every client they encountered.',
   },
   {
     number: '03',
-    title: 'Writers as first-class citizens.',
-    body: 'Every product decision runs through a single filter: does this make a writer\'s life better, or just the platform\'s metrics? When those two conflict, the writer wins.',
+    title: 'The Expansion.',
+    body: 'Today, MLD Marketing Solutions has expanded far beyond its humble launchpad. With a growing crew of more than 20 talented specialists and a presence that reaches across the globe, we\'ve become a recognised force in the marketing universe.',
+  },
+  {
+    number: '04',
+    title: 'The Next Orbit.',
+    body: 'And as our momentum continues to accelerate, we\'re only just beginning the next phase of our journey. The mission remains the same: helping ambitious brands reach new frontiers.',
   },
 ];
 ---
-<Base title="Mission - Mindloop" description="We exist to restore signal. Read the principles that guide everything we build at Mindloop.">
+<Base title="Launch History - MLD Marketing Solutions" description="From one small launchpad to a global orbit. The story of how MLD Marketing Solutions began and where it's headed.">
 
   <!-- Hero -->
   <section class="pt-44 md:pt-56 pb-20 md:pb-32 px-8 md:px-28 max-w-6xl mx-auto">
-    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Our Mission</p>
+    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Launch History</p>
     <h1 data-reveal data-delay="0.05" class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05] max-w-4xl">
-      We exist to<br /><span class="font-serif italic font-normal">restore signal.</span>
+      From one small launchpad<br /><span class="font-serif italic font-normal">to a global orbit.</span>
     </h1>
     <p data-reveal data-delay="0.15" class="text-xl text-muted-foreground mt-10 max-w-2xl leading-relaxed">
-      The internet is drowning in content. Billions of words published daily, most of them forgettable. We started Mindloop because we believe the problem isn't too little content - it's too little meaning. We're fixing that, one newsletter at a time.
+      Nearly a decade ago, Dolby launched MLD from a little one-bedroom apartment - what began as a solo mission has grown into a globally recognised marketing agency. The mission remains the same: helping ambitious brands reach new frontiers.
     </p>
   </section>
 
@@ -44,11 +49,11 @@ const principles = [
     </div>
   </section>
 
-  <!-- Principles -->
+  <!-- Timeline -->
   <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 max-w-6xl mx-auto">
-    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-16">What we believe</p>
+    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-16">The Story So Far</p>
     <div class="space-y-0 divide-y divide-border/20">
-      {principles.map(({ number, title, body }, i) => (
+      {timeline.map(({ number, title, body }, i) => (
         <div data-reveal data-delay={String(0.05 * i)} class="grid md:grid-cols-12 gap-8 py-12 md:py-16">
           <span class="md:col-span-1 text-sm text-muted-foreground font-mono pt-1">{number}</span>
           <div class="md:col-span-4">
@@ -63,11 +68,11 @@ const principles = [
   <!-- Pull quote -->
   <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 text-center">
     <blockquote data-reveal class="text-3xl md:text-5xl lg:text-6xl font-serif italic font-normal max-w-4xl mx-auto leading-tight text-foreground/90">
-      "The best newsletter is the one that makes you think longer after you close it."
+      "From one small launchpad to a global orbit."
     </blockquote>
-    <p data-reveal data-delay="0.1" class="mt-8 text-muted-foreground text-sm tracking-wide">- Founding principle, 2023</p>
+    <p data-reveal data-delay="0.1" class="mt-8 text-muted-foreground text-sm tracking-wide">- The MLD Story</p>
     <a data-reveal data-delay="0.2" href="/vision" class="inline-block mt-16 text-sm text-muted-foreground hover:text-foreground transition-colors border-b border-border/50 hover:border-foreground pb-1">
-      Read our vision →
+      Explore the Engine Room →
     </a>
   </section>
 

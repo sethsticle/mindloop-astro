@@ -3,15 +3,15 @@ import Base from '../layouts/BaseV2.astro';
 import CTAV2 from '../components/CTAV2.astro';
 
 const details = [
-  { label: 'General Inquiries', value: 'hello@mindloop.com' },
-  { label: 'Press & Media',     value: 'press@mindloop.com' },
-  { label: 'Support',           value: 'help@mindloop.com'  },
+  { label: 'Michael Dolby', value: 'michael@mldmarketing.co.za', href: 'mailto:michael@mldmarketing.co.za' },
+  { label: 'Sasha Dolby',   value: 'sasha@mldmarketing.co.za',   href: 'mailto:sasha@mldmarketing.co.za' },
+  { label: 'Call / WhatsApp', value: '071 939 7108',             href: 'https://wa.me/27719397108' },
 ];
 
 const inputCls = 'bg-transparent border-b border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-foreground transition-colors py-3 w-full mb-8';
 ---
 
-<Base title="Contact - Mindloop" description="Have a question, partnership idea, or just want to say hello? Get in touch with the Mindloop team.">
+<Base title="Open a Transmission - MLD Marketing Solutions" description="Have a question, a brand ready to launch, or just want to say hello? Get in touch with MLD Marketing Solutions.">
 
   <!-- CTAV2 provides the star-field + comet canvas as a full-page background -->
   <CTAV2 noClip class="min-h-screen">
@@ -44,17 +44,18 @@ const inputCls = 'bg-transparent border-b border-border/50 text-foreground place
 
         <!-- Left — text content -->
         <div class="md:col-span-5 flex flex-col justify-center">
-          <h1 data-reveal class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05]">
-            Let's<span class="font-serif italic font-normal"> connect.</span>
+          <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Open a Transmission</p>
+          <h1 data-reveal data-delay="0.05" class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05]">
+            Board the<span class="font-serif italic font-normal"> Mothership.</span>
           </h1>
           <p data-reveal data-delay="0.1" class="text-lg text-muted-foreground mt-6 mb-12">
-            Have a question, partnership idea, or just want to say hello? Drop us a line.
+            Have a question, a brand ready to launch, or just want to say hello? Send a transmission our way.
           </p>
           <div class="space-y-4">
-            {details.map(({ label, value }, i) => (
+            {details.map(({ label, value, href }, i) => (
               <div data-reveal data-delay={String(0.15 + i * 0.05)} class="flex gap-4 items-center">
                 <span class="text-sm text-muted-foreground w-40">{label}</span>
-                <a href={`mailto:${value}`} class="text-base font-medium hover:text-muted-foreground transition-colors">{value}</a>
+                <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined} class="text-base font-medium hover:text-muted-foreground transition-colors">{value}</a>
               </div>
             ))}
           </div>
@@ -70,12 +71,12 @@ const inputCls = 'bg-transparent border-b border-border/50 text-foreground place
           >
             <input type="text"   placeholder="Your Name"       class={inputCls} />
             <input type="email"  placeholder="Email Address"   class={inputCls} />
-            <textarea rows={4}   placeholder="How can we help?" class={inputCls}></textarea>
+            <textarea rows={4}   placeholder="Tell us about your mission" class={inputCls}></textarea>
             <button
               type="submit"
               class="w-full bg-foreground text-background rounded-full py-4 font-medium hover:scale-[1.02] transition-transform"
             >
-              Send Message
+              Send Transmission
             </button>
           </form>
         </div>
@@ -88,7 +89,7 @@ const inputCls = 'bg-transparent border-b border-border/50 text-foreground place
   <!-- Pull quote — creates natural breathing room above the footer -->
   <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 text-center">
     <blockquote data-reveal class="text-3xl md:text-5xl lg:text-6xl font-serif italic font-normal max-w-4xl mx-auto leading-tight text-foreground/90">
-      "Every great collaboration starts with a single message."
+      "Helping ambitious brands reach new frontiers."
     </blockquote>
     <p data-reveal data-delay="0.1" class="mt-8 text-muted-foreground text-sm tracking-wide">— MLD Marketing Solutions</p>
   </section>

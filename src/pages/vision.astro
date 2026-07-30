@@ -1,92 +1,103 @@
 ---
-import Base from '../layouts/BaseV2.astro';
+import Base from "../layouts/BaseV2.astro";
+import CTAV2 from "../components/CTAV2.astro";
 
+// NOTE: The client brief has no formal services list — these 4 pillars are
+// derived from the case-study write-ups and the About Us copy. Flag for
+// client confirmation before treating as final service names/scope.
 const pillars = [
   {
-    year: '2024',
-    heading: 'The Foundation.',
-    body: 'We proved the model. Independent writers earning a living wage through direct reader relationships. No middlemen, no algorithms dictating reach. The economics of depth turned out to be more resilient than anyone expected.',
+    number: "01",
+    heading: "Social Media Management.",
+    body: "Day-to-day content, community management and platform strategy that turns followers into a genuine audience - not just a number.",
   },
   {
-    year: '2025',
-    heading: 'The Infrastructure.',
-    body: 'We built the pipes. Open publishing APIs, cross-platform distribution, a reading experience that works everywhere from low-bandwidth mobile to desktop. The platform became invisible - the ideas became visible.',
+    number: "02",
+    heading: "Brand & Creative Content.",
+    body: "Visual identity, photography and video content built to be instantly recognisable, scroll-stopping and unmistakably yours.",
   },
   {
-    year: '2026',
-    heading: 'The Community.',
-    body: 'We\'re here now. Writers and readers converging into something rarer: a genuine intellectual community. Not a social network. Not a forum. A place where thinking out loud is the point.',
+    number: "03",
+    heading: "Organic Growth Strategy.",
+    body: "We believe the strongest growth comes from building a lasting presence, not just buying attention. More than 85% of our clients' marketing success is driven by organic growth strategies.",
   },
   {
-    year: '2027+',
-    heading: 'The Movement.',
-    body: 'What comes next is written by the people who show up. We\'re building infrastructure for a quieter internet - the tools, the standards, the norms. The goal was never Mindloop. The goal was what Mindloop makes possible.',
+    number: "04",
+    heading: "Digital Strategy & Advertising.",
+    body: "Strategy, creativity, and cutting-edge digital solutions working together to launch brands into new markets and accelerate growth.",
   },
 ];
 
 const beliefs = [
-  'Depth is not a niche - it is a market the algorithm abandoned.',
-  'The best content business aligns writer incentives with reader experience.',
-  'Open infrastructure beats proprietary lock-in over any meaningful time horizon.',
-  'Slow media is not dead media - it is medicine.',
+  "The strongest growth comes from building a lasting presence, not just buying attention.",
+  "More than 85% of our clients' marketing success is driven by organic growth strategies.",
+  "We combine strategy, creativity, and cutting-edge digital solutions to launch brands into new markets.",
+  "Every solution we build is designed to move our clients closer to their goals.",
 ];
 ---
-<Base title="Vision - Mindloop" description="The future we're building toward. A quieter, deeper internet for people who still believe ideas matter.">
 
-  <!-- Hero -->
-  <section class="min-h-[70vh] flex flex-col justify-end pt-44 pb-20 px-8 md:px-28 max-w-6xl mx-auto">
-    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Our Vision</p>
-    <h1 data-reveal data-delay="0.05" class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05] max-w-4xl">
-      The future<br /><span class="font-serif italic font-normal">we're building.</span>
-    </h1>
-    <p data-reveal data-delay="0.15" class="text-xl text-muted-foreground mt-10 max-w-2xl leading-relaxed">
-      Not a roadmap. A direction. We don't know exactly where this ends - we know what we're building toward. A quieter internet. A sustainable one. One where ideas move on their own merit.
-    </p>
-  </section>
+<Base title="The Engine Room - MLD Marketing Solutions" description="The services and strategy powering every MLD campaign - social media, creative content, organic growth and digital advertising.">
+  <!-- Hero — star-field + comet canvas so it doesn't read as flat black -->
+  <CTAV2 class="min-h-[70vh]">
+    <section class="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-end px-8 pt-44 pb-20 md:px-28">
+      <p data-reveal class="text-muted-foreground mb-8 text-xs tracking-[3px] uppercase">The Engine Room</p>
+      <h1 data-reveal data-delay="0.05" class="max-w-4xl text-6xl leading-[1.05] font-medium tracking-[-2px] md:text-8xl">
+        What powers<br /><span class="font-serif font-normal italic">every mission.</span>
+      </h1>
+      <p data-reveal data-delay="0.15" class="text-muted-foreground mt-10 max-w-2xl text-xl leading-relaxed">
+        Strategy, creativity, and cutting-edge digital solutions - combined to launch brands into new markets, accelerate growth, and create lasting impact.
+      </p>
+    </section>
+  </CTAV2>
 
-  <!-- Timeline -->
-  <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 max-w-6xl mx-auto">
-    <div class="space-y-0 divide-y divide-border/20">
-      {pillars.map(({ year, heading, body }, i) => (
-        <div data-reveal data-delay={String(0.05 * i)} class="grid md:grid-cols-12 gap-8 py-14 md:py-20 group">
-          <span class="md:col-span-2 text-sm text-muted-foreground font-mono tracking-wide pt-1">{year}</span>
-          <div class="md:col-span-10 md:grid md:grid-cols-2 md:gap-12">
-            <h3 class="text-3xl md:text-4xl font-medium tracking-[-0.5px] mb-4 md:mb-0">{heading}</h3>
-            <p class="text-muted-foreground leading-relaxed">{body}</p>
+  <!-- Services -->
+  <section class="border-border/30 mx-auto max-w-6xl border-t px-8 py-24 md:px-28 md:py-32">
+    <div class="divide-border/20 space-y-0 divide-y">
+      {
+        pillars.map(({ number, heading, body }, i) => (
+          <div data-reveal data-delay={String(0.05 * i)} class="group grid gap-8 py-14 md:grid-cols-12 md:py-20">
+            <span class="text-muted-foreground pt-1 font-mono text-sm tracking-wide md:col-span-2">{number}</span>
+            <div class="md:col-span-10 md:grid md:grid-cols-2 md:gap-12">
+              <h3 class="mb-4 text-3xl font-medium tracking-[-0.5px] md:mb-0 md:text-4xl">{heading}</h3>
+              <p class="text-muted-foreground leading-relaxed">{body}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </section>
 
   <!-- We believe -->
-  <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 max-w-6xl mx-auto">
-    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-16">Things we hold true</p>
-    <div class="space-y-6">
-      {beliefs.map((b, i) => (
-        <p data-reveal data-delay={String(0.06 * i)} class="text-2xl md:text-3xl font-medium tracking-[-0.5px] leading-snug text-foreground/80 border-b border-border/20 pb-6">
-          {b}
-        </p>
-      ))}
+  <section class="border-border/30 mx-auto max-w-6xl border-t px-8 py-24 md:px-28 md:py-32">
+    <p data-reveal class="text-muted-foreground mb-16 text-xs tracking-[3px] uppercase">How We Work</p>
+    <div data-reveal class="liquid-glass rounded-3xl p-8 md:p-14">
+      <!-- decorative brand-colour wash, clipped to the card by liquid-glass's own overflow:hidden -->
+      <div class="pointer-events-none absolute -top-20 -left-20 h-72 w-72 rounded-full opacity-25 blur-3xl" style="background: var(--color-brand-yellow)"></div>
+      <div class="pointer-events-none absolute -right-20 -bottom-20 h-72 w-72 rounded-full opacity-25 blur-3xl" style="background: var(--color-brand-teal)"></div>
+
+      <div class="relative space-y-8">
+        {
+          beliefs.map((b, i) => (
+            <div data-reveal data-delay={String(0.06 * i)} class="flex items-start gap-5 border-b border-white/10 pb-8 last:border-b-0 last:pb-0">
+              <p class="text-foreground/90 text-2xl leading-snug font-medium tracking-[-0.5px] md:text-3xl">{b}</p>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </section>
 
   <!-- Closing CTA -->
-  <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 text-center">
-    <h2 data-reveal class="text-4xl md:text-6xl font-serif italic font-normal max-w-2xl mx-auto leading-tight">
-      Come build it with us.
-    </h2>
-    <p data-reveal data-delay="0.1" class="text-muted-foreground mt-6 max-w-lg mx-auto">
-      Whether you read, write, build, or fund - there's a place for you in what we're making.
-    </p>
-    <div data-reveal data-delay="0.2" class="flex flex-wrap justify-center gap-4 mt-10">
-      <a href="/contact" class="bg-foreground text-background rounded-lg px-8 py-3.5 font-semibold text-sm hover:scale-[1.03] active:scale-[0.98] transition-transform inline-block">
-        Get in Touch
+  <section class="border-border/30 border-t px-8 py-24 text-center md:px-28 md:py-32">
+    <h2 data-reveal class="mx-auto max-w-2xl font-serif text-4xl leading-tight font-normal italic md:text-6xl">Ready to launch?</h2>
+    <p data-reveal data-delay="0.1" class="text-muted-foreground mx-auto mt-6 max-w-lg">Whether you need a full crew or one specialist - there's a place for your brand in our orbit.</p>
+    <div data-reveal data-delay="0.2" class="mt-10 flex flex-wrap justify-center gap-4">
+      <a href="/contact" class="bg-foreground text-background inline-block rounded-lg px-8 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.03] active:scale-[0.98]">
+        Open a Transmission
       </a>
-      <a href="/mission" class="liquid-glass rounded-lg px-8 py-3.5 text-foreground font-semibold text-sm hover:scale-[1.03] active:scale-[0.98] transition-transform inline-block">
-        Read Our Mission
+      <a href="/mission" class="liquid-glass text-foreground inline-block rounded-lg px-8 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.03] active:scale-[0.98]">
+        Read Our Launch History
       </a>
     </div>
   </section>
-
 </Base>
