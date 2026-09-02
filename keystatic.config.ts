@@ -7,7 +7,9 @@ export default config({
       owner: 'sethsticle',
       name: 'mindloop-astro',
     },
-    branchPrefix: 'draft/',
+    // No branchPrefix - Keystatic commits straight to main. Saves publish
+    // immediately once CI (or a manual `npm run deploy`) picks up the commit,
+    // with no PR review gate in between. See PLAN.md NOTE to KB.
   },
 
   ui: {

@@ -4,8 +4,12 @@ import { env } from "cloudflare:workers"; // CF Workers env access in Astro v6
 export const prerender = false; // static output mode, server this route only
 
 // CONFIGURE: must be a Resend-verified sender domain, and MLD's real inbox.
-const FROM_ADDRESS = "careers@mldmarketing.co.za";
+const FROM_ADDRESS = "admin@mldmarketing.co.za";
 const TO_ADDRESS = "michael@mldmarketing.co.za";
+
+// Keep in sync with MAX_RESUME_BYTES in ApplicationForm.astro — that check is
+// a UX shortcut only, this is the real enforcement (client checks are bypassable).
+const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 
 export const POST: APIRoute = async ({ request }) => {
   const apiKey = env.RESEND_API_KEY;
@@ -28,11 +32,25 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: "Required fields missing." }, 400);
   }
 
+  const resume = formData.get("resume");
+  let attachments: { filename: string; content: string }[] | undefined;
+
+  if (resume instanceof File && resume.size > 0) {
+    if (resume.type !== "application/pdf") {
+      return json({ error: "CV must be a PDF." }, 400);
+    }
+    if (resume.size > MAX_RESUME_BYTES) {
+      return json({ error: "CV must be under 5MB." }, 400);
+    }
+    const bytes = new Uint8Array(await resume.arrayBuffer());
+    attachments = [{ filename: resume.name || "cv.pdf", content: Buffer.from(bytes).toString("base64") }];
+  }
+
   const html = `
     <p><strong>Role:</strong> ${escapeHtml(role)}</p>
     <p><strong>Name:</strong> ${escapeHtml(name)}</p>
     <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-    ${portfolio ? `<p><strong>Portfolio / CV:</strong> ${escapeHtml(portfolio)}</p>` : ""}
+    ${portfolio ? `<p><strong>Portfolio:</strong> ${escapeHtml(portfolio)}</p>` : ""}
     ${message ? `<p><strong>Message:</strong></p><p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>` : ""}
   `;
 
@@ -48,6 +66,7 @@ export const POST: APIRoute = async ({ request }) => {
       reply_to: email,
       subject: `Application: ${role} — ${name}`,
       html,
+      ...(attachments ? { attachments } : {}),
     }),
   });
 

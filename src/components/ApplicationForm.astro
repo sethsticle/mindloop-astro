@@ -19,6 +19,8 @@ const openJobs = (await getCollection('jobs'))
 
 const inputCls =
   'bg-transparent border-b border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-foreground transition-colors py-3 w-full mb-8';
+
+const MAX_RESUME_BYTES = 5 * 1024 * 1024; // 5MB — kept in sync with the server-side check in api/apply.ts
 ---
 
 <form
@@ -42,7 +44,17 @@ const inputCls =
 
   <input type="text" name="name" placeholder="Your Name" required class={inputCls} />
   <input type="email" name="email" placeholder="Email Address" required class={inputCls} />
-  <input type="url" name="portfolio" placeholder="Portfolio / CV Link" class={inputCls} />
+  <input type="url" name="portfolio" placeholder="Portfolio Link (optional)" class={inputCls} />
+
+  <label class="block text-xs uppercase tracking-widest text-muted-foreground mb-2" for="apply-resume">CV / Resume (optional, PDF, max 5MB)</label>
+  <input
+    id="apply-resume"
+    type="file"
+    name="resume"
+    accept="application/pdf"
+    class={`${inputCls} file:mr-4 file:py-2 file:px-4 file:rounded-full file:border file:border-border/50 file:bg-transparent file:text-foreground file:text-sm`}
+  />
+
   <textarea name="message" rows="4" placeholder="Tell us why you'd be a good fit" class={inputCls}></textarea>
 
   <button
@@ -65,6 +77,18 @@ const inputCls =
       const status = form.querySelector<HTMLParagraphElement>('[data-application-status]');
       const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
       if (!status || !button) return;
+
+      // Keep in sync with MAX_RESUME_BYTES in the frontmatter above and the
+      // server-side check in api/apply.ts — this is a UX shortcut only, the
+      // server re-validates since a client check can always be bypassed.
+      const MAX_RESUME_BYTES = 5 * 1024 * 1024;
+      const resumeInput = form.querySelector<HTMLInputElement>('input[name="resume"]');
+      const resume = resumeInput?.files?.[0];
+      if (resume && (resume.type !== 'application/pdf' || resume.size > MAX_RESUME_BYTES)) {
+        status.classList.remove('hidden');
+        status.textContent = 'CV must be a PDF under 5MB.';
+        return;
+      }
 
       button.disabled = true;
       status.classList.remove('hidden');
