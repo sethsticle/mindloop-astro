@@ -13,7 +13,7 @@ const jobs = defineCollection({
       'client-services',
       'operations',
     ]),
-    location: z.enum(['durban', 'hybrid', 'remote']),
+    location: z.enum(['hillcrest', 'hybrid', 'remote']),
     employmentType: z.enum(['full-time', 'part-time', 'contract', 'internship']),
     status: z.enum(['open', 'closed']).default('open'),
     summary: z.string(),
@@ -40,7 +40,19 @@ const missionLogs = defineCollection({
   }),
 });
 
+const legends = defineCollection({
+  loader: glob({ pattern: '**/*.yaml', base: './src/content/legends' }),
+  schema: z.object({
+    name: z.string(),
+    description: z.string(),
+    videoUrl: z.string(),
+    thumbnail: z.string(),
+    order: z.number().default(0),
+  }),
+});
+
 export const collections = {
   jobs,
   'mission-logs': missionLogs,
+  legends,
 };

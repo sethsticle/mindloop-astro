@@ -1,5 +1,5 @@
 ---
-import SparklesCanvas from './effects/SparklesCanvas.astro';
+import SparklesCanvas from "./effects/SparklesCanvas.astro";
 
 interface LinkGroup {
   title: string;
@@ -10,29 +10,29 @@ const navGroups: LinkGroup[] = [
   {
     title: "Explore",
     items: [
-      { label: "About",     href: "/about" },
-      { label: "Mission",   href: "/mission" },
-      { label: "Vision",    href: "/vision" },
-      { label: "Projects",  href: "/projects" },
+      { label: "About", href: "/about" },
+      { label: "Mission", href: "/mission" },
+      { label: "Vision", href: "/vision" },
+      { label: "Projects", href: "/projects" },
       { label: "Portfolio", href: "/portfolio" },
     ],
   },
   {
     title: "Platform",
     items: [
-      { label: "Newsletter",    href: "#" },
-      { label: "Community",     href: "#" },
-      { label: "Writer Tools",  href: "#" },
-      { label: "Distribution",  href: "#" },
+      { label: "Newsletter", href: "#" },
+      { label: "Community", href: "#" },
+      { label: "Writer Tools", href: "#" },
+      { label: "Distribution", href: "#" },
     ],
   },
   {
     title: "Company",
     items: [
-      { label: "Contact",      href: "/contact" },
-      { label: "Privacy",      href: "#" },
-      { label: "Terms",        href: "#" },
-      { label: "Report Issue", href: "#" },
+      { label: "Contact", href: "/contact" },
+      // { label: "Privacy",      href: "#" },
+      // { label: "Terms",        href: "#" },
+      // { label: "Report Issue", href: "#" },
     ],
   },
 ];
@@ -61,94 +61,74 @@ const socials = [
 ];
 
 const legalLinks = [
-  { label: 'Privacy', href: '#' },
-  { label: 'Terms',   href: '#' },
-  { label: 'Contact', href: '/contact' },
+  { label: "Privacy", href: "#" },
+  { label: "Terms", href: "#" },
+  { label: "Contact", href: "/contact" },
 ];
 ---
 
-<SparklesCanvas
-  density={155}
-  spawnRate={1}
-  minSize={0.4}
-  maxSize={3.8}
-  class="border-t border-border/20"
->
+<SparklesCanvas density={155} spawnRate={1} minSize={0.4} maxSize={3.8} class="border-border/20 border-t">
   <!-- Black fade bleeding up from the very top of this section -->
-  <div class="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-background to-transparent pointer-events-none z-20"></div>
+  <div class="from-background pointer-events-none absolute inset-x-0 top-0 z-20 h-32 bg-linear-to-b to-transparent"></div>
 
-  <div class="px-4 md:px-8 pt-24 pb-12">
-
+  <div class="px-4 pt-24 pb-12 md:px-8">
     <!-- Glass footer card -->
-    <footer class="liquid-glass animate-footer-in w-full rounded-3xl p-6 md:p-10 text-white/70 max-w-6xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 mb-10">
-
+    <footer class="liquid-glass animate-footer-in mx-auto w-full max-w-6xl rounded-3xl p-6 text-white/70 md:p-10">
+      <div class="mb-10 grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-12">
         <!-- Brand block -->
         <div class="md:col-span-5">
-          <a href="/" class="flex items-center gap-2.5 mb-4 text-white group">
+          <a href="/" class="group mb-4 flex items-center gap-2.5 text-white">
             <!-- Mindloop mark -->
-            <div class="w-7 h-7 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white/60 transition-colors">
-              <div class="w-2.5 h-2.5 rounded-full border border-white/50 group-hover:border-white/80 transition-colors"></div>
+            <div class="flex h-7 w-7 items-center justify-center rounded-full border border-white/30 transition-colors group-hover:border-white/60">
+              <div class="h-2.5 w-2.5 rounded-full border border-white/50 transition-colors group-hover:border-white/80"></div>
             </div>
             <span class="text-xl font-medium tracking-tight">Mindloop</span>
           </a>
-          <p class="text-sm leading-relaxed max-w-sm">
-            Where curiosity meets clarity — a space for readers, writers,
-            and the conversations that carry ideas forward.
-          </p>
+          <p class="max-w-sm text-sm leading-relaxed">Where curiosity meets clarity — a space for readers, writers, and the conversations that carry ideas forward.</p>
         </div>
 
         <!-- Nav link groups -->
-        <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-8">
-          {navGroups.map((group) => (
-            <div>
-              <h4 class="text-sm uppercase tracking-wider text-white font-medium mb-4">
-                {group.title}
-              </h4>
-              <ul class="text-xs space-y-2">
-                {group.items.map((item) => (
-                  <li>
-                    <a href={item.href} class="hover:text-white transition-colors">
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-3 md:col-span-7">
+          {
+            navGroups.map((group) => (
+              <div>
+                <h4 class="mb-4 text-sm font-medium tracking-wider text-white uppercase">{group.title}</h4>
+                <ul class="space-y-2 text-xs">
+                  {group.items.map((item) => (
+                    <li>
+                      <a href={item.href} class="transition-colors hover:text-white">
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
         </div>
       </div>
 
       <!-- Bottom bar inside glass card -->
-      <div class="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">
+      <div class="flex flex-col items-center justify-between gap-6 border-t border-white/10 pt-6 md:flex-row md:gap-4">
         <p class="text-xs opacity-60">© {new Date().getFullYear()} Mindloop. All rights reserved.</p>
         <div class="flex items-center gap-4">
-          <span class="text-[10px] uppercase tracking-widest opacity-50">Follow along:</span>
+          <span class="text-[10px] tracking-widest uppercase opacity-50">Follow along:</span>
           <div class="flex items-center gap-4">
-            {socials.map((s) => (
-              <a
-                href="#"
-                aria-label={s.label}
-                class="opacity-70 hover:opacity-100 hover:text-white transition-all"
-                set:html={s.svg}
-              />
-            ))}
+            {socials.map((s) => <a href="#" aria-label={s.label} class="opacity-70 transition-all hover:text-white hover:opacity-100" set:html={s.svg} />)}
           </div>
         </div>
       </div>
     </footer>
 
     <!-- Legal strip below the glass card -->
-    <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 mt-6">
-      {legalLinks.map((l) => (
-        <a
-          href={l.href}
-          class="text-muted-foreground text-xs hover:text-foreground transition-colors"
-        >
-          {l.label}
-        </a>
-      ))}
+    <div class="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2">
+      {
+        legalLinks.map((l) => (
+          <a href={l.href} class="text-muted-foreground hover:text-foreground text-xs transition-colors">
+            {l.label}
+          </a>
+        ))
+      }
     </div>
-
   </div>
 </SparklesCanvas>

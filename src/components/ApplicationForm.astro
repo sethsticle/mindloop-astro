@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 
 /**
- * ApplicationForm — job dropdown is built from open Keystatic-managed
+ * ApplicationForm - job dropdown is built from open Keystatic-managed
  * jobs at build time, so it never needs a manual edit when MLD adds,
  * closes, or removes a role. `preselectSlug` pre-picks a role when the
  * form is embedded on that job's own detail page.
@@ -20,7 +20,7 @@ const openJobs = (await getCollection('jobs'))
 const inputCls =
   'bg-transparent border-b border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-foreground transition-colors py-3 w-full mb-8';
 
-const MAX_RESUME_BYTES = 5 * 1024 * 1024; // 5MB — kept in sync with the server-side check in api/apply.ts
+const MAX_RESUME_BYTES = 5 * 1024 * 1024; // 5MB - kept in sync with the server-side check in api/apply.ts
 ---
 
 <form
@@ -28,7 +28,7 @@ const MAX_RESUME_BYTES = 5 * 1024 * 1024; // 5MB — kept in sync with the serve
   data-reveal
   class="liquid-glass rounded-3xl p-8 md:p-12 w-full max-w-lg"
 >
-  <!-- Honeypot — hidden from real users, bots tend to fill every field -->
+  <!-- Honeypot - hidden from real users, bots tend to fill every field -->
   <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
 
   <label class="block text-xs uppercase tracking-widest text-muted-foreground mb-2" for="apply-role">Role</label>
@@ -79,7 +79,7 @@ const MAX_RESUME_BYTES = 5 * 1024 * 1024; // 5MB — kept in sync with the serve
       if (!status || !button) return;
 
       // Keep in sync with MAX_RESUME_BYTES in the frontmatter above and the
-      // server-side check in api/apply.ts — this is a UX shortcut only, the
+      // server-side check in api/apply.ts - this is a UX shortcut only, the
       // server re-validates since a client check can always be bypassed.
       const MAX_RESUME_BYTES = 5 * 1024 * 1024;
       const resumeInput = form.querySelector<HTMLInputElement>('input[name="resume"]');
@@ -103,7 +103,7 @@ const MAX_RESUME_BYTES = 5 * 1024 * 1024; // 5MB — kept in sync with the serve
         const data = await res.json().catch(() => ({}));
 
         if (res.ok && data?.ok) {
-          status.textContent = "Transmission received — we'll be in touch.";
+          status.textContent = "Transmission received - we'll be in touch.";
           form.reset();
         } else {
           status.textContent = data?.error || 'Something went wrong. Please try again.';

@@ -70,6 +70,27 @@ nav {
   transition: top 0.3s ease, left 0.3s ease, right 0.3s ease,
     border-radius 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
+/* Navbar.astro applies `.liquid-glass` directly to <nav> so the header is
+   always legible over scrolling content, not just past the nav-scrolled
+   threshold. `.liquid-glass` sets `position: relative`, and because it's an
+   unlayered rule it beats Tailwind's `fixed` utility (compiled inside
+   `@layer utilities`) regardless of source order - this pins it back to
+   `fixed` so the header doesn't scroll away with the page. */
+nav.liquid-glass {
+  position: fixed;
+}
+/* `.liquid-glass::before` draws a bright gradient border - fine on a small
+   card, but at rest the nav spans the full viewport width with square
+   corners, so that border reads as a harsh straight line across the top of
+   the page. Hide it until nav-scrolled shrinks the nav into a pill, and
+   bring it in at a lower opacity than the card default. */
+nav.liquid-glass::before {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+nav.liquid-glass.nav-scrolled::before {
+  opacity: 0.6;
+}
 nav.nav-scrolled {
   top: 0.75rem;
   left: 0.75rem;

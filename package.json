@@ -11,7 +11,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "generate-types": "wrangler types",
-    "deploy": "npm run build && wrangler deploy --config ./dist/server/wrangler.json"
+    "deploy": "npm run build && wrangler deploy --config ./dist/server/wrangler.json",
+    "db:migrate:local": "wrangler d1 execute mindloop-astro-legends --local --file=./migrations/0001_votes.sql",
+    "db:migrate:remote": "wrangler d1 execute mindloop-astro-legends --remote --file=./migrations/0001_votes.sql"
   },
   "overrides": {
     "vite": "^7.3.2"

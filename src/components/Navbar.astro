@@ -1,50 +1,54 @@
 ---
-import Logo from './Logo.astro';
-import LogoV2 from './LogoV2.astro';
+import Logo from "./Logo.astro";
+import LogoV2 from "./LogoV2.astro";
 
 const links = [
-  { label: 'Home', href: '/' },
-  { label: 'Our Mission', href: '/about' },
-  { label: 'The Engine Room', href: '/vision' },
-  { label: 'Mission Log', href: '/portfolio' },
-  { label: 'Careers', href: '/careers' },
-  { label: 'Open a Transmission', href: '/contact' },
+  { label: "Home", href: "/" },
+  { label: "Our Mission", href: "/about" },
+  { label: "The Engine Room", href: "/vision" },
+  { label: "Mission Log", href: "/portfolio" },
+  { label: "Careers", href: "/careers" },
+  { label: "Open a Transmission", href: "/contact" },
   // { label: 'Projects', href: '/projects' },
 ];
 ---
-<nav class="fixed top-0 left-0 right-0 z-50 px-8 md:px-16 py-4 flex items-center justify-between">
-  <a href="/" class="flex items-center gap-5 shrink-0  justify-center text-center ">
+
+<nav class="liquid-glass fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-8 pt-4 pb-4 md:px-16">
+  <a href="/" class="mb-[3px] flex shrink-0 items-center justify-center gap-5 text-center">
     <!-- <Logo className="h-14 w-auto"/> -->
-     <LogoV2 imgClass="h-10 w-auto" />
-    
+    <LogoV2 imgClass="h-10 w-auto" />
   </a>
 
-  <div class="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 text-sm">
-    {links.map((l) => (
-      <a href={l.href} class="text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">{l.label}</a>
-    ))}
+  <div class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 text-sm md:flex">
+    {
+      links.map((l) => (
+        <a href={l.href} class="text-muted-foreground hover:text-foreground whitespace-nowrap transition-colors">
+          {l.label}
+        </a>
+      ))
+    }
   </div>
 
-  <div class="flex items-center gap-2 shrink-0">
+  <div class="flex shrink-0 items-center gap-2">
     <!-- Instagram -->
-    <a href="#" class="liquid-glass w-10 h-10 rounded-full flex items-center justify-center">
+    <a href="#" class="liquid-glass flex h-10 w-10 items-center justify-center rounded-full">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
-        <circle cx="12" cy="13" r="3"/>
+        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
+        <circle cx="12" cy="13" r="3"></circle>
       </svg>
     </a>
     <!-- Email -->
-    <a href="#" class="liquid-glass w-10 h-10 rounded-full flex items-center justify-center">
+    <a href="#" class="liquid-glass flex h-10 w-10 items-center justify-center rounded-full">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/>
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
       </svg>
     </a>
     <!-- Send -->
-    <a href="#" class="liquid-glass w-10 h-10 rounded-full flex items-center justify-center">
+    <a href="#" class="liquid-glass flex h-10 w-10 items-center justify-center rounded-full">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m22 2-7 20-4-9-9-4Z"/>
-        <path d="M22 2 11 13"/>
+        <path d="m22 2-7 20-4-9-9-4Z"></path>
+        <path d="M22 2 11 13"></path>
       </svg>
     </a>
   </div>
@@ -52,10 +56,10 @@ const links = [
 
 <script>
   // Adds the .nav-scrolled pill (see global.css) once the user scrolls past the hero.
-  const nav = document.querySelector('nav');
+  const nav = document.querySelector("nav");
   if (nav) {
-    const updateNav = () => nav.classList.toggle('nav-scrolled', window.scrollY > 20);
+    const updateNav = () => nav.classList.toggle("nav-scrolled", window.scrollY > 20);
     updateNav();
-    window.addEventListener('scroll', updateNav, { passive: true });
+    window.addEventListener("scroll", updateNav, { passive: true });
   }
 </script>

@@ -14,7 +14,7 @@ const DEPARTMENT_LABELS: Record<string, string> = {
 };
 
 const LOCATION_LABELS: Record<string, string> = {
-  durban: "Durban, KZN",
+  hillcrest: "Hillcrest, KZN",
   hybrid: "Hybrid",
   remote: "Remote",
 };
@@ -33,9 +33,9 @@ const openJobs = (await getCollection("jobs"))
 ---
 
 <Base title="Careers - MLD Marketing Solutions" description="Join the crew at MLD Marketing Solutions. See our open roles and send a transmission.">
-  <!-- Hero — full-bleed background image, same layered-fade technique as FooterV2 -->
+  <!-- Hero - full-bleed background image, same layered-fade technique as FooterV2 -->
   <section class="relative overflow-hidden">
-    <!-- Background image — bg-position is a Tailwind class (not inline style) so it can vary by breakpoint: right-focused on mobile, centered from md up -->
+    <!-- Background image - bg-position is a Tailwind class (not inline style) so it can vary by breakpoint: right-focused on mobile, centered from md up -->
     <div
       class="absolute inset-0 h-full w-full bg-position-[75%_center] md:bg-[center_30%]"
       style="
@@ -45,7 +45,7 @@ const openJobs = (await getCollection("jobs"))
       aria-hidden="true">
     </div>
 
-    <!-- Dark vignette at the bottom — image dissolves into the page background -->
+    <!-- Dark vignette at the bottom - image dissolves into the page background -->
     <div class="from-background pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/3 bg-gradient-to-t to-transparent" aria-hidden="true"></div>
 
     <!-- Left / right edge softening -->
@@ -71,7 +71,7 @@ const openJobs = (await getCollection("jobs"))
     {
       openJobs.length === 0 ? (
         <p data-reveal class="text-muted-foreground text-lg">
-          No open roles right now — check back soon, or send a transmission below and we'll keep you in orbit.
+          No open roles right now - check back soon, or send a transmission below and we'll keep you in orbit.
         </p>
       ) : (
         <div class="divide-border/20 divide-y">

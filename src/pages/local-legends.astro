@@ -1,0 +1,286 @@
+---
+export const prerender = false; // needs a live D1 read per request (leaderboard + voting-closed state)
+
+import Base from "../layouts/BaseV2.astro";
+import CTAV2 from "../components/CTAV2.astro";
+import { getCollection } from "astro:content";
+import { env } from "cloudflare:workers";
+import { isVotingOpen, isLeaderboardVisible, VOTING_CLOSES_AT } from "../lib/local-legends-config";
+
+const legends = (await getCollection("legends")).map((entry) => ({ slug: entry.id, ...entry.data })).sort((a, b) => a.order - b.order);
+
+const votingOpen = isVotingOpen();
+const leaderboardVisible = isLeaderboardVisible();
+
+let voteCounts: Record<string, number> = {};
+if (leaderboardVisible && env.DB) {
+  const { results } = await env.DB.prepare("SELECT legend_id, COUNT(*) as count FROM votes WHERE status = 'confirmed' GROUP BY legend_id").all<{ legend_id: string; count: number }>();
+  voteCounts = Object.fromEntries(results.map((r) => [r.legend_id, r.count]));
+}
+
+const votedState = Astro.url.searchParams.get("voted"); // '1' | 'already' | 'invalid' | null
+
+const deadlineLabel = VOTING_CLOSES_AT.toLocaleString("en-ZA", {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
+const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
+<Base title="Local Legends - MLD Marketing Solutions" description="Not all heroes wear jerseys. Watch the videos and vote for your Local Legend.">
+  {turnstileSiteKey && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />}
+
+  <!-- Starfield/comet canvas runs behind the whole page, same as the CTA sections elsewhere on the site -->
+  <CTAV2 noClip>
+
+  <!-- Hero -->
+  <section class="mx-auto max-w-5xl px-8 pt-44 pb-16 text-center md:px-28 md:pt-56 md:pb-20">
+    <p data-reveal class="text-muted-foreground mb-8 text-xs tracking-[3px] uppercase">Local Legends &middot; Community Vote</p>
+    <h1 data-reveal data-delay="0.05" class="text-6xl leading-[1.05] font-medium tracking-[-2px] md:text-8xl">
+      Local<br /><span class="font-serif font-normal italic">Legends.</span>
+    </h1>
+    <p data-reveal data-delay="0.1" class="mx-auto mt-8 max-w-2xl text-xl leading-relaxed">
+      Not all heroes wear jerseys. <span style={`color: var(--color-brand-teal)`}>On the field or off it</span>, our Legends wear their community proud.
+    </p>
+    <p data-reveal data-delay="0.15" class="text-muted-foreground mx-auto mt-6 max-w-2xl leading-relaxed">
+      Every legend has a story, not all of them get told on the pitch. We've been shining a spotlight on the everyday people and local businesses making a real difference off the field. Now it's your
+      turn to make the call. Watch the videos below and vote for the Local Legend who's earned the win.
+    </p>
+  </section>
+
+  <!-- Prize callout -->
+  <section class="mx-auto max-w-3xl px-8 pb-16 md:px-28 md:pb-20">
+    <div data-reveal class="liquid-glass relative overflow-hidden rounded-3xl p-8 text-center md:p-10">
+      <div class="pointer-events-none absolute -top-16 -left-16 h-56 w-56 rounded-full opacity-25 blur-3xl" style="background: var(--color-brand-yellow)"></div>
+      <div class="pointer-events-none absolute -right-16 -bottom-16 h-56 w-56 rounded-full opacity-25 blur-3xl" style="background: var(--color-brand-teal)"></div>
+      <p class="relative text-4xl font-medium tracking-[-1px] md:text-5xl" style="color: var(--color-brand-yellow)">R10,000</p>
+      <p class="text-muted-foreground relative mt-2">Cash prize for the winning Legend, courtesy of MLD Marketing Solutions.</p>
+    </div>
+  </section>
+
+  {
+    votedState && (
+      <section class="mx-auto max-w-3xl px-8 pb-8 md:px-28">
+        <div data-reveal class="liquid-glass rounded-2xl px-6 py-4 text-center text-sm">
+          {votedState === "1" && "Your vote is confirmed - thanks for backing your Legend."}
+          {votedState === "already" && "This vote was already confirmed."}
+          {votedState === "invalid" && "That confirmation link is invalid or expired."}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Gallery -->
+  <section class="mx-auto max-w-6xl px-8 pb-8 md:px-28">
+    <p data-reveal class="text-muted-foreground mb-2 text-center text-xs tracking-[3px] uppercase">Meet the Legends</p>
+    <p data-reveal data-delay="0.05" class="text-muted-foreground mb-14 text-center">Watch as many as you like. One vote, one Legend.</p>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        legends.map(({ slug, name, description, videoUrl, thumbnail }, i) => (
+          <div data-reveal data-delay={String(0.05 * i)} class="liquid-glass overflow-hidden rounded-2xl">
+            <button
+              type="button"
+              data-video-open
+              data-video-url={videoUrl}
+              data-video-name={name}
+              class="group relative block aspect-video w-full overflow-hidden text-left"
+            >
+              <img src={thumbnail} alt={name} class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+                <span class="flex h-14 w-14 items-center justify-center rounded-full border border-white/40 bg-white/15 backdrop-blur-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
+              </div>
+            </button>
+            <div class="p-6">
+              <h3 class="text-lg font-semibold tracking-[-0.3px]">{name}</h3>
+              <p class="text-muted-foreground mt-1 text-sm">{description}</p>
+              {leaderboardVisible && (
+                <p class="text-muted-foreground mt-2 text-xs">
+                  {voteCounts[slug] ?? 0} vote{(voteCounts[slug] ?? 0) === 1 ? "" : "s"}
+                </p>
+              )}
+              <button
+                type="button"
+                data-vote-select
+                data-legend-id={slug}
+                data-legend-name={name}
+                disabled={!votingOpen}
+                class="mt-4 w-full rounded-full py-3 text-sm font-medium transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:pointer-events-none disabled:opacity-40"
+                style={`background: var(--color-brand-yellow); color: var(--color-background)`}>
+                {votingOpen ? "Vote for this Legend" : "Voting closed"}
+              </button>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Vote panel -->
+  <section id="vote" class="mx-auto w-full max-w-4xl px-8 py-16 md:px-28 md:py-20">
+    <form data-vote-form data-reveal class="liquid-glass w-full rounded-3xl p-8 md:p-10">
+      <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+      <input type="hidden" name="legendId" data-vote-legend-id value="" />
+
+      <p class="text-muted-foreground mb-2 text-xs tracking-widest uppercase">Voting for</p>
+      <p data-vote-legend-name class="mb-6 text-2xl font-medium tracking-[-0.5px]">Choose a Legend above</p>
+
+      <input
+        type="email"
+        name="email"
+        placeholder="Your Email Address"
+        required
+        class="border-border/50 text-foreground placeholder:text-muted-foreground focus:border-foreground mb-6 w-full border-b bg-transparent py-3 transition-colors focus:outline-none"
+      />
+
+      {turnstileSiteKey && <div class="cf-turnstile mb-6 w-full" data-sitekey={turnstileSiteKey} />}
+
+      <button
+        type="submit"
+        disabled={!votingOpen}
+        class="bg-foreground text-background w-full rounded-full py-4 font-medium transition-transform hover:scale-[1.02] disabled:pointer-events-none disabled:opacity-40">
+        {votingOpen ? "Cast My Vote" : "Voting Closed"}
+      </button>
+
+      <p data-vote-status class="mt-4 hidden text-center text-sm"></p>
+    </form>
+  </section>
+
+  <!-- Rules / deadline -->
+  <section class="mx-auto max-w-xl px-8 pb-24 text-center md:px-28 md:pb-32">
+    <p data-reveal class="text-muted-foreground">
+      <strong class="text-foreground">One vote per person.</strong> Watch as many videos as you like, then cast your vote for your Legend above.
+    </p>
+    <p data-reveal data-delay="0.05" class="mt-4 inline-block rounded-full border px-5 py-2 text-sm" style={`border-color: var(--color-brand-teal); color: var(--color-brand-teal)`}>
+      Voting closes {deadlineLabel}
+    </p>
+  </section>
+
+  </CTAV2>
+
+  <!-- Video modal - shared by every gallery card, one iframe reused rather than one per card -->
+  <div data-video-modal class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/85 p-6">
+    <div class="relative w-full max-w-3xl">
+      <button
+        type="button"
+        data-video-close
+        aria-label="Close video"
+        class="liquid-glass absolute -top-12 right-0 flex h-10 w-10 items-center justify-center rounded-full md:-top-14"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+        </svg>
+      </button>
+      <p data-video-modal-name class="text-muted-foreground mb-3 text-sm"></p>
+      <div class="aspect-video w-full overflow-hidden rounded-2xl bg-black">
+        <iframe
+          data-video-frame
+          src=""
+          class="h-full w-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script>
+  // Converts a YouTube/Vimeo watch link into its embeddable form. Anything
+  // else (a direct video file, or an already-embed URL) passes through as-is.
+  function toEmbedUrl(rawUrl: string): string {
+    const yt = rawUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+    if (yt) return `https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0`;
+    const vimeo = rawUrl.match(/vimeo\.com\/(\d+)/);
+    if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1`;
+    return rawUrl;
+  }
+
+  const modal = document.querySelector<HTMLDivElement>("[data-video-modal]");
+  const modalFrame = document.querySelector<HTMLIFrameElement>("[data-video-frame]");
+  const modalName = document.querySelector<HTMLParagraphElement>("[data-video-modal-name]");
+
+  function closeVideoModal() {
+    if (!modal || !modalFrame) return;
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    modalFrame.src = ""; // stops playback, not just hides it
+    document.body.style.overflow = "";
+  }
+
+  document.querySelectorAll<HTMLButtonElement>("[data-video-open]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!modal || !modalFrame) return;
+      modalFrame.src = toEmbedUrl(btn.dataset.videoUrl ?? "");
+      if (modalName) modalName.textContent = btn.dataset.videoName ?? "";
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  document.querySelector("[data-video-close]")?.addEventListener("click", closeVideoModal);
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) closeVideoModal(); // backdrop click, not the video itself
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeVideoModal();
+  });
+
+  const form = document.querySelector<HTMLFormElement>("[data-vote-form]");
+  const legendIdInput = document.querySelector<HTMLInputElement>("[data-vote-legend-id]");
+  const legendNameLabel = document.querySelector<HTMLParagraphElement>("[data-vote-legend-name]");
+
+  document.querySelectorAll<HTMLButtonElement>("[data-vote-select]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!legendIdInput || !legendNameLabel) return;
+      legendIdInput.value = btn.dataset.legendId ?? "";
+      legendNameLabel.textContent = btn.dataset.legendName ?? "";
+      document.getElementById("vote")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const status = form.querySelector<HTMLParagraphElement>("[data-vote-status]");
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (!status || !button) return;
+
+    if (!legendIdInput?.value) {
+      status.classList.remove("hidden");
+      status.textContent = "Pick a Legend above first.";
+      return;
+    }
+
+    button.disabled = true;
+    status.classList.remove("hidden");
+    status.textContent = "Sending...";
+
+    try {
+      const res = await fetch("/api/legends/vote", {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data?.ok) {
+        status.textContent = "Check your email to confirm your vote.";
+        form.reset();
+        if (legendIdInput) legendIdInput.value = "";
+        if (legendNameLabel) legendNameLabel.textContent = "Choose a Legend above";
+      } else {
+        status.textContent = data?.error || "Something went wrong. Please try again.";
+        button.disabled = false;
+      }
+    } catch {
+      status.textContent = "Something went wrong. Please try again.";
+      button.disabled = false;
+    }
+  });
+</script>

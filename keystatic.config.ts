@@ -42,11 +42,11 @@ export default config({
         location: fields.select({
           label: 'Location',
           options: [
-            { label: 'Durban, KZN (in-office)', value: 'durban' },
+            { label: 'Hillcrest, KZN (in office)', value: 'hillcrest' },
             { label: 'Hybrid', value: 'hybrid' },
             { label: 'Remote', value: 'remote' },
           ],
-          defaultValue: 'durban',
+          defaultValue: 'hillcrest',
         }),
         employmentType: fields.select({
           label: 'Employment Type',
@@ -91,9 +91,10 @@ export default config({
           label: 'Tags',
           itemLabel: (props) => props.value,
         }),
-        img: fields.url({
-          label: 'Cover Image URL',
-          description: 'Hosted image URL - paste a client photo or stock image link.',
+        img: fields.image({
+          label: 'Cover Image',
+          directory: 'public/assets/images/mission-logs',
+          publicPath: '/assets/images/mission-logs/',
         }),
         featured: fields.checkbox({ label: 'Featured', defaultValue: false }),
         wide: fields.checkbox({ label: 'Wide Card', defaultValue: false }),
@@ -104,12 +105,45 @@ export default config({
             value: fields.text({ label: 'Value', description: 'e.g. "42%" or "TBD"' }),
             label: fields.text({ label: 'Label' }),
           }),
-          { label: 'Results', itemLabel: (props) => `${props.fields.value.value} — ${props.fields.label.value}` }
+          { label: 'Results', itemLabel: (props) => `${props.fields.value.value} - ${props.fields.label.value}` }
         ),
         gallery: fields.array(
-          fields.url({ label: 'Image URL' }),
+          fields.image({
+            label: 'Image',
+            directory: 'public/assets/images/mission-logs',
+            publicPath: '/assets/images/mission-logs/',
+          }),
           { label: 'Gallery', itemLabel: (props) => props.value ?? 'Image' }
         ),
+      },
+    }),
+
+    legends: collection({
+      label: 'Local Legends',
+      slugField: 'name',
+      path: 'src/content/legends/*',
+      format: 'yaml',
+      entryLayout: 'form',
+      schema: {
+        name: fields.slug({ name: { label: 'Legend Name' } }),
+        description: fields.text({
+          label: 'One-line Description',
+          description: 'What makes them a Legend - shown on their gallery card.',
+        }),
+        videoUrl: fields.url({
+          label: 'Video URL',
+          description: 'A YouTube or Vimeo link for now. Hosting approach may change once the final video count/length is known.',
+        }),
+        thumbnail: fields.image({
+          label: 'Thumbnail',
+          directory: 'public/assets/images/legends',
+          publicPath: '/assets/images/legends/',
+        }),
+        order: fields.integer({
+          label: 'Gallery Order',
+          description: 'Lower numbers appear first.',
+          defaultValue: 0,
+        }),
       },
     }),
   },
