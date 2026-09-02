@@ -1,106 +1,124 @@
 ---
-import Base from '../layouts/BaseV2.astro';
-import CTAV2 from '../components/CTAV2.astro';
-import ApplicationForm from '../components/ApplicationForm.astro';
-import { getCollection } from 'astro:content';
+import Base from "../layouts/BaseV2.astro";
+import CTAV2 from "../components/CTAV2.astro";
+import ApplicationForm from "../components/ApplicationForm.astro";
+import { getCollection } from "astro:content";
 
 const DEPARTMENT_LABELS: Record<string, string> = {
-  'social-media-content': 'Social Media & Content',
-  'paid-media-performance': 'Paid Media & Performance',
-  'video-production': 'Video & Production',
-  'design-creative': 'Design & Creative',
-  'client-services': 'Client Services',
-  operations: 'Operations',
+  "social-media-content": "Social Media & Content",
+  "paid-media-performance": "Paid Media & Performance",
+  "video-production": "Video & Production",
+  "design-creative": "Design & Creative",
+  "client-services": "Client Services",
+  operations: "Operations",
 };
 
 const LOCATION_LABELS: Record<string, string> = {
-  durban: 'Durban, KZN',
-  hybrid: 'Hybrid',
-  remote: 'Remote',
+  durban: "Durban, KZN",
+  hybrid: "Hybrid",
+  remote: "Remote",
 };
 
 const TYPE_LABELS: Record<string, string> = {
-  'full-time': 'Full-time',
-  'part-time': 'Part-time',
-  contract: 'Contract',
-  internship: 'Internship',
+  "full-time": "Full-time",
+  "part-time": "Part-time",
+  contract: "Contract",
+  internship: "Internship",
 };
 
-const openJobs = (await getCollection('jobs'))
-  .filter(job => job.data.status === 'open')
-  .map(job => ({ slug: job.id, ...job.data }))
+const openJobs = (await getCollection("jobs"))
+  .filter((job) => job.data.status === "open")
+  .map((job) => ({ slug: job.id, ...job.data }))
   .sort((a, b) => a.title.localeCompare(b.title));
 ---
 
 <Base title="Careers - MLD Marketing Solutions" description="Join the crew at MLD Marketing Solutions. See our open roles and send a transmission.">
+  <!-- Hero — full-bleed background image, same layered-fade technique as FooterV2 -->
+  <section class="relative overflow-hidden">
+    <!-- Background image — bg-position is a Tailwind class (not inline style) so it can vary by breakpoint: right-focused on mobile, centered from md up -->
+    <div
+      class="absolute inset-0 h-full w-full bg-position-[75%_center] md:bg-[center_30%]"
+      style="
+        background-image: url('/assets/images/careers-hero.webp');
+        background-size: cover;
+      "
+      aria-hidden="true">
+    </div>
 
-  <!-- Hero -->
-  <section class="pt-44 md:pt-56 pb-20 md:pb-28 px-8 md:px-28 max-w-6xl mx-auto">
-    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Careers</p>
-    <h1 data-reveal data-delay="0.05" class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05] max-w-4xl">
-      Join the<br /><span class="font-serif italic font-normal">crew.</span>
-    </h1>
-    <p data-reveal data-delay="0.15" class="text-xl text-muted-foreground mt-10 max-w-2xl leading-relaxed">
-      We're a high-performing, in-office crew of marketing specialists helping ambitious brands reach new frontiers. We're not always hiring for every role below, but we're always looking for talent worth making room for.
-    </p>
+    <!-- Dark vignette at the bottom — image dissolves into the page background -->
+    <div class="from-background pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/3 bg-gradient-to-t to-transparent" aria-hidden="true"></div>
+
+    <!-- Left / right edge softening -->
+    <div class="from-background/70 pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r to-transparent" aria-hidden="true"></div>
+    <div class="from-background/70 pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l to-transparent" aria-hidden="true"></div>
+
+    <div class="relative z-20 mx-auto max-w-6xl px-8 pt-44 pb-32 md:px-28 md:pt-56 md:pb-44">
+      <p data-reveal class="text-muted-foreground mb-8 text-xs tracking-[3px] uppercase">Careers</p>
+      <h1 data-reveal data-delay="0.05" class="max-w-4xl text-6xl leading-[1.05] font-medium tracking-[-2px] md:text-8xl">
+        Join the<br /><span class="font-serif font-normal italic">crew.</span>
+      </h1>
+      <p data-reveal data-delay="0.15" class="text-muted-foreground mt-10 max-w-2xl text-xl leading-relaxed">
+        We're a high-performing, in-office crew of marketing specialists helping ambitious brands reach new frontiers. We're not always hiring for every role below, but we're always looking for talent
+        worth making room for.
+      </p>
+    </div>
   </section>
 
   <!-- Open roles -->
-  <section id="roles" class="py-16 md:py-20 border-t border-border/30 px-8 md:px-28 max-w-6xl mx-auto">
-    <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-10">Open Roles</p>
+  <section id="roles" class="border-border/30 mx-auto max-w-6xl border-t px-8 py-16 md:px-28 md:py-20">
+    <p data-reveal class="text-muted-foreground mb-10 text-xs tracking-[3px] uppercase">Open Roles</p>
 
-    {openJobs.length === 0 ? (
-      <p data-reveal class="text-muted-foreground text-lg">
-        No open roles right now — check back soon, or send a transmission below and we'll keep you in orbit.
-      </p>
-    ) : (
-      <div class="divide-y divide-border/20">
-        {openJobs.map(({ slug, title, department, location, employmentType, summary }, i) => (
-          <a
-            href={`/careers/${slug}`}
-            data-reveal
-            data-delay={String(0.05 * i)}
-            class="group flex flex-col md:flex-row md:items-center justify-between gap-4 py-8 hover:opacity-80 transition-opacity"
-          >
-            <div>
-              <h3 class="text-2xl md:text-3xl font-medium tracking-[-0.5px]">{title}</h3>
-              <p class="text-sm text-muted-foreground mt-2">{summary}</p>
-              <div class="flex flex-wrap gap-2 mt-4">
-                <span class="px-3 py-1 rounded-full border border-border/40 text-xs text-muted-foreground">{DEPARTMENT_LABELS[department]}</span>
-                <span class="px-3 py-1 rounded-full border border-border/40 text-xs text-muted-foreground">{LOCATION_LABELS[location]}</span>
-                <span class="px-3 py-1 rounded-full border border-border/40 text-xs text-muted-foreground">{TYPE_LABELS[employmentType]}</span>
+    {
+      openJobs.length === 0 ? (
+        <p data-reveal class="text-muted-foreground text-lg">
+          No open roles right now — check back soon, or send a transmission below and we'll keep you in orbit.
+        </p>
+      ) : (
+        <div class="divide-border/20 divide-y">
+          {openJobs.map(({ slug, title, department, location, employmentType, summary }, i) => (
+            <a
+              href={`/careers/${slug}`}
+              data-reveal
+              data-delay={String(0.05 * i)}
+              class="group flex flex-col justify-between gap-4 py-8 transition-opacity hover:opacity-80 md:flex-row md:items-center">
+              <div>
+                <h3 class="text-2xl font-medium tracking-[-0.5px] md:text-3xl">{title}</h3>
+                <p class="text-muted-foreground mt-2 text-sm">{summary}</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <span class="border-border/40 text-muted-foreground rounded-full border px-3 py-1 text-xs">{DEPARTMENT_LABELS[department]}</span>
+                  <span class="border-border/40 text-muted-foreground rounded-full border px-3 py-1 text-xs">{LOCATION_LABELS[location]}</span>
+                  <span class="border-border/40 text-muted-foreground rounded-full border px-3 py-1 text-xs">{TYPE_LABELS[employmentType]}</span>
+                </div>
               </div>
-            </div>
-            <span class="shrink-0 inline-flex items-center gap-2 text-sm text-foreground group-hover:gap-3 transition-all">
-              View role
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-              </svg>
-            </span>
-          </a>
-        ))}
-      </div>
-    )}
+              <span class="text-foreground inline-flex shrink-0 items-center gap-2 text-sm transition-all group-hover:gap-3">
+                View role
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      )
+    }
   </section>
 
   <!-- Application -->
   <CTAV2 noClip>
-    <section id="apply" class="py-20 md:py-32 border-t border-border/30 px-8 md:px-28 max-w-6xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-16">
-        <div class="md:col-span-5 flex flex-col justify-center">
-          <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Apply</p>
-          <h2 data-reveal data-delay="0.05" class="text-4xl md:text-6xl font-medium tracking-[-1.5px] leading-[1.05]">
-            Send a<span class="font-serif italic font-normal"> transmission.</span>
+    <section id="apply" class="border-border/30 mx-auto max-w-6xl border-t px-8 py-20 md:px-28 md:py-32">
+      <div class="grid grid-cols-1 gap-16 md:grid-cols-12">
+        <div class="flex flex-col justify-center md:col-span-5">
+          <p data-reveal class="text-muted-foreground mb-8 text-xs tracking-[3px] uppercase">Apply</p>
+          <h2 data-reveal data-delay="0.05" class="text-4xl leading-[1.05] font-medium tracking-[-1.5px] md:text-6xl">
+            Send a<span class="font-serif font-normal italic"> transmission.</span>
           </h2>
-          <p data-reveal data-delay="0.1" class="text-lg text-muted-foreground mt-6">
-            Pick the role you're after, tell us a bit about yourself, and we'll take it from there.
-          </p>
+          <p data-reveal data-delay="0.1" class="text-muted-foreground mt-6 text-lg">Pick the role you're after, tell us a bit about yourself, and we'll take it from there.</p>
         </div>
-        <div class="md:col-span-7 flex items-center justify-end">
+        <div class="flex items-center justify-end md:col-span-7">
           <ApplicationForm />
         </div>
       </div>
     </section>
   </CTAV2>
-
 </Base>
