@@ -32,6 +32,6 @@
 	// commit). Create a Turnstile widget at dash.cloudflare.com/?to=/:account/turnstile,
 	// paste the site key here and the secret key via `wrangler secret put TURNSTILE_SECRET_KEY`.
 	"vars": {
-		"PUBLIC_TURNSTILE_SITE_KEY": "REPLACE_WITH_TURNSTILE_SITE_KEY"
+		"PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAAElLXpibCoC0YpRr"
 	}
 }
