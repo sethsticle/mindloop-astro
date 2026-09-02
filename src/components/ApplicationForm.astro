@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+
+/**
+ * ApplicationForm — job dropdown is built from open Keystatic-managed
+ * jobs at build time, so it never needs a manual edit when MLD adds,
+ * closes, or removes a role. `preselectSlug` pre-picks a role when the
+ * form is embedded on that job's own detail page.
+ */
+interface Props {
+  preselectSlug?: string;
+}
+const { preselectSlug } = Astro.props;
+
+const openJobs = (await getCollection('jobs'))
+  .filter(job => job.data.status === 'open')
+  .map(job => ({ slug: job.id, title: job.data.title }))
+  .sort((a, b) => a.title.localeCompare(b.title));
+
+const inputCls =
+  'bg-transparent border-b border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-foreground transition-colors py-3 w-full mb-8';
+---
+
+<form
+  data-application-form
+  data-reveal
+  class="liquid-glass rounded-3xl p-8 md:p-12 w-full max-w-lg"
+>
+  <!-- Honeypot — hidden from real users, bots tend to fill every field -->
+  <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+  <label class="block text-xs uppercase tracking-widest text-muted-foreground mb-2" for="apply-role">Role</label>
+  <select id="apply-role" name="role" required class={inputCls} disabled={openJobs.length === 0}>
+    {openJobs.length === 0 ? (
+      <option value="">No open roles right now</option>
+    ) : (
+      openJobs.map(job => (
+        <option value={job.title} selected={job.slug === preselectSlug}>{job.title}</option>
+      ))
+    )}
+  </select>
+
+  <input type="text" name="name" placeholder="Your Name" required class={inputCls} />
+  <input type="email" name="email" placeholder="Email Address" required class={inputCls} />
+  <input type="url" name="portfolio" placeholder="Portfolio / CV Link" class={inputCls} />
+  <textarea name="message" rows="4" placeholder="Tell us why you'd be a good fit" class={inputCls}></textarea>
+
+  <button
+    type="submit"
+    disabled={openJobs.length === 0}
+    class="w-full bg-foreground text-background rounded-full py-4 font-medium hover:scale-[1.02] transition-transform disabled:opacity-40 disabled:pointer-events-none"
+  >
+    Send Application
+  </button>
+
+  <p data-application-status class="mt-4 text-sm text-center hidden"></p>
+</form>
+
+<script>
+  // Submits to /api/apply as JSON, mirrors the contact-form Resend pattern.
+  // Runs once per form on the page (careers.astro renders exactly one).
+  document.querySelectorAll<HTMLFormElement>('[data-application-form]').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = form.querySelector<HTMLParagraphElement>('[data-application-status]');
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (!status || !button) return;
+
+      button.disabled = true;
+      status.classList.remove('hidden');
+      status.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('/api/apply', {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data?.ok) {
+          status.textContent = "Transmission received — we'll be in touch.";
+          form.reset();
+        } else {
+          status.textContent = data?.error || 'Something went wrong. Please try again.';
+          button.disabled = false;
+        }
+      } catch {
+        status.textContent = 'Something went wrong. Please try again.';
+        button.disabled = false;
+      }
+    });
+  });
+</script>

@@ -97,6 +97,18 @@ Vite warns when any chunk exceeds 500 KB. hls.js minified is ~450–550 KB. The 
 ### `err-tailwindcss-vite-rolldown` - `@tailwindcss/vite` >=4.2.4 breaks with Vite 8 / rolldown
 `@tailwindcss/vite` >=4.2.4 pulls Vite 8 as a peer which uses rolldown instead of rollup. This breaks the plugin. Fix: add a `overrides` / `resolutions` block in `package.json` to pin `vite` to `^5.4.0`. This is the clean solution; downgrading `@tailwindcss/vite` is the fallback. Applies to all Astro 5/6 boilerplate tiers.
 
+### `decision-mindloop-keystatic-cms` - Added Keystatic (GitHub-storage) for Jobs + Mission Logs, moved deploy target from Xneelo to Cloudflare Workers
+MLD needed to self-service job postings and case studies ("mission logs") without a code edit per change, so a `jobs` and `missionLogs` Keystatic collection were added (`keystatic.config.ts` + `src/content.config.ts`, per the two-file rule in pcl-astro's `decision-keystatic-collection-setup.md`). This required switching this project's deploy target from static/Xneelo to `@astrojs/cloudflare` (adapter, `wrangler.jsonc`, `generate-types`/`deploy` scripts) - Keystatic's hosted admin UI needs a server runtime to commit via the GitHub App. **This contradicts the `@cloudflare/vite-plugin` removal note in the "What Was Dropped" table below** - that removal was correct for the original brief (static Xneelo site with no CMS); it no longer holds now that a CMS is in scope. Applies to any demo-tier project that later gets a "let the client self-serve X" request.
+
+### `decision-keystatic-fields-url-not-image` - Use `fields.url` for image URLs migrated from hardcoded placeholder data, not `fields.image`
+The 5 migrated Mission Log entries carry external Unsplash placeholder URLs (`img`, `gallery`). `fields.image` expects a locally-uploaded file relative to a `directory`/`publicPath` pair - pointing it at pre-existing external URLs shows as broken/invalid in the Keystatic UI the moment an editor opens the entry. `fields.url` accepts any hosted URL string with no upload requirement, matches the placeholder data as-is, and still lets MLD paste a real client photo URL later. Swap to `fields.image` only once there's an actual local-upload workflow for these images.
+
+### `err-keystatic-cf-workers-v13-runtime-env` - `@keystatic/astro` v5 breaks under `@astrojs/cloudflare` v13 without a middleware shim
+Keystatic v5 reads secrets via `Astro.locals.runtime.env` (the Astro v5 API). The CF adapter v13 + Astro v6 removed that in favour of `import { env } from 'cloudflare:workers'`, and `locals.runtime` is now non-writable. Without `src/middleware.ts` restoring `runtime.env` via `Object.defineProperty`, `/keystatic` 500s. Also: `astro.config.mjs` needs an explicit `site:` value or `Astro.site` is `undefined` and the homepage silently builds as a blank HTML shell (no build error). Both caught by comparing against pcl-astro's validated `CLOUDFLARE-SETUP.md` after the fact - should have been applied at the same time as the adapter/integration wiring, not discovered later. Applies to every Astro 6 + CF Workers + Keystatic v5 project until Keystatic ships a fix.
+
+### `decision-keystatic-yaml-not-markdoc` - Plain `format: 'yaml'` collections, not Markdoc, for Jobs and Mission Logs
+Every field in both collections (summary, description, challenge, solution, results) is a single paragraph, not structured rich text. Markdoc would require adding `@astrojs/markdoc` as a new integration/dependency and a render() step for zero real benefit. `format: 'yaml'` (data-only collection, no content field) keeps the diff smaller and matches the existing plain-string shape of the pre-Keystatic `caseStudies.ts` data.
+
 ---
 
 ## Video Streaming - Implementation Notes

@@ -1,10 +1,14 @@
 ---
 import Base from '../layouts/BaseV2.astro';
 import CTAV2 from '../components/CTAV2.astro';
-import { caseStudies } from '../data/caseStudies';
+import { getCollection } from 'astro:content';
 
-const featured = caseStudies.find(cs => cs.featured)!;
-const works = caseStudies.filter(cs => !cs.featured);
+const missionLogs = (await getCollection('mission-logs')).map(entry => ({
+  slug: entry.id,
+  ...entry.data,
+}));
+const featured = missionLogs.find(log => log.featured) ?? missionLogs[0];
+const works = missionLogs.filter(log => log.slug !== featured.slug);
 
 const stats = [
   { value: '10',    label: 'years in orbit' },
@@ -84,7 +88,7 @@ const stats = [
               z-index: 10;
             "
           />
-          <a href={`/case-studies/${featured.slug}`} data-reveal data-delay="0.05" class="liquid-glass rounded-3xl overflow-hidden group hover:scale-[1.005] transition-transform block">
+          <a href={`/mission-logs/${featured.slug}`} data-reveal data-delay="0.05" class="liquid-glass rounded-3xl overflow-hidden group hover:scale-[1.005] transition-transform block">
             <div class="aspect-[16/7] relative overflow-hidden">
               <img src={featured.img} alt={featured.title} class="absolute inset-0 w-full h-full object-cover" />
             </div>
@@ -104,7 +108,7 @@ const stats = [
                 <p class="text-sm text-muted-foreground mt-1">{featured.client}</p>
                 <p class="text-sm font-mono text-muted-foreground mt-1">{featured.year}</p>
                 <div class="mt-6 inline-flex items-center gap-2 text-sm text-foreground group-hover:gap-3 transition-all">
-                  <span>View case study</span>
+                  <span>View mission log</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                   </svg>
@@ -120,7 +124,7 @@ const stats = [
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {works.map(({ slug, title, client, year, wide, img }, i) => (
             <a
-              href={`/case-studies/${slug}`}
+              href={`/mission-logs/${slug}`}
               data-reveal
               data-delay={String(0.05 * i)}
               class={`liquid-glass rounded-2xl overflow-hidden group hover:scale-[1.01] transition-transform ${wide ? 'lg:col-span-2' : ''}`}

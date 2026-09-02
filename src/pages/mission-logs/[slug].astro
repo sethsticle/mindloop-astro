@@ -1,19 +1,28 @@
 ---
 import BaseV2 from '../../layouts/BaseV2.astro';
-import { caseStudies, type CaseStudy } from '../../data/caseStudies';
+import { getCollection } from 'astro:content';
 
-export function getStaticPaths() {
-  return caseStudies.map(cs => ({
-    params: { slug: cs.slug },
-    props: { study: cs },
+const missionLogs = (await getCollection('mission-logs')).map(entry => ({
+  slug: entry.id,
+  ...entry.data,
+}));
+
+export async function getStaticPaths() {
+  const entries = (await getCollection('mission-logs')).map(entry => ({
+    slug: entry.id,
+    ...entry.data,
+  }));
+  return entries.map(log => ({
+    params: { slug: log.slug },
+    props: { study: log },
   }));
 }
 
-interface Props { study: CaseStudy; }
+interface Props { study: (typeof missionLogs)[number]; }
 const { study } = Astro.props;
 
-const currentIndex = caseStudies.findIndex(cs => cs.slug === study.slug);
-const next = caseStudies[(currentIndex + 1) % caseStudies.length];
+const currentIndex = missionLogs.findIndex(log => log.slug === study.slug);
+const next = missionLogs[(currentIndex + 1) % missionLogs.length];
 ---
 
 <BaseV2
@@ -87,7 +96,7 @@ const next = caseStudies[(currentIndex + 1) % caseStudies.length];
       </div>
       <div>
         <p class="text-xs uppercase tracking-widest text-muted-foreground mb-2">Format</p>
-        <p class="text-sm font-medium">Case Study</p>
+        <p class="text-sm font-medium">Mission Log</p>
       </div>
     </div>
   </div>
@@ -183,19 +192,19 @@ const next = caseStudies[(currentIndex + 1) % caseStudies.length];
     </div>
   </section>
 
-  <!-- Next case study -->
+  <!-- Next mission log -->
   <section class="mt-24 md:mt-36 px-6 md:px-16 max-w-7xl mx-auto border-t border-border/30 pt-12">
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
       <div>
-        <p class="text-xs uppercase tracking-[3px] text-muted-foreground mb-3">Next Case Study</p>
+        <p class="text-xs uppercase tracking-[3px] text-muted-foreground mb-3">Next Mission Log</p>
         <h3 class="text-2xl md:text-3xl font-medium tracking-[-0.5px]">{next.title}</h3>
         <p class="text-sm text-muted-foreground mt-1">{next.client}</p>
       </div>
       <a
-        href={`/case-studies/${next.slug}`}
+        href={`/mission-logs/${next.slug}`}
         class="liquid-glass shrink-0 rounded-full px-8 py-3.5 text-sm font-medium inline-flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-transform"
       >
-        View Case Study
+        View Mission Log
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
         </svg>
