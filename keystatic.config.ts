@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import { config, collection, fields } from '@keystatic/core';
 
 export default config({
@@ -15,6 +16,8 @@ export default config({
   ui: {
     brand: {
       name: 'MLD Marketing Solutions',
+      // Replaces Keystatic's default mark with the MLD helmet logo.
+      mark: () => createElement('img', { src: '/mld-logo.png', alt: 'MLD', style: { height: '1.5rem', width: 'auto' } }),
     },
   },
 
