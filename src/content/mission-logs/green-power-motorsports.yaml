@@ -3,34 +3,33 @@ client: Green Power Motorsports
 type: Social Media & Motorsport Content
 year: Ongoing
 desc: >-
-  Capturing the speed, intensity and innovation of modern motorsport, on
-  and off the track.
+  Capturing the speed, intensity and innovation of modern motorsport, on and off
+  the track.
 tags:
   - Social Media
   - Motorsport
   - Sponsorship
-img: /assets/images/placeholders/placeholder-2.jpg
+img: /assets/images/mission-logs/green-power-motorsports/img.webp
 featured: false
 wide: false
 challenge: >-
-  For Green Power Motorsports, our goal was to capture the intensity, speed
-  and innovation that define modern motorsport while building a brand
-  identity that stands out both on and off the track.
+  For Green Power Motorsports, our goal was to capture the intensity, speed and
+  innovation that define modern motorsport while building a brand identity that
+  stands out both on and off the track.
 solution: >-
   We developed a high-energy content strategy that combines dynamic race
   photography, bold graphic design, sponsor integration and compelling
-  storytelling to keep fans engaged throughout the racing season. Every
-  piece of content is designed to amplify the excitement of race weekends,
-  celebrate key moments and showcase the team's journey as they compete at
-  the highest level. Beyond race coverage, we focus on building a
-  community around the brand by highlighting rider achievements,
-  behind-the-scenes moments, partnerships and the innovative technologies
-  powering the team's success - creating a deeper connection between the
-  team, its supporters and its sponsors while maintaining a premium and
-  professional image. The result is a fast-paced, visually striking social
-  media presence that reflects the energy of the sport, strengthens brand
-  recognition and positions Green Power Motorsports as a forward-thinking
-  force within the motorsport industry.
+  storytelling to keep fans engaged throughout the racing season. Every piece of
+  content is designed to amplify the excitement of race weekends, celebrate key
+  moments and showcase the team's journey as they compete at the highest level.
+  Beyond race coverage, we focus on building a community around the brand by
+  highlighting rider achievements, behind-the-scenes moments, partnerships and
+  the innovative technologies powering the team's success - creating a deeper
+  connection between the team, its supporters and its sponsors while maintaining
+  a premium and professional image. The result is a fast-paced, visually
+  striking social media presence that reflects the energy of the sport,
+  strengthens brand recognition and positions Green Power Motorsports as a
+  forward-thinking force within the motorsport industry.
 results:
   - value: TBD
     label: growth in race-weekend engagement
@@ -40,4 +39,6 @@ results:
     label: audience growth
   - value: TBD
     label: content pieces delivered
-gallery: []
+gallery:
+  - /assets/images/mission-logs/green-power-motorsports/gallery/0.jpg
+  - /assets/images/mission-logs/green-power-motorsports/gallery/1.webp
