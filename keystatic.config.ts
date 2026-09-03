@@ -16,8 +16,14 @@ export default config({
   ui: {
     brand: {
       name: 'MLD Marketing Solutions',
-      // Replaces Keystatic's default mark with the MLD helmet logo.
-      mark: () => createElement('img', { src: '/mld-logo.png', alt: 'MLD', style: { height: '1.5rem', width: 'auto' } }),
+      // Replaces Keystatic's default mark with the MLD helmet logo, swapping
+      // to the black-text variant so it stays legible on Keystatic's light theme.
+      mark: ({ colorScheme }) =>
+        createElement('img', {
+          src: colorScheme === 'dark' ? '/mld-logo.png' : '/mld-logo-light.png',
+          alt: 'MLD',
+          style: { height: '1.5rem', width: 'auto' },
+        }),
     },
   },
 
