@@ -9,7 +9,7 @@ tags:
   - Social Media
   - Brand Content
   - Community
-img: /assets/images/mission-logs/shell-whetstone-service-station-cover.jpg
+img: /assets/images/placeholders/placeholder-5.jpg
 featured: true
 wide: false
 challenge: >-
@@ -38,7 +38,4 @@ results:
     label: community follower growth
   - value: TBD
     label: content pieces delivered
-gallery:
-  - /assets/images/mission-logs/shell-whetstone-service-station-gallery-1.jpg
-  - /assets/images/mission-logs/shell-whetstone-service-station-gallery-2.jpg
-  - /assets/images/mission-logs/shell-whetstone-service-station-gallery-3.jpg
+gallery: []

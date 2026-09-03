@@ -9,7 +9,7 @@ tags:
   - Social Media
   - Community
   - Outdoor & Lifestyle
-img: /assets/images/mission-logs/hillcrest-guns-outdoor-cover.jpg
+img: /assets/images/placeholders/placeholder-3.jpg
 featured: false
 wide: true
 challenge: >-
@@ -39,7 +39,4 @@ results:
     label: audience growth
   - value: TBD
     label: content pieces delivered
-gallery:
-  - /assets/images/mission-logs/hillcrest-guns-outdoor-gallery-1.jpg
-  - /assets/images/mission-logs/hillcrest-guns-outdoor-gallery-2.jpg
-  - /assets/images/mission-logs/hillcrest-guns-outdoor-gallery-3.jpg
+gallery: []

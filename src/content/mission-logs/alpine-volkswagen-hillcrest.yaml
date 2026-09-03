@@ -9,7 +9,7 @@ tags:
   - Social Media
   - Video Content
   - Automotive
-img: /assets/images/mission-logs/alpine-volkswagen-hillcrest-cover.jpg
+img: /assets/images/placeholders/placeholder-1.jpg
 featured: false
 wide: false
 challenge: >-
@@ -38,7 +38,4 @@ results:
     label: audience growth
   - value: TBD
     label: content pieces delivered
-gallery:
-  - /assets/images/mission-logs/alpine-volkswagen-hillcrest-gallery-1.jpg
-  - /assets/images/mission-logs/alpine-volkswagen-hillcrest-gallery-2.jpg
-  - /assets/images/mission-logs/alpine-volkswagen-hillcrest-gallery-3.jpg
+gallery: []

@@ -9,7 +9,7 @@ tags:
   - Social Media
   - Motorsport
   - Sponsorship
-img: /assets/images/mission-logs/green-power-motorsports-cover.jpg
+img: /assets/images/placeholders/placeholder-2.jpg
 featured: false
 wide: false
 challenge: >-
@@ -40,7 +40,4 @@ results:
     label: audience growth
   - value: TBD
     label: content pieces delivered
-gallery:
-  - /assets/images/mission-logs/green-power-motorsports-gallery-1.jpg
-  - /assets/images/mission-logs/green-power-motorsports-gallery-2.jpg
-  - /assets/images/mission-logs/green-power-motorsports-gallery-3.jpg
+gallery: []

@@ -9,7 +9,7 @@ tags:
   - Social Media
   - Campaigns
   - Telecommunications
-img: /assets/images/mission-logs/mtn-cantel-cover.jpg
+img: /assets/images/placeholders/placeholder-4.jpg
 featured: false
 wide: false
 challenge: >-
@@ -40,7 +40,4 @@ results:
     label: audience growth
   - value: TBD
     label: content pieces delivered
-gallery:
-  - /assets/images/mission-logs/mtn-cantel-gallery-1.jpg
-  - /assets/images/mission-logs/mtn-cantel-gallery-2.jpg
-  - /assets/images/mission-logs/mtn-cantel-gallery-3.jpg
+gallery: []
