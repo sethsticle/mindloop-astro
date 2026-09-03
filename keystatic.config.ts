@@ -122,7 +122,7 @@ export default config({
             directory: 'public/assets/images/mission-logs',
             publicPath: '/assets/images/mission-logs/',
           }),
-          { label: 'Gallery', itemLabel: (props) => props.value ?? 'Image' }
+          { label: 'Gallery', itemLabel: (props) => props.value?.filename ?? 'Image' }
         ),
       },
     }),
