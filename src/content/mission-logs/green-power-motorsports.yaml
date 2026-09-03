@@ -9,7 +9,7 @@ tags:
   - Social Media
   - Motorsport
   - Sponsorship
-img: https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&auto=format&q=80
+img: /assets/images/mission-logs/green-power-motorsports-cover.jpg
 featured: false
 wide: false
 challenge: >-
@@ -41,6 +41,6 @@ results:
   - value: TBD
     label: content pieces delivered
 gallery:
-  - https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&auto=format&q=80
-  - https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&auto=format&q=80
-  - https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&auto=format&q=80
+  - /assets/images/mission-logs/green-power-motorsports-gallery-1.jpg
+  - /assets/images/mission-logs/green-power-motorsports-gallery-2.jpg
+  - /assets/images/mission-logs/green-power-motorsports-gallery-3.jpg

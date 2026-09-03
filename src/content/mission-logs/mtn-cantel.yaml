@@ -9,7 +9,7 @@ tags:
   - Social Media
   - Campaigns
   - Telecommunications
-img: https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1400&auto=format&q=80
+img: /assets/images/mission-logs/mtn-cantel-cover.jpg
 featured: false
 wide: false
 challenge: >-
@@ -41,6 +41,6 @@ results:
   - value: TBD
     label: content pieces delivered
 gallery:
-  - https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=900&auto=format&q=80
-  - https://images.unsplash.com/photo-1560066984-138dadb4c035?w=900&auto=format&q=80
-  - https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=900&auto=format&q=80
+  - /assets/images/mission-logs/mtn-cantel-gallery-1.jpg
+  - /assets/images/mission-logs/mtn-cantel-gallery-2.jpg
+  - /assets/images/mission-logs/mtn-cantel-gallery-3.jpg

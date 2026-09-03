@@ -9,7 +9,7 @@ tags:
   - Social Media
   - Brand Content
   - Community
-img: https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1400&auto=format&q=80
+img: /assets/images/mission-logs/shell-whetstone-service-station-cover.jpg
 featured: true
 wide: false
 challenge: >-
@@ -39,6 +39,6 @@ results:
   - value: TBD
     label: content pieces delivered
 gallery:
-  - https://images.unsplash.com/photo-1582407947304-fd86f28f4a32?w=900&auto=format&q=80
-  - https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&auto=format&q=80
-  - https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&auto=format&q=80
+  - /assets/images/mission-logs/shell-whetstone-service-station-gallery-1.jpg
+  - /assets/images/mission-logs/shell-whetstone-service-station-gallery-2.jpg
+  - /assets/images/mission-logs/shell-whetstone-service-station-gallery-3.jpg

@@ -9,7 +9,7 @@ tags:
   - Social Media
   - Community
   - Outdoor & Lifestyle
-img: https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&auto=format&q=80
+img: /assets/images/mission-logs/hillcrest-guns-outdoor-cover.jpg
 featured: false
 wide: true
 challenge: >-
@@ -40,6 +40,6 @@ results:
   - value: TBD
     label: content pieces delivered
 gallery:
-  - https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&q=80
-  - https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&q=80
-  - https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=900&auto=format&q=80
+  - /assets/images/mission-logs/hillcrest-guns-outdoor-gallery-1.jpg
+  - /assets/images/mission-logs/hillcrest-guns-outdoor-gallery-2.jpg
+  - /assets/images/mission-logs/hillcrest-guns-outdoor-gallery-3.jpg
