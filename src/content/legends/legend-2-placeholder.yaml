@@ -3,5 +3,5 @@ name: Placeholder Legend Two
 description: One-line description of what makes this Legend a Legend goes here.
 # Real, stable test video so the modal is actually playable during internal demo/testing - swap for the real Legend's video before launch.
 videoUrl: https://www.youtube.com/watch?v=jNQXAC9IVRw
-thumbnail: /assets/images/placeholders/placeholder-2.jpg
+thumbnail: /assets/images/legends/legend-2-placeholder/thumbnail.jpg
 order: 2
