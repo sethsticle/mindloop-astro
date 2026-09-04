@@ -38,4 +38,5 @@ results:
     label: community follower growth
   - value: TBD
     label: content pieces delivered
-gallery: []
+gallery:
+  - /assets/images/mission-logs/shell-whetstone-service-station/gallery/0.png
