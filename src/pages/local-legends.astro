@@ -87,7 +87,7 @@ const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY;
               data-video-name={name}
               class="group relative block aspect-video w-full overflow-hidden text-left"
             >
-              <img src={thumbnail} alt={name} class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src={thumbnail} alt={name} class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
               <div class="absolute inset-0 flex items-center justify-center bg-black/20">
                 <span class="flex h-14 w-14 items-center justify-center rounded-full border border-white/40 bg-white/15 backdrop-blur-sm">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white">

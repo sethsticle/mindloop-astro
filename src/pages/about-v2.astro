@@ -2,6 +2,14 @@
 import BaseV2 from '../layouts/BaseV2.astro';
 import ParallaxPlants from '../components/ParallaxPlants.astro';
 import TeamCard from '../components/TeamCard.astro';
+import plant1 from '../assets/images/plant-1.webp';
+import plant2 from '../assets/images/plant-2.webp';
+import plant3 from '../assets/images/plant-3.webp';
+import plant4 from '../assets/images/plant-4.webp';
+import plant5Tall from '../assets/images/plant-5-tall.webp';
+import plant6 from '../assets/images/plant-6.webp';
+import sashaCard from '../assets/images/sasha-card-text-removed.webp';
+import mikeCard from '../assets/images/mike-card-text-removed.webp';
 
 const cards = [
   {
@@ -43,18 +51,18 @@ const principles = [
 ];
 
 const plants = [
-  { src: '/assets/images/plant-3.webp',    style: 'top: -8vh; right: -10vw; width: 42vw; opacity: 0.11; rotate: 12deg; z-index: 0;',   speed: 0.1,  blur: 0  },
-  { src: '/assets/images/plant-5-tall.webp',style: 'top: 8vh; right: -2vw; height: 130vh; width: auto; opacity: 0.2; rotate: 4deg; z-index: 1;', speed: 0.22, blur: 0  },
-  { src: '/assets/images/plant-1.webp',    style: 'top: 62vh; left: -8vw; width: 30vw; opacity: 0.17; rotate: -16deg; z-index: 1;',    speed: 0.25, blur: 0  },
-  { src: '/assets/images/plant-6.webp',    style: 'top: 38vh; right: 2vw; width: 22vw; opacity: 0.3; rotate: -9deg; z-index: 2;',      speed: 0.4,  blur: 2  },
-  { src: '/assets/images/plant-2.webp',    style: 'top: 82vh; left: 1vw; width: 24vw; opacity: 0.28; rotate: 11deg; z-index: 2;',      speed: 0.42, blur: 2  },
-  { src: '/assets/images/plant-4.webp',    style: 'top: 42vh; left: -14vw; width: 34vw; opacity: 0.48; rotate: 24deg; z-index: 10;',   speed: 0.65, blur: 6  },
-  { src: '/assets/images/plant-1.webp',    style: 'top: 68vh; right: -14vw; width: 38vw; opacity: 0.55; rotate: -30deg; z-index: 11;', speed: 0.82, blur: 10 },
+  { src: plant3,    style: 'top: -8vh; right: -10vw; width: 42vw; opacity: 0.11; rotate: 12deg; z-index: 0;',   speed: 0.1,  blur: 0  },
+  { src: plant5Tall,style: 'top: 8vh; right: -2vw; height: 130vh; width: auto; opacity: 0.2; rotate: 4deg; z-index: 1;', speed: 0.22, blur: 0  },
+  { src: plant1,    style: 'top: 62vh; left: -8vw; width: 30vw; opacity: 0.17; rotate: -16deg; z-index: 1;',    speed: 0.25, blur: 0  },
+  { src: plant6,    style: 'top: 38vh; right: 2vw; width: 22vw; opacity: 0.3; rotate: -9deg; z-index: 2;',      speed: 0.4,  blur: 2  },
+  { src: plant2,    style: 'top: 82vh; left: 1vw; width: 24vw; opacity: 0.28; rotate: 11deg; z-index: 2;',      speed: 0.42, blur: 2  },
+  { src: plant4,    style: 'top: 42vh; left: -14vw; width: 34vw; opacity: 0.48; rotate: 24deg; z-index: 10;',   speed: 0.65, blur: 6  },
+  { src: plant1,    style: 'top: 68vh; right: -14vw; width: 38vw; opacity: 0.55; rotate: -30deg; z-index: 11;', speed: 0.82, blur: 10 },
 ];
 
 const team = [
-  { image: '/assets/images/sasha-card-text-removed.webp', name: 'Sasha Dolby'   },
-  { image: '/assets/images/mike-card-text-removed.webp',  name: 'Michael Dolby' },
+  { image: sashaCard, name: 'Sasha Dolby'   },
+  { image: mikeCard,  name: 'Michael Dolby' },
 ];
 ---
 

@@ -7,6 +7,9 @@
  * Arrow buttons provided for desktop; touch/swipe works natively.
  */
 
+import { Image } from 'astro:assets';
+import holdingHand from '../assets/images/holding-hand.webp';
+
 const carouselImages = [
   { src: "https://picsum.photos/seed/ml-card-1/800/500", alt: "Placeholder image 1" },
   { src: "https://picsum.photos/seed/ml-card-2/800/500", alt: "Placeholder image 2" },
@@ -21,11 +24,13 @@ const carouselImages = [
   aria-label="Portfolio carousel"
 >
   <!-- Background image -->
-  <img
-    src="/assets/images/holding-hand.webp"
+  <Image
+    src={holdingHand}
+    width={1920}
     alt=""
     aria-hidden="true"
     class="absolute inset-0 w-full h-full object-cover object-center"
+    loading="lazy"
   />
 
   <!-- 4-edge vignette -->

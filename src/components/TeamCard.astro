@@ -1,6 +1,9 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
-  image: string;
+  image: ImageMetadata;
   name: string;
   phone?: string;
   phoneHref?: string;
@@ -20,7 +23,7 @@ const {
 ---
 
 <div class={`liquid-glass rounded-2xl inline-block ${cls}`}>
-  <img src={image} alt={`${name} contact card`} class="w-full h-auto block" />
+  <Image src={image} width={700} alt={`${name} contact card`} class="w-full h-auto block" loading="lazy" />
 
   <!-- <div class="absolute bottom-[2%] right-[2%] flex flex-col items-end gap-2 text-right">
 

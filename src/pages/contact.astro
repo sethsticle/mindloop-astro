@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/BaseV2.astro';
 import CTAV2 from '../components/CTAV2.astro';
+import { Image } from 'astro:assets';
+import tetheredAstronaut from '../assets/images/tethered-astronaut.png';
 
 const details = [
   { label: 'Michael Dolby', value: 'michael@mldmarketing.co.za', href: 'mailto:michael@mldmarketing.co.za' },
@@ -24,8 +26,10 @@ const inputCls = 'bg-transparent border-b border-border/50 text-foreground place
         drop-shadow lifts the dark tether rope off the black page background.
         z-index: 1 keeps it behind the text (z-2) and form card (z-3).
       -->
-      <img
-        src="/assets/images/tethered-astronaut.png"
+      <Image
+        src={tetheredAstronaut}
+        width={1600}
+        format="webp"
         alt=""
         aria-hidden="true"
         class="hidden md:block absolute pointer-events-none select-none"

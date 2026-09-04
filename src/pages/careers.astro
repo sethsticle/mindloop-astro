@@ -3,6 +3,12 @@ import Base from "../layouts/BaseV2.astro";
 import CTAV2 from "../components/CTAV2.astro";
 import ApplicationForm from "../components/ApplicationForm.astro";
 import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
+import careersHeroSrc from "../assets/images/careers-hero.webp";
+
+// Native file is 5472x3072 (16MP) - way past any hero display size, so cap
+// the built asset to a sane max width instead of shipping the raw upload.
+const careersHero = await getImage({ src: careersHeroSrc, width: 2400 });
 
 const DEPARTMENT_LABELS: Record<string, string> = {
   "social-media-content": "Social Media & Content",
@@ -38,10 +44,10 @@ const openJobs = (await getCollection("jobs"))
     <!-- Background image - bg-position is a Tailwind class (not inline style) so it can vary by breakpoint: right-focused on mobile, centered from md up -->
     <div
       class="absolute inset-0 h-full w-full bg-position-[75%_center] md:bg-[center_30%]"
-      style="
-        background-image: url('/assets/images/careers-hero.webp');
+      style={`
+        background-image: url('${careersHero.src}');
         background-size: cover;
-      "
+      `}
       aria-hidden="true">
     </div>
 

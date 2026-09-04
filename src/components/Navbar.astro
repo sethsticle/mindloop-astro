@@ -11,15 +11,40 @@ const links = [
   { label: "Open a Transmission", href: "/contact" },
   // { label: 'Projects', href: '/projects' },
 ];
+
+// The panel renders the CTA link as a filled pill button below a divider,
+// so it's split out of the numbered list rendered above it.
+const [ctaLink, ...navLinks] = [links[links.length - 1], ...links.slice(0, -1)];
+
+// Navbar carries the three highest-traffic profiles; the full set (+ LinkedIn,
+// TikTok) lives in FooterV2.astro. Bootstrap Icons brand paths, matching the
+// footer's icon set so the two never look like different icon libraries.
+const navSocials = [
+  {
+    label: "Instagram",
+    svg: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/></svg>`,
+    href: "https://www.instagram.com/mld_marketing_solutions/?hl=en",
+  },
+  {
+    label: "Facebook",
+    svg: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8a8 8 0 1 0-9.25 7.903V10.25H4.719V8H6.75V6.258c0-2.005 1.194-3.112 3.022-3.112.875 0 1.79.156 1.79.156v1.968h-1.008c-.993 0-1.304.617-1.304 1.25V8h2.219l-.355 2.25H9.25v5.653A8.003 8.003 0 0 0 16 8z"/></svg>`,
+    href: "https://www.facebook.com/MLDMarketingSolutions/",
+  },
+  {
+    label: "YouTube",
+    svg: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"/></svg>`,
+    href: "https://www.youtube.com/@mldmarketingsolutions",
+  },
+];
 ---
 
 <nav class="liquid-glass fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-8 pt-4 pb-4 md:px-16">
   <a href="/" class="mb-[3px] flex shrink-0 items-center justify-center gap-5 text-center">
     <!-- <Logo className="h-14 w-auto"/> -->
-    <LogoV2 imgClass="h-10 w-auto" />
+    <LogoV2 imgClass="h-6 md:h-8 lg:h-10 w-auto" />
   </a>
 
-  <div class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 text-sm md:flex">
+  <div class="nav:flex absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 text-sm">
     {
       links.map((l) => (
         <a href={l.href} class="text-muted-foreground hover:text-foreground whitespace-nowrap transition-colors">
@@ -30,29 +55,97 @@ const links = [
   </div>
 
   <div class="flex shrink-0 items-center gap-2">
-    <!-- Instagram -->
-    <a href="#" class="liquid-glass flex h-10 w-10 items-center justify-center rounded-full">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
-        <circle cx="12" cy="13" r="3"></circle>
+    {
+      navSocials.map((s) => (
+        <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} class="liquid-glass flex h-10 w-10 items-center justify-center rounded-full" set:html={s.svg} />
+      ))
+    }
+    <!-- Mobile menu toggle - hidden at nav: (1240px) where the inline link row takes over -->
+    <button
+      id="mobile-menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobile-menu-panel"
+      aria-label="Open menu"
+      class="liquid-glass nav:hidden flex h-10 w-10 items-center justify-center rounded-full">
+      <svg
+        id="menu-icon-open"
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+        <line x1="4" y1="7" x2="20" y2="7"></line>
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="17" x2="20" y2="17"></line>
       </svg>
-    </a>
-    <!-- Email -->
-    <a href="#" class="liquid-glass flex h-10 w-10 items-center justify-center rounded-full">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="4"></circle>
-        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+      <svg
+        id="menu-icon-close"
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="hidden">
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+        <line x1="18" y1="6" x2="6" y2="18"></line>
       </svg>
-    </a>
-    <!-- Send -->
-    <a href="#" class="liquid-glass flex h-10 w-10 items-center justify-center rounded-full">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m22 2-7 20-4-9-9-4Z"></path>
-        <path d="M22 2 11 13"></path>
-      </svg>
-    </a>
+    </button>
   </div>
 </nav>
+
+<!-- Mobile nav panel - backdrop dims + blurs the page, panel slides in from the
+     right. Solid `bg-card` on purpose: `.liquid-glass`'s background is almost
+     fully transparent (see global.css), which reads fine on a small pill but
+     would leave this full-height panel unreadable over scrolling content. -->
+<div id="mobile-menu-backdrop" class="nav:hidden pointer-events-none fixed inset-0 z-50 bg-black/70 opacity-0 backdrop-blur-sm transition-opacity duration-300"></div>
+<aside
+  id="mobile-menu-panel"
+  class="border-border bg-card nav:hidden fixed inset-y-0 right-0 z-[60] flex w-80 max-w-[85vw] translate-x-full flex-col overflow-hidden border-l transition-transform duration-300">
+  <!-- Ambient glow wash - purely decorative, echoes the brand teal used in stat cards / logo gradients -->
+  <div class="bg-brand-teal pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full opacity-[0.15] blur-3xl"></div>
+
+  <div class="relative flex items-center justify-between px-6 pt-8">
+    <span class="text-muted-foreground text-xs font-semibold tracking-[0.14em] uppercase">Menu</span>
+    <button id="mobile-menu-close" type="button" aria-label="Close menu" class="liquid-glass flex h-9 w-9 items-center justify-center rounded-full">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="relative flex flex-1 flex-col justify-center gap-0 px-6" aria-label="Mobile">
+    {
+      navLinks.map((l, i) => (
+        <a href={l.href} data-menu-item class="group border-border/40 hover:text-accent text-foreground flex items-baseline gap-4 border-b py-4 transition-colors">
+          <span class="text-muted-foreground group-hover:text-accent font-mono text-xs transition-colors">{String(i + 1).padStart(2, "0")}</span>
+          <span class="font-serif text-2xl italic transition-transform duration-300 group-hover:translate-x-1">{l.label}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <!-- inline transition-delay wins over the #mobile-menu-panel [data-menu-item]:nth-child(4)
+       rule in global.css, which would otherwise collide: this div is the 4th
+       child of #mobile-menu-panel (after the glow/header/nav siblings), same
+       position as the 4th nav link inside <nav>, but should land last -->
+  <div class="relative px-6 pb-10" data-menu-item style="transition-delay: 0.3s">
+    <a
+      href={ctaLink.href}
+      class="bg-foreground text-background flex w-full items-center justify-center rounded-full px-8 py-3 text-sm font-semibold tracking-wide whitespace-nowrap transition-transform hover:scale-[1.02] active:scale-[0.98]">
+      {ctaLink.label}
+    </a>
+  </div>
+</aside>
 
 <script>
   // Adds the .nav-scrolled pill (see global.css) once the user scrolls past the hero.
@@ -62,4 +155,40 @@ const links = [
     updateNav();
     window.addEventListener("scroll", updateNav, { passive: true });
   }
+
+  // Drives the mobile menu: toggles the slide-in panel, its backdrop, the
+  // hamburger/close icon swap, and the `.menu-open` class that staggers each
+  // [data-menu-item] in (see global.css for the per-item transition-delay).
+  // Locks page scroll while open. Closes on backdrop click, link click,
+  // the in-panel close button, or Escape.
+  const menuToggle = document.getElementById("mobile-menu-toggle");
+  const menuClose = document.getElementById("mobile-menu-close");
+  const menuPanel = document.getElementById("mobile-menu-panel");
+  const menuBackdrop = document.getElementById("mobile-menu-backdrop");
+  const iconOpen = document.getElementById("menu-icon-open");
+  const iconClose = document.getElementById("menu-icon-close");
+
+  const setMenuOpen = (open: boolean) => {
+    menuPanel?.classList.toggle("translate-x-0", open);
+    menuPanel?.classList.toggle("translate-x-full", !open);
+    menuPanel?.classList.toggle("menu-open", open);
+    menuBackdrop?.classList.toggle("opacity-100", open);
+    menuBackdrop?.classList.toggle("pointer-events-auto", open);
+    menuBackdrop?.classList.toggle("opacity-0", !open);
+    menuBackdrop?.classList.toggle("pointer-events-none", !open);
+    iconOpen?.classList.toggle("hidden", open);
+    iconClose?.classList.toggle("hidden", !open);
+    menuToggle?.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("overflow-hidden", open);
+  };
+
+  menuToggle?.addEventListener("click", () => {
+    setMenuOpen(!menuPanel?.classList.contains("translate-x-0"));
+  });
+  menuClose?.addEventListener("click", () => setMenuOpen(false));
+  menuBackdrop?.addEventListener("click", () => setMenuOpen(false));
+  menuPanel?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenuOpen(false)));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setMenuOpen(false);
+  });
 </script>

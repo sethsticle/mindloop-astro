@@ -4,6 +4,11 @@ import VideoAutoplay from "../components/VideoAutoplay.astro";
 import MissionV2 from "../components/MissionV2.astro";
 import CTAV2 from "../components/CTAV2.astro";
 import StatsGrid from "../components/StatsGrid.astro";
+import { Image } from "astro:assets";
+import avatar1 from "../assets/images/avatar-1.jpg";
+import avatar2 from "../assets/images/avatar-2.jpg";
+import avatar3 from "../assets/images/avatar-3.jpg";
+import solutionImg from "../assets/images/solution.webp";
 
 const platforms = [
   {
@@ -71,9 +76,9 @@ const faqs = [
     <div class="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 pt-28 pb-32 text-center md:pt-32">
       <div data-reveal class="mb-8 flex items-center gap-3">
         <div class="flex -space-x-2">
-          <img src="/assets/images/avatar-1.jpg" alt="" class="border-background h-8 w-8 rounded-full border-2" />
-          <img src="/assets/images/avatar-2.jpg" alt="" class="border-background h-8 w-8 rounded-full border-2" />
-          <img src="/assets/images/avatar-3.jpg" alt="" class="border-background h-8 w-8 rounded-full border-2" />
+          <Image src={avatar1} width={64} alt="" class="border-background h-8 w-8 rounded-full border-2" />
+          <Image src={avatar2} width={64} alt="" class="border-background h-8 w-8 rounded-full border-2" />
+          <Image src={avatar3} width={64} alt="" class="border-background h-8 w-8 rounded-full border-2" />
         </div>
         <span class="text-muted-foreground text-sm">60+ brands growing with MLD</span>
       </div>
@@ -208,8 +213,9 @@ const faqs = [
 
     <!-- Solution V2 — static image with edge gradient fade -->
     <div data-reveal data-delay="0.2" class="relative my-12 overflow-hidden rounded-2xl">
-      <img
-        src="/assets/images/solution.webp"
+      <Image
+        src={solutionImg}
+        width={1600}
         alt="GoHighLevel connecting social media platforms — a unified solution for client growth"
         class="aspect-[2/1] w-full rounded-2xl object-cover"
         loading="lazy"

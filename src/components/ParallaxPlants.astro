@@ -1,6 +1,9 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Plant {
-  src: string;
+  src: ImageMetadata;
   style: string;
   speed: number;
   blur: number;
@@ -9,16 +12,21 @@ interface Props {
   plants: Plant[];
 }
 const { plants } = Astro.props;
+
+// Plants render at 22-42vw, so a 1200px intrinsic width covers even a 4K
+// viewport - the source files ship at a native 2048x2048.
 ---
 
 {plants.map((p) => (
-  <img
+  <Image
     src={p.src}
+    width={1200}
     alt=""
     aria-hidden="true"
     data-parallax={String(p.speed)}
     class="fixed pointer-events-none select-none"
     style={`${p.style} filter: blur(${p.blur}px); will-change: transform;`}
+    loading="lazy"
   />
 ))}
 
