@@ -13,11 +13,27 @@
 interface Props {
   class?: string;
   noClip?: boolean;
+  /** Adds the teal/purple/orange nebula wash behind the stars (Local Legends brief). Off by default so other CTAV2 callers keep the plain starfield. */
+  nebula?: boolean;
 }
-const { class: className = '', noClip = false } = Astro.props;
+const { class: className = '', noClip = false, nebula = false } = Astro.props;
 ---
 
 <div class:list={['ctav2-host relative', { 'overflow-hidden': !noClip }, className]}>
+  {
+    nebula && (
+      // Static blurred radial gradients (teal/purple/orange) — cheaper than
+      // animating colour in the canvas, and reads as a "thick" wash sitting
+      // behind the existing star/comet layer rather than competing with it.
+      // rgba stops are the --color-brand-* hex values converted by hand so
+      // this stays pure Tailwind arbitrary-value utilities, no <style> block.
+      <div
+        class="pointer-events-none absolute inset-0 opacity-50 blur-[60px] saturate-150
+          bg-[radial-gradient(ellipse_60%_45%_at_15%_10%,rgba(12,169,158,0.55),transparent_70%),radial-gradient(ellipse_55%_50%_at_85%_15%,rgba(91,42,134,0.6),transparent_70%),radial-gradient(ellipse_50%_45%_at_25%_90%,rgba(246,148,34,0.4),transparent_70%),radial-gradient(ellipse_60%_55%_at_80%_85%,rgba(91,42,134,0.45),transparent_70%)]"
+        aria-hidden="true"
+      />
+    )
+  }
   <canvas
     data-ctav2-canvas
     class="absolute inset-0 w-full h-full pointer-events-none"
