@@ -5,9 +5,9 @@ import MissionV2 from "../components/MissionV2.astro";
 import CTAV2 from "../components/CTAV2.astro";
 import StatsGrid from "../components/StatsGrid.astro";
 import { Image } from "astro:assets";
-import avatar1 from "../assets/images/avatar-1.jpg";
-import avatar2 from "../assets/images/avatar-2.jpg";
-import avatar3 from "../assets/images/avatar-3.jpg";
+import avatar1 from "../assets/images/avatar-1.png";
+import avatar2 from "../assets/images/avatar-2.png";
+import avatar3 from "../assets/images/avatar-3.png";
 import solutionImg from "../assets/images/solution.webp";
 
 const platforms = [
@@ -73,18 +73,19 @@ const faqs = [
     <VideoAutoplay src="/assets/video/hero.mp4" class="absolute inset-0 z-0 h-full w-full object-cover" eager freeze />
     <div class="from-background absolute bottom-0 z-[1] h-64 w-full bg-linear-to-t from-10% to-transparent"></div>
 
-    <div class="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 pt-28 pb-32 text-center md:pt-32">
+    <div class="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 pt-28 pb-32 text-center md:pt-52">
       <div data-reveal class="mb-8 flex items-center gap-3">
         <div class="flex -space-x-2">
-          <Image src={avatar1} width={64} alt="" class="border-background h-8 w-8 rounded-full border-2" />
-          <Image src={avatar2} width={64} alt="" class="border-background h-8 w-8 rounded-full border-2" />
-          <Image src={avatar3} width={64} alt="" class="border-background h-8 w-8 rounded-full border-2" />
+          <Image src={avatar1} width={64} alt="" class="border-background h-8 w-8 lg:h-12 lg:w-12 rounded-full border-2" />
+          <Image src={avatar2} width={64} alt="" class="border-background h-8 w-8 lg:h-12 lg:w-12 rounded-full border-2" />
+          <Image src={avatar3} width={64} alt="" class="border-background h-8 w-8 lg:h-12 lg:w-12 rounded-full border-2" />
         </div>
         <span class="text-muted-foreground text-sm">60+ brands growing with MLD</span>
       </div>
 
       <h1 data-reveal data-delay="0.1" class="text-5xl leading-[1.05] font-medium tracking-[-2px] md:text-7xl lg:text-8xl">
-        Helping Ambitious Brands <br /><span class="font-serif font-normal italic">Reach New Frontiers</span>
+        Helping Ambitious Brands <br />
+        <span class="font-serif font-normal italic">Reach New Frontiers</span>
       </h1>
 
       <p data-reveal data-delay="0.2" class="mt-8 max-w-2xl py-2 text-lg" style="color: var(--color-hero-subtitle)">
@@ -109,43 +110,49 @@ const faqs = [
   <!-- ── Search Changed ────────────────────────────────────────────────── -->
   <section class="mx-auto max-w-6xl px-6 pt-52 pb-6 text-center md:px-12 md:pt-64 md:pb-9">
     <h2 data-reveal class="text-5xl leading-[1.05] font-medium tracking-[-2px] md:text-7xl lg:text-8xl">
-      Attention is earned, <span class="font-serif font-normal italic"><br />not bought.</span>
+      Attention is earned,{" "}
+      <span class="font-serif font-normal italic">
+        <br />
+        not bought.
+      </span>
     </h2>
     <p data-reveal data-delay="0.1" class="text-muted-foreground mx-auto mt-8 mb-24 max-w-2xl text-lg">
       The way brands build trust has shifted. The question is whether yours still reaches the right audience.
     </p>
 
     <div class="mb-20 grid gap-12 md:grid-cols-3 md:gap-8">
-      {
-        platforms.map(({ name, desc, svg }, i) => (
-          <div data-reveal data-delay={String(0.1 * i)} class="flex flex-col items-center">
-            <div class="liquid-glass-animated flex h-[200px] w-[200px] items-center justify-center rounded-3xl">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.25"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                set:html={svg}
-              />
-            </div>
-            <h3 class="mt-6 text-base font-semibold">{name}</h3>
-            <p class="text-muted-foreground mt-2 max-w-xs text-sm">{desc}</p>
+      {platforms.map(({ name, desc, svg }, i) => (
+        <div data-reveal data-delay={String(0.1 * i)} class="flex flex-col items-center">
+          <div class="liquid-glass-animated flex h-[200px] w-[200px] items-center justify-center rounded-3xl">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.25"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              set:html={svg}
+            />
           </div>
-        ))
-      }
+          <h3 class="mt-6 text-base font-semibold">{name}</h3>
+          <p class="text-muted-foreground mt-2 max-w-xs text-sm">{desc}</p>
+        </div>
+      ))}
     </div>
 
-    <p data-reveal class="text-muted-foreground text-sm">If you don't build the presence, someone else will.</p>
+    <p data-reveal class="text-muted-foreground text-sm">
+      If you don't build the presence, someone else will.
+    </p>
   </section>
 
   <!-- ── Stats ─────────────────────────────────────────────────────────── -->
   <section class="mx-auto max-w-6xl px-6 py-32 text-center md:px-12 md:py-44">
-    <p data-reveal class="text-muted-foreground text-xs tracking-[3px] uppercase">Results</p>
+    <p data-reveal class="text-muted-foreground text-xs tracking-[3px] uppercase">
+      Results
+    </p>
     <h2 data-reveal data-delay="0.1" class="mx-auto mt-6 max-w-3xl text-4xl leading-tight font-medium tracking-[-1px] md:text-6xl">
       Results that <span class="font-serif font-normal italic">speak</span> for themselves
     </h2>
@@ -197,7 +204,9 @@ const faqs = [
 
   <!-- ── Solution ──────────────────────────────────────────────────────── -->
   <section class="border-border/30 mx-auto max-w-7xl border-t px-6 py-32 md:px-12 md:py-44">
-    <p data-reveal class="text-muted-foreground text-center text-xs tracking-[3px] uppercase">Solution</p>
+    <p data-reveal class="text-muted-foreground text-center text-xs tracking-[3px] uppercase">
+      Solution
+    </p>
     <h2 data-reveal data-delay="0.1" class="mx-auto mt-6 max-w-4xl text-center text-4xl leading-tight font-medium tracking-[-1px] md:text-6xl">
       The engine room behind <span class="font-serif font-normal italic">every</span> mission
     </h2>
@@ -226,17 +235,18 @@ const faqs = [
     </div>
 
     <div class="grid gap-8 md:grid-cols-4">
-      {
-        solutionItems.map(({ title, desc }, i) => (
-          <div data-reveal data-delay={String(0.05 * i)}>
-            <h3 class="text-base font-semibold">{title}</h3>
-            <p class="text-muted-foreground mt-2 text-sm">{desc}</p>
-          </div>
-        ))
-      }
+      {solutionItems.map(({ title, desc }, i) => (
+        <div data-reveal data-delay={String(0.05 * i)}>
+          <h3 class="text-base font-semibold">{title}</h3>
+          <p class="text-muted-foreground mt-2 text-sm">{desc}</p>
+        </div>
+      ))}
     </div>
     <p data-reveal data-delay="0.3" class="mt-16 text-center">
-      <a href="/vision" class="text-muted-foreground hover:text-foreground border-border/50 hover:border-foreground border-b pb-1 text-sm transition-colors"> Explore the Engine Room → </a>
+      <a href="/vision" class="text-muted-foreground hover:text-foreground border-border/50 hover:border-foreground border-b pb-1 text-sm transition-colors">
+        {" "}
+        Explore the Engine Room →{" "}
+      </a>
     </p>
   </section>
 
@@ -252,8 +262,12 @@ const faqs = [
   <!-- ── CTA V2 — star-field + comet canvas, no logo ───────────────────── -->
   <CTAV2 class="border-border/30 border-t py-32 md:py-44">
     <div class="mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
-      <h2 data-reveal data-delay="0.1" class="font-serif text-5xl leading-tight italic md:text-6xl">Start Your Mission</h2>
-      <p data-reveal data-delay="0.2" class="text-muted-foreground mt-6 max-w-xl text-lg">Enter our orbit or open a transmission. Either way, it begins with a single, deliberate move.</p>
+      <h2 data-reveal data-delay="0.1" class="font-serif text-5xl leading-tight italic md:text-6xl">
+        Start Your Mission
+      </h2>
+      <p data-reveal data-delay="0.2" class="text-muted-foreground mt-6 max-w-xl text-lg">
+        Enter our orbit or open a transmission. Either way, it begins with a single, deliberate move.
+      </p>
       <div data-reveal data-delay="0.3" class="mt-10 flex flex-wrap justify-center gap-4">
         <a href="/contact" class="bg-foreground text-background inline-block rounded-lg px-8 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.03] active:scale-[0.98]">
           Board the Mothership
@@ -270,19 +284,19 @@ const faqs = [
        inferred from the case studies / About Us copy and should be reviewed
        with the client before treating as final. -->
   <section class="border-border/30 mx-auto max-w-4xl border-t px-6 py-32 md:px-12 md:py-44">
-    <p data-reveal class="text-muted-foreground text-center text-xs tracking-[3px] uppercase">Mission Control</p>
+    <p data-reveal class="text-muted-foreground text-center text-xs tracking-[3px] uppercase">
+      Mission Control
+    </p>
     <h2 data-reveal data-delay="0.1" class="mt-6 mb-16 text-center text-4xl leading-tight font-medium tracking-[-1px] md:text-6xl">
       Frequently asked <span class="font-serif font-normal italic">questions</span>
     </h2>
     <div class="divide-border/20 space-y-0 divide-y">
-      {
-        faqs.map(({ q, a }, i) => (
-          <div data-reveal data-delay={String(0.05 * i)} class="py-8">
-            <h3 class="text-lg font-semibold">{q}</h3>
-            <p class="text-muted-foreground mt-3 text-sm leading-relaxed">{a}</p>
-          </div>
-        ))
-      }
+      {faqs.map(({ q, a }, i) => (
+        <div data-reveal data-delay={String(0.05 * i)} class="py-8">
+          <h3 class="text-lg font-semibold">{q}</h3>
+          <p class="text-muted-foreground mt-3 text-sm leading-relaxed">{a}</p>
+        </div>
+      ))}
     </div>
   </section>
 </Base>

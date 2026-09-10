@@ -1,6 +1,25 @@
 ---
 import Logo from "./Logo.astro";
 import LogoV2 from "./LogoV2.astro";
+import { isVotingOpen } from "../lib/local-legends-config";
+
+// Promotional toggle for the temporary Local Legends competition. When true it
+// renders the angled wordmark button (desktop: beside the logo; mobile: top of the
+// slide-in panel); when false the navbar is the plain standard link menu with no
+// Local Legends entry at all.
+//
+// Driven by VOTING_CLOSES_AT (src/lib/local-legends-config.ts, 10 Dec 2026): the
+// promo shows while voting is open and auto-hides once it closes.
+// Evaluated at build time (static output), so it flips on the first deploy after
+// the deadline - deploys run on every Keystatic save and every push, so that lands
+// within a normal edit cycle, not exactly at midnight.
+//
+// When the competition is fully wrapped: delete the two gated blocks below and
+// restore `--breakpoint-nav` to 1240px in global.css (see LOCAL-LEGENDS.md
+// shutdown steps). Below `--breakpoint-nav` (1470px while the promo is live) the
+// desktop wordmark button is hidden and Local Legends stays reachable via the
+// wordmark at the top of the slide-in panel.
+const SHOW_LOCAL_LEGENDS_PROMO = isVotingOpen();
 
 const links = [
   { label: "Home", href: "/" },
@@ -9,6 +28,7 @@ const links = [
   { label: "Mission Log", href: "/portfolio" },
   { label: "Careers", href: "/careers" },
   { label: "Open a Transmission", href: "/contact" },
+
   // { label: 'Projects', href: '/projects' },
 ];
 
@@ -39,27 +59,38 @@ const navSocials = [
 ---
 
 <nav class="liquid-glass fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-8 pt-4 pb-4 md:px-16">
-  <a href="/" class="mb-[3px] flex shrink-0 items-center justify-center gap-5 text-center">
-    <!-- <Logo className="h-14 w-auto"/> -->
-    <LogoV2 imgClass="h-6 md:h-8 lg:h-10 w-auto" />
-  </a>
+  <div class="flex shrink-0 items-center gap-4 md:gap-18">
+    <a href="/" class="mb-[3px] flex shrink-0 items-center justify-center gap-5 text-center">
+      <!-- <Logo className="h-14 w-auto"/> -->
+      <LogoV2 imgClass="h-6 md:h-8 lg:h-10 w-auto" />
+    </a>
+
+    {/* Promotional Local Legends button - desktop only (nav: breakpoint up).
+        Bare wordmark styled as an angled sticker: tilted, drop-shadow lift,
+        straightens + lifts on hover. Remove this block when SHOW_LOCAL_LEGENDS_PROMO
+        is retired (see LOCAL-LEGENDS.md). */}
+    {SHOW_LOCAL_LEGENDS_PROMO && (
+      <a
+        href="/local-legends"
+        aria-label="Local Legends"
+        class="nav:block hidden shrink-0 -rotate-3 transition-transform duration-300 [filter:drop-shadow(0_5px_8px_rgba(0,0,0,0.45))] hover:rotate-0 hover:scale-105">
+        <img src="/assets/images/legends/local-legends-wordmark.png" alt="Local Legends" class="h-9 md:h-11 w-auto" />
+      </a>
+    )}
+  </div>
 
   <div class="nav:flex absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 text-sm">
-    {
-      links.map((l) => (
-        <a href={l.href} class="text-muted-foreground hover:text-foreground whitespace-nowrap transition-colors">
-          {l.label}
-        </a>
-      ))
-    }
+    {links.map((l) => (
+      <a href={l.href} class="text-muted-foreground hover:text-foreground whitespace-nowrap transition-colors">
+        {l.label}
+      </a>
+    ))}
   </div>
 
   <div class="flex shrink-0 items-center gap-2">
-    {
-      navSocials.map((s) => (
-        <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} class="liquid-glass flex h-10 w-10 items-center justify-center rounded-full" set:html={s.svg} />
-      ))
-    }
+    {navSocials.map((s) => (
+      <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} class="liquid-glass flex h-10 w-10 items-center justify-center rounded-full" set:html={s.svg} />
+    ))}
     <!-- Mobile menu toggle - hidden at nav: (1240px) where the inline link row takes over -->
     <button
       id="mobile-menu-toggle"
@@ -124,14 +155,32 @@ const navSocials = [
   </div>
 
   <nav class="relative flex flex-1 flex-col justify-center gap-0 px-6" aria-label="Mobile">
-    {
-      navLinks.map((l, i) => (
-        <a href={l.href} data-menu-item class="group border-border/40 hover:text-accent text-foreground flex items-baseline gap-4 border-b py-4 transition-colors">
-          <span class="text-muted-foreground group-hover:text-accent font-mono text-xs transition-colors">{String(i + 1).padStart(2, "0")}</span>
-          <span class="font-serif text-2xl italic transition-transform duration-300 group-hover:translate-x-1">{l.label}</span>
-        </a>
-      ))
-    }
+    {/* Promotional Local Legends item - mobile panel version. Presented as a
+        tinted, brand-yellow-bordered promo card sitting above the numbered links,
+        with a "Vote now" eyebrow and a pulsing live-vote dot to draw the eye.
+        Kept in the [data-menu-item] stagger. Remove when SHOW_LOCAL_LEGENDS_PROMO
+        is retired. */}
+    {SHOW_LOCAL_LEGENDS_PROMO && (
+      <a
+        href="/local-legends"
+        data-menu-item
+        aria-label="Local Legends - vote now"
+        class="border-brand-yellow/40 bg-brand-yellow/10 hover:border-brand-yellow hover:bg-brand-yellow/20 relative mb-6 flex flex-col gap-2 rounded-xl border px-4 py-4 transition duration-300 active:scale-[0.98]">
+        {/* Pulsing dot - live-vote signal. animate-ping is a Tailwind built-in. */}
+        <span class="absolute top-3.5 right-3.5 flex h-2.5 w-2.5">
+          <span class="bg-brand-teal absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
+          <span class="bg-brand-yellow relative inline-flex h-2.5 w-2.5 rounded-full"></span>
+        </span>
+        <span class="text-brand-yellow text-xs font-semibold tracking-[0.14em] uppercase">Vote now</span>
+        <img src="/assets/images/legends/local-legends-wordmark.png" alt="Local Legends" class="h-18 w-auto" />
+      </a>
+    )}
+    {navLinks.map((l, i) => (
+      <a href={l.href} data-menu-item class="group border-border/40 hover:text-accent text-foreground flex items-baseline gap-4 border-b py-4 transition-colors">
+        <span class="text-muted-foreground group-hover:text-accent font-mono text-xs transition-colors">{String(i + 1).padStart(2, "0")}</span>
+        <span class="font-serif text-2xl italic transition-transform duration-300 group-hover:translate-x-1">{l.label}</span>
+      </a>
+    ))}
   </nav>
 
   <!-- inline transition-delay wins over the #mobile-menu-panel [data-menu-item]:nth-child(4)

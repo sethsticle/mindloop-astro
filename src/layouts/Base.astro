@@ -9,6 +9,11 @@ interface Props {
 }
 
 const { title = 'Mindloop', description = 'A newsletter and content platform for meaningful ideas.' } = Astro.props;
+
+// Cloudflare Web Analytics beacon (production builds only). Public token, inlined.
+// Kept in step with BaseV2.astro - this layout is not currently imported by any
+// page, but the two shells should not drift.
+const cfBeaconToken = import.meta.env.PROD ? "a5103a08489b4ed0bdd9be5837541a63" : null;
 ---
 <!doctype html>
 <html lang="en">
@@ -26,5 +31,12 @@ const { title = 'Mindloop', description = 'A newsletter and content platform for
     <script src="/scripts/reveal.js" defer></script>
     <script src="/scripts/video-lazy.js" defer></script>
     <script src="/scripts/video-fade.js" defer></script>
+    {cfBeaconToken && (
+      <script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}
+      />
+    )}
   </body>
 </html>

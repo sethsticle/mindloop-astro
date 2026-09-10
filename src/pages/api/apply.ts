@@ -3,10 +3,9 @@ import { env } from "cloudflare:workers"; // CF Workers env access in Astro v6
 
 export const prerender = false; // static output mode, server this route only
 
-// CONFIGURE: must be a Resend-verified sender domain, and MLD's real inbox.
+// Resend-verified sender domain + MLD's live careers inbox.
 const FROM_ADDRESS = "admin@mldmarketing.co.za";
-// const TO_ADDRESS = "michael@mldmarketing.co.za";
-const TO_ADDRESS = "seth.hendrikz@gmail.com";
+const TO_ADDRESS = "michael@mldmarketing.co.za";
 
 // Keep in sync with MAX_RESUME_BYTES in ApplicationForm.astro - that check is
 // a UX shortcut only, this is the real enforcement (client checks are bypassable).

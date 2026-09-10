@@ -20,9 +20,9 @@ Download each file and place it at the path shown. Update the `src` attributes i
 
 | File | Source | Local path | Used in |
 |---|---|---|---|
-| `avatar-1.jpg` | `https://i.pravatar.cc/100?img=1` | `public/assets/images/avatar-1.jpg` | Hero avatar row |
-| `avatar-2.jpg` | `https://i.pravatar.cc/100?img=2` | `public/assets/images/avatar-2.jpg` | Hero avatar row |
-| `avatar-3.jpg` | `https://i.pravatar.cc/100?img=3` | `public/assets/images/avatar-3.jpg` | Hero avatar row |
+| `avatar-1.png` | `https://i.pravatar.cc/100?img=1` | `public/assets/images/avatar-1.jpg` | Hero avatar row |
+| `avatar-2.png` | `https://i.pravatar.cc/100?img=2` | `public/assets/images/avatar-2.jpg` | Hero avatar row |
+| `avatar-3.png` | `https://i.pravatar.cc/100?img=3` | `public/assets/images/avatar-3.jpg` | Hero avatar row |
 
 ## Favicon
 

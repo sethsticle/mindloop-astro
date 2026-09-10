@@ -10,6 +10,11 @@ interface Props {
 }
 
 const { title = 'MLD Marketing Solutions', description = 'Helping ambitious brands break free from the ordinary and reach new heights.' } = Astro.props;
+
+// Cloudflare Web Analytics beacon. The token is a public identifier (it ships in
+// page source), so it is inlined rather than kept as a secret. Loaded on
+// production builds only - omitted under `astro dev` to keep local runs quiet.
+const cfBeaconToken = import.meta.env.PROD ? "a5103a08489b4ed0bdd9be5837541a63" : null;
 ---
 <!doctype html>
 <html lang="en">
@@ -27,5 +32,12 @@ const { title = 'MLD Marketing Solutions', description = 'Helping ambitious bran
     <script src="/scripts/reveal.js" defer></script>
     <script src="/scripts/video-lazy.js" defer></script>
     <script src="/scripts/video-fade.js" defer></script>
+    {cfBeaconToken && (
+      <script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}
+      />
+    )}
   </body>
 </html>

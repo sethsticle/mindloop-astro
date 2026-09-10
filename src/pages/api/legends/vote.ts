@@ -29,13 +29,47 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: "Required fields missing." }, 400);
   }
 
+  // A real Turnstile token is well under 2KB - anything longer is junk/an attack.
+  if (turnstileToken.length > 2048) {
+    return json({ error: "Verification failed. Please try again." }, 400);
+  }
+
+  // Hostnames the Turnstile widget is served from - siteverify's `hostname` must
+  // be one of these. Keep in sync with the widget's Domains list in the Cloudflare
+  // dashboard (Turnstile -> widget -> Settings -> Domains). localhost entries are
+  // for local `npm run dev` testing and are harmless in prod (a token would have
+  // to be minted from a page actually served on localhost).
+  const ALLOWED_TURNSTILE_HOSTS = new Set([
+    "mldmarketing.co.za",
+    "www.mldmarketing.co.za",
+    "mindloop-astro.webdoordev.workers.dev",
+    "localhost",
+    "127.0.0.1",
+  ]);
+
+  // Passed to siteverify so Cloudflare can factor the client IP into scoring.
+  const clientIp = request.headers.get("CF-Connecting-IP") ?? "";
+  const verifyParams = new URLSearchParams({ secret: turnstileSecret, response: turnstileToken });
+  if (clientIp) verifyParams.set("remoteip", clientIp);
+
   const verify = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ secret: turnstileSecret, response: turnstileToken }),
+    body: verifyParams,
   });
-  const verifyBody = await verify.json().catch(() => ({})) as { success?: boolean };
-  if (!verifyBody.success) {
+  const verifyBody = (await verify.json().catch(() => ({}))) as {
+    success?: boolean;
+    action?: string;
+    hostname?: string;
+  };
+  // Three checks: token valid + issued for the vote widget (data-action="vote" in
+  // local-legends.astro) + served from a hostname we recognise.
+  if (
+    !verifyBody.success ||
+    verifyBody.action !== "vote" ||
+    !verifyBody.hostname ||
+    !ALLOWED_TURNSTILE_HOSTS.has(verifyBody.hostname)
+  ) {
     return json({ error: "Verification failed. Please try again." }, 400);
   }
 

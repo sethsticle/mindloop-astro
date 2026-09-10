@@ -104,3 +104,7 @@ Deleting the page is not the same as removing everything - do all of these:
    `TURNSTILE_SECRET_KEY` (`wrangler secret delete TURNSTILE_SECRET_KEY`) and
    `PUBLIC_TURNSTILE_SITE_KEY` (`wrangler.jsonc`)
 4. Remove `d1_databases` from `wrangler.jsonc` if the database itself was deleted in step 2
+5. Navbar promo: in `src/components/Navbar.astro` set `SHOW_LOCAL_LEGENDS_PROMO = false`
+   (or delete the two gated wordmark blocks outright), and restore
+   `--breakpoint-nav` to `1240px` in `src/styles/global.css` (raised to `1470px`
+   only to fit the wordmark button)

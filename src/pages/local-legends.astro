@@ -203,7 +203,7 @@ const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY;
           class="border-border/50 text-foreground placeholder:text-muted-foreground focus:border-foreground mb-6 w-full border-b bg-transparent py-3 transition-colors focus:outline-none"
         />
 
-        {turnstileSiteKey && <div class="cf-turnstile mb-6 w-full" data-sitekey={turnstileSiteKey} />}
+        {turnstileSiteKey && <div class="cf-turnstile mb-6 w-full" data-sitekey={turnstileSiteKey} data-action="vote" />}
 
         <button
           type="submit"
@@ -330,10 +330,13 @@ const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY;
       } else {
         status.textContent = data?.error || "Something went wrong. Please try again.";
         button.disabled = false;
+        // Turnstile tokens are single-use - mint a fresh one for the retry.
+        (window as any).turnstile?.reset();
       }
     } catch {
       status.textContent = "Something went wrong. Please try again.";
       button.disabled = false;
+      (window as any).turnstile?.reset();
     }
   });
 </script>

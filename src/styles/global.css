@@ -12,8 +12,11 @@
 
   /* Navbar's inline link row / mobile menu switch here instead of a stock
      breakpoint - the centered link row needs more room to avoid colliding
-     with the logo + social icons than `lg`/`xl` give it. */
-  --breakpoint-nav: 1240px;
+     with the logo + social icons than `lg`/`xl` give it.
+     Raised from 1240px to 1470px for the temporary Local Legends promo: the
+     wordmark button + its gap need the extra room or they overlap the centered
+     link row. Restore to 1240px when the promo is retired (see LOCAL-LEGENDS.md). */
+  --breakpoint-nav: 1470px;
 
   /* Monochrome palette */
   --color-background: hsl(0 0% 0%);
