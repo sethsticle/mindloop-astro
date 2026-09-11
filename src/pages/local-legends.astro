@@ -33,31 +33,12 @@ const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY;
 
   <!-- Starfield/comet canvas + teal/purple/orange nebula wash runs behind the whole page -->
   <CTAV2 noClip nebula>
-    <!-- Sponsor strip: MLD (host) + Alpine Volkswagen Hillcrest (partner sponsor) side by side, per the brief -->
-    <section class="mx-auto max-w-7xl px-8 pt-22 md:px-28 md:pt-26">
+    <!-- Local Legends watermark moved up here (was in the hero) - swapped with the sponsor strip so the VW Alpine lockup below carries the emphasis -->
+    <section class="mx-auto max-w-7xl px-8 pt-28 md:px-28 md:pt-26">
       <div data-reveal class="flex flex-col items-center gap-3">
-        <p class="text-muted-foreground text-xs tracking-[3px] uppercase">Presented by</p>
-        <!--
-          Both sponsor lockups share one shape (icon centered above a
-          single-line label, same image height, same text size/weight) so
-          the outer flex's items-end lines up the two text baselines instead
-          of drifting apart.
-        -->
-        <div class="-ml-8 flex items-end gap-8 md:gap-10">
-          <div class="flex flex-col items-center gap-1.5">
-            <img src="/mld-logo.png" alt="MLD Marketing Solutions logo" class="h-8 w-auto md:h-9" />
-            <span class="text-sm font-medium tracking-tight whitespace-nowrap">Marketing Solutions</span>
-          </div>
-          <span class="text-muted-foreground pb-1 text-lg font-light" aria-hidden="true">
-            ×
-          </span>
-          <div class="flex flex-col items-center gap-1.5">
-            <img src="/assets/images/legends/alpine-vw-hillcrest-icon.png" alt="Alpine Volkswagen Hillcrest logo" class="h-8 w-auto md:h-9" />
-            <span class="text-sm font-medium tracking-tight whitespace-nowrap">Alpine Hillcrest</span>
-          </div>
-        </div>
-        <!-- SA flag - the "South African linkage" the brief asked for, kept small rather than repainting the page -->
-        <img src="/assets/images/legends/sa-flag.png" alt="" aria-hidden="true" loading="lazy" class="mt-1 h-auto w-12" />
+        <img src="/assets/images/legends/local-legends-wordmark.png" alt="Local Legends" class="w-40 md:w-56" />
+        <!-- SA flag hidden for now, kept in markup in case it's wanted back -->
+        <img src="/assets/images/legends/sa-flag.png" alt="" aria-hidden="true" loading="lazy" class="mt-1 hidden h-auto w-12" />
       </div>
     </section>
 
@@ -72,10 +53,10 @@ const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY;
         class="pointer-events-none absolute top-2 -right-2 hidden w-28 rotate-[8deg] opacity-90 select-none sm:block md:top-6 md:right-4 md:w-46"
       /> -->
       <p data-reveal class="text-muted-foreground mb-8 text-xs tracking-[3px] uppercase">
-        Local Legends &middot; Community Vote
+        Sponsored by
       </p>
       <h1 data-reveal data-delay="0.05" class="mx-auto">
-        <img src="/assets/images/legends/local-legends-wordmark.png" alt="Local Legends" class="mx-auto w-56 md:w-122" />
+        <img src="/assets/images/legends/alpine-vw-hillcrest-white-hq.png" alt="Alpine Volkswagen Hillcrest" class="mx-auto h-38 w-auto md:h-60" />
       </h1>
       <p data-reveal data-delay="0.1" class="mx-auto mt-8 max-w-2xl text-xl leading-relaxed">
         Not all heroes wear jerseys. <span style={`color: var(--color-brand-teal)`}>On the field or off it</span>, our Legends wear their community proud.
@@ -196,43 +177,46 @@ const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY;
             </div>
           </div>
         ))}
+
+        <!-- Vote form fills the 2 leftover grid cells (7 legends into a 3-col grid): full row on mobile, the last cell at 2-col, cols 2+3 of the last row at 3-col -->
+        <form
+          id="vote"
+          data-vote-form
+          data-reveal
+          data-delay={String(0.05 * legends.length)}
+          class="liquid-glass flex w-full flex-col justify-center rounded-2xl p-8 sm:col-span-1 md:p-10 lg:col-span-2">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+          <input type="hidden" name="legendId" data-vote-legend-id value="" />
+
+          <p class="text-muted-foreground mb-2 text-xs tracking-widest uppercase">Voting for</p>
+          <p data-vote-legend-name class="mb-6 text-2xl font-medium tracking-[-0.5px]">
+            Choose a Legend above
+          </p>
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email Address"
+            required
+            class="border-border/50 text-foreground placeholder:text-muted-foreground focus:border-foreground mb-6 w-full border-b bg-transparent py-3 transition-colors focus:outline-none"
+          />
+
+          {turnstileSiteKey && <div class="cf-turnstile mb-6 w-full" data-sitekey={turnstileSiteKey} data-action="vote" />}
+
+          <button
+            type="submit"
+            disabled={!votingOpen}
+            class="bg-foreground text-background w-full rounded-full py-4 font-medium transition-transform hover:scale-[1.02] disabled:pointer-events-none disabled:opacity-40">
+            {votingOpen ? "Cast My Vote" : "Voting Closed"}
+          </button>
+
+          <p data-vote-status class="mt-4 hidden text-center text-sm"></p>
+        </form>
       </div>
     </section>
 
-    <!-- Vote panel -->
-    <section id="vote" class="mx-auto w-full max-w-4xl px-8 py-16 md:px-28 md:py-20">
-      <form data-vote-form data-reveal class="liquid-glass w-full rounded-3xl p-8 md:p-10">
-        <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
-        <input type="hidden" name="legendId" data-vote-legend-id value="" />
-
-        <p class="text-muted-foreground mb-2 text-xs tracking-widest uppercase">Voting for</p>
-        <p data-vote-legend-name class="mb-6 text-2xl font-medium tracking-[-0.5px]">
-          Choose a Legend above
-        </p>
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email Address"
-          required
-          class="border-border/50 text-foreground placeholder:text-muted-foreground focus:border-foreground mb-6 w-full border-b bg-transparent py-3 transition-colors focus:outline-none"
-        />
-
-        {turnstileSiteKey && <div class="cf-turnstile mb-6 w-full" data-sitekey={turnstileSiteKey} data-action="vote" />}
-
-        <button
-          type="submit"
-          disabled={!votingOpen}
-          class="bg-foreground text-background w-full rounded-full py-4 font-medium transition-transform hover:scale-[1.02] disabled:pointer-events-none disabled:opacity-40">
-          {votingOpen ? "Cast My Vote" : "Voting Closed"}
-        </button>
-
-        <p data-vote-status class="mt-4 hidden text-center text-sm"></p>
-      </form>
-    </section>
-
-    <!-- Rules / deadline -->
-    <section class="mx-auto max-w-xl px-8 pb-24 text-center md:px-28 md:pb-32">
+    <!-- Rules / deadline - full width now that the vote form moved into the gallery grid above -->
+    <section class="mx-auto max-w-7xl px-8 pb-24 text-center md:px-20 md:pb-32">
       <p data-reveal class="text-muted-foreground">
         <strong class="text-foreground">One vote per person.</strong> Watch as many videos as you like, then cast your vote for your Legend above.
       </p>

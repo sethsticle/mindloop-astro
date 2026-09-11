@@ -178,7 +178,7 @@ const navSocials = [
     {navLinks.map((l, i) => (
       <a href={l.href} data-menu-item class="group border-border/40 hover:text-accent text-foreground flex items-baseline gap-4 border-b py-4 transition-colors">
         <span class="text-muted-foreground group-hover:text-accent font-mono text-xs transition-colors">{String(i + 1).padStart(2, "0")}</span>
-        <span class="font-serif text-2xl italic transition-transform duration-300 group-hover:translate-x-1">{l.label}</span>
+        <span class="text-2xl font-medium tracking-[-0.5px] transition-transform duration-300 group-hover:translate-x-1">{l.label}</span>
       </a>
     ))}
   </nav>
