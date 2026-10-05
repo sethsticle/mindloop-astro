@@ -85,48 +85,6 @@ export default config({
       },
     }),
 
-    missionLogs: collection({
-      label: 'Mission Logs',
-      slugField: 'title',
-      path: 'src/content/mission-logs/*',
-      format: 'yaml',
-      schema: {
-        title: fields.slug({ name: { label: 'Title' } }),
-        client: fields.text({ label: 'Client' }),
-        type: fields.text({ label: 'Service Type', description: 'e.g. "Social Media & Video Content"' }),
-        year: fields.text({ label: 'Year', description: 'e.g. "Ongoing" or "2026"' }),
-        desc: fields.text({ label: 'Short Description', multiline: true }),
-        tags: fields.array(fields.text({ label: 'Tag' }), {
-          label: 'Tags',
-          itemLabel: (props) => props.value,
-        }),
-        img: fields.image({
-          label: 'Cover Image',
-          directory: 'public/assets/images/mission-logs',
-          publicPath: '/assets/images/mission-logs/',
-        }),
-        featured: fields.checkbox({ label: 'Featured', defaultValue: false }),
-        wide: fields.checkbox({ label: 'Wide Card', defaultValue: false }),
-        challenge: fields.text({ label: 'The Brief', multiline: true }),
-        solution: fields.text({ label: 'Our Approach', multiline: true }),
-        results: fields.array(
-          fields.object({
-            value: fields.text({ label: 'Value', description: 'e.g. "42%" or "TBD"' }),
-            label: fields.text({ label: 'Label' }),
-          }),
-          { label: 'Results', itemLabel: (props) => `${props.fields.value.value} - ${props.fields.label.value}` }
-        ),
-        gallery: fields.array(
-          fields.image({
-            label: 'Image',
-            directory: 'public/assets/images/mission-logs',
-            publicPath: '/assets/images/mission-logs/',
-          }),
-          { label: 'Gallery', itemLabel: (props) => props.value?.filename ?? 'Image' }
-        ),
-      },
-    }),
-
     legends: collection({
       label: 'Local Legends',
       slugField: 'name',

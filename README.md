@@ -70,8 +70,10 @@ Keystatic GitHub App on first sign-in. Saves commit to `main` and deploy
 immediately - there is no draft/review gate (see
 `PLAN.md` -> `decision-keystatic-no-branch-prefix`).
 
-Collections: **Jobs** (`src/content/jobs`), **Mission Logs**
-(`src/content/mission-logs`), **Local Legends** (`src/content/legends`).
+Collections: **Jobs** (`src/content/jobs`), **Local Legends** (`src/content/legends`).
+
+Mission logs are NOT in Keystatic: edit `src/data/mission-logs.ts` (images in
+`public/assets/images/mission-logs/<slug>/`) and redeploy.
 
 ---
 

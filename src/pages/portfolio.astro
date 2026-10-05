@@ -1,32 +1,27 @@
 ---
-import Base from '../layouts/BaseV2.astro';
-import CTAV2 from '../components/CTAV2.astro';
-import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
-import plant5Tall from '../assets/images/plant-5-tall.webp';
-import sittingAstronaught from '../assets/images/sitting-astronaught.webp';
+import Base from "../layouts/BaseV2.astro";
+import CTAV2 from "../components/CTAV2.astro";
+import { missionLogs as allLogs } from "../data/mission-logs";
+import { Image } from "astro:assets";
+import plant5Tall from "../assets/images/plant-5-tall.webp";
+import sittingAstronaught from "../assets/images/sitting-astronaught.webp";
 
-const missionLogs = (await getCollection('mission-logs')).map(entry => ({
-  slug: entry.id,
-  ...entry.data,
-}));
-const featured = missionLogs.find(log => log.featured) ?? missionLogs[0];
-const works = missionLogs.filter(log => log.slug !== featured.slug);
+// Archived (hidden) logs are excluded from the portfolio
+const missionLogs = allLogs.filter((log) => !log.hidden);
+const featured = missionLogs.find((log) => log.featured) ?? missionLogs[0];
+const works = missionLogs.filter((log) => log.slug !== featured.slug);
 
 const stats = [
-  { value: '10',    label: 'years in orbit' },
-  { value: '150+',  label: 'missions completed' },
-  { value: '60+',   label: 'brands growing with MLD' },
-  { value: '85%',   label: 'organic growth driven' },
+  { value: "10", label: "years in orbit" },
+  { value: "150+", label: "missions completed" },
+  { value: "60+", label: "brands growing with MLD" },
+  { value: "85%", label: "organic growth driven" },
 ];
-
 ---
 
 <Base title="Portfolio - MLD Marketing Solutions" description="Selected campaigns, brand strategies and digital projects from MLD Marketing Solutions.">
-
   <!-- Full-page wrapper anchors the tall stalk -->
   <div class="relative">
-
     <!-- Tall stalk — absolute, scrolls with page content -->
     <Image
       src={plant5Tall}
@@ -48,13 +43,16 @@ const stats = [
 
     <!-- Page content at z-5, above bg parallax plants, below fg parallax plants -->
     <div class="relative" style="z-index: 5;">
-
       <!-- Hero -->
       <section class="pt-44 md:pt-56 pb-20 px-8 md:px-28 max-w-7xl mx-auto">
-        <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">Mission Log</p>
+        <p data-reveal class="text-xs tracking-[3px] uppercase text-muted-foreground mb-8">
+          Mission Log
+        </p>
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
           <h1 data-reveal data-delay="0.05" class="text-6xl md:text-8xl font-medium tracking-[-2px] leading-[1.05]">
-            Missions that<br /><span class="font-serif italic font-normal">matter.</span>
+            Missions that
+            <br />
+            <span class="font-serif italic font-normal">matter.</span>
           </h1>
           <p data-reveal data-delay="0.15" class="text-lg text-muted-foreground max-w-sm leading-relaxed md:text-right pb-2">
             Social strategies, brand content, and campaigns built for ambitious brands. Organic growth over rented attention - always.
@@ -67,7 +65,9 @@ const stats = [
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map(({ value, label }, i) => (
             <div data-reveal data-delay={String(0.05 * i)}>
-              <p class="text-4xl md:text-5xl font-medium tracking-[-1px]" style="color: var(--color-accent)">{value}</p>
+              <p class="text-4xl md:text-5xl font-medium tracking-[-1px]" style="color: var(--color-brand-teal)">
+                {value}
+              </p>
               <p class="text-sm text-muted-foreground mt-1">{label}</p>
             </div>
           ))}
@@ -101,7 +101,7 @@ const stats = [
             <div class="p-8 md:p-12 grid md:grid-cols-3 gap-8 items-end">
               <div class="md:col-span-2">
                 <div class="flex flex-wrap gap-2 mb-4">
-                  {featured.tags.map(tag => (
+                  {featured.tags.map((tag) => (
                     <span class="px-3 py-1 rounded-full border border-border/40 text-xs text-muted-foreground">{tag}</span>
                   ))}
                 </div>
@@ -116,7 +116,8 @@ const stats = [
                 <div class="mt-6 inline-flex items-center gap-2 text-sm text-foreground group-hover:gap-3 transition-all">
                   <span>View mission log</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
                   </svg>
                 </div>
               </div>
@@ -133,9 +134,8 @@ const stats = [
               href={`/mission-logs/${slug}`}
               data-reveal
               data-delay={String(0.05 * i)}
-              class={`liquid-glass rounded-2xl overflow-hidden group hover:scale-[1.01] transition-transform ${wide ? 'lg:col-span-2' : ''}`}
-            >
-              <div class={`${wide ? 'aspect-[3/1]' : 'aspect-square'} relative overflow-hidden`}>
+              class={`liquid-glass rounded-2xl overflow-hidden group hover:scale-[1.01] transition-transform ${wide ? "lg:col-span-2" : ""}`}>
+              <div class={`${wide ? "aspect-[3/1]" : "aspect-square"} relative overflow-hidden`}>
                 <img src={img} alt={title} class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
               </div>
               <div class="p-6 flex items-end justify-between">
@@ -164,8 +164,6 @@ const stats = [
           </a>
         </div>
       </CTAV2>
-
     </div>
   </div>
-
 </Base>

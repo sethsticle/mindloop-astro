@@ -88,6 +88,9 @@ Pure HTML. `<video>` tag + 4-col feature grid. No interactivity.
 
 ## NOTE to KB
 
+### `decision-mindloop-mission-logs-out-of-keystatic` - Mission Logs moved from a Keystatic collection to `src/data/mission-logs.ts`
+Mission logs change a few times a year and the client never used the CMS for them, while Jobs/Legends stay in Keystatic. A typed TS array (comments, multi-line strings, build-time type errors) replaced the YAML collection and the zod schema; both the `keystatic.config.ts` and `content.config.ts` entries were removed together (the two-file rule applies to removal too). The flat `gallery: string[]` became named slots (`break`, `row[]` with optional `span: 2`) so layouts like Green Power's double-wide tile fit without index-guessing. `hidden: true` archives a log (MTN Cantel) from /portfolio and the detail route. Applies to any Keystatic collection that turns out to be rarely edited.
+
 ### `decision-hlsvideo-data-attr-pattern` - Pass src to HlsVideo via `data-hls-src` attribute, not `define:vars`
 `define:vars` forces `is:inline` on the script, which blocks npm imports. Using `data-hls-src` on the `<video>` element and reading it in a processed `<script>` block keeps the npm import path open and lets Astro deduplicate the script when multiple HlsVideo components appear on the same page.
 

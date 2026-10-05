@@ -1,24 +1,19 @@
 ---
 import BaseV2 from '../../layouts/BaseV2.astro';
-import { getCollection } from 'astro:content';
+import { missionLogs as allLogs, type MissionLog } from '../../data/mission-logs';
 
-const missionLogs = (await getCollection('mission-logs')).map(entry => ({
-  slug: entry.id,
-  ...entry.data,
-}));
+// Archived (hidden) logs get no page and are skipped by the "next" link
+const missionLogs = allLogs.filter(log => !log.hidden);
 
-export async function getStaticPaths() {
-  const entries = (await getCollection('mission-logs')).map(entry => ({
-    slug: entry.id,
-    ...entry.data,
-  }));
-  return entries.map(log => ({
+/** Builds one static page per visible mission log. */
+export function getStaticPaths() {
+  return allLogs.filter(log => !log.hidden).map(log => ({
     params: { slug: log.slug },
     props: { study: log },
   }));
 }
 
-interface Props { study: (typeof missionLogs)[number]; }
+interface Props { study: MissionLog; }
 const { study } = Astro.props;
 
 const currentIndex = missionLogs.findIndex(log => log.slug === study.slug);
@@ -45,7 +40,7 @@ const next = missionLogs[(currentIndex + 1) % missionLogs.length];
 
   <!-- Hero image -->
   <div class="mt-8 px-6 md:px-16 max-w-7xl mx-auto">
-    <div class="w-full aspect-[4/3] md:aspect-[21/9] rounded-2xl overflow-hidden">
+    <div class="w-full aspect-[4/3] md:aspect-[5/2] rounded-2xl overflow-hidden">
       <img
         src={study.img}
         alt={study.title}
@@ -117,18 +112,20 @@ const next = missionLogs[(currentIndex + 1) % missionLogs.length];
     </div>
   </section>
 
-  <!-- Full-width image break -->
-  <div class="mt-16 md:mt-20 px-6 md:px-16 max-w-7xl mx-auto">
-    <div class="w-full aspect-[4/3] md:aspect-[2/1] rounded-2xl overflow-hidden">
-      <img
-        src={study.gallery[0]}
-        alt=""
-        aria-hidden="true"
-        class="w-full h-full object-cover"
-        loading="lazy"
-      />
+  <!-- Full-width image break (hidden when the log has no break image) -->
+  {study.break && (
+    <div class="mt-16 md:mt-20 px-6 md:px-16 max-w-7xl mx-auto">
+      <div class="w-full rounded-2xl overflow-hidden">
+        <img
+          src={study.break}
+          alt=""
+          aria-hidden="true"
+          class="w-full h-auto"
+          loading="lazy"
+        />
+      </div>
     </div>
-  </div>
+  )}
 
   <!-- Our Approach -->
   <section class="mt-20 md:mt-28 px-6 md:px-16 max-w-7xl mx-auto">
@@ -146,31 +143,33 @@ const next = missionLogs[(currentIndex + 1) % missionLogs.length];
     </div>
   </section>
 
-  <!-- Gallery grid -->
-  <section class="mt-16 px-6 md:px-16 max-w-7xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div data-reveal class="aspect-[4/3] rounded-2xl overflow-hidden">
-        <img
-          src={study.gallery[1]}
-          alt=""
-          aria-hidden="true"
-          class="w-full h-full object-cover"
-          loading="lazy"
-        />
+  <!-- Image row: 3-column grid of 4:5 tiles; a span-2 tile fills the height of its neighbours on desktop -->
+  {study.row.length > 0 && (
+    <section class="mt-16 px-6 md:px-16 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {study.row.map(({ src, span }, i) => (
+          <div
+            data-reveal
+            data-delay={String(0.08 * i)}
+            class={span === 2
+              ? 'md:col-span-2 aspect-[15/8] md:aspect-auto rounded-2xl overflow-hidden'
+              : 'aspect-[4/5] rounded-2xl overflow-hidden'}
+          >
+            <img
+              src={src}
+              alt=""
+              aria-hidden="true"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        ))}
       </div>
-      <div data-reveal data-delay="0.08" class="aspect-[4/3] rounded-2xl overflow-hidden">
-        <img
-          src={study.gallery[2]}
-          alt=""
-          aria-hidden="true"
-          class="w-full h-full object-cover"
-          loading="lazy"
-        />
-      </div>
-    </div>
-  </section>
+    </section>
+  )}
 
-  <!-- Results -->
+  <!-- Results (hidden when empty) -->
+  {study.results.length > 0 && (
   <section class="mt-20 md:mt-28 px-6 md:px-16 max-w-7xl mx-auto">
     <p class="text-xs uppercase tracking-[3px] text-muted-foreground mb-10">Results</p>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -191,6 +190,7 @@ const next = missionLogs[(currentIndex + 1) % missionLogs.length];
       ))}
     </div>
   </section>
+  )}
 
   <!-- Next mission log -->
   <section class="mt-24 md:mt-36 px-6 md:px-16 max-w-7xl mx-auto border-t border-border/30 pt-12">
