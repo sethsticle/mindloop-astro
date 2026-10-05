@@ -15,13 +15,13 @@ for what to actually delete once the competition ends.
 2. Votes are the only dynamic part, stored in **Cloudflare D1** (`mindloop-astro-legends`
    database, `votes` table, `migrations/0001_votes.sql`). `email` is the table's
    `PRIMARY KEY` - that's the actual "one vote per person" enforcement, not app logic.
-3. A vote is **double opt-in**: `POST /api/legends/vote` (Turnstile check + deadline
-   check) writes a `pending` row and emails a confirm link via Resend. Only clicking
-   that link (`GET /api/legends/confirm?token=`) flips the row to `confirmed`. Only
-   `confirmed` rows count toward the leaderboard.
-4. Submitting again with the same email before confirming overwrites the pending
-   choice (changing your mind is allowed); submitting again *after* confirming is
-   rejected with "You've already voted."
+3. A vote counts instantly: `POST /api/legends/vote` (Turnstile check + deadline
+   check) writes the row straight in as `confirmed` - no email round-trip. This
+   replaced an earlier double opt-in (email confirm link) design; see
+   `git show beec4a8` ("auto confirm") for what changed and why.
+4. Submitting again with the same email is rejected with "You've already voted" -
+   `email` is the table's `PRIMARY KEY`, so there's no "change your mind" path
+   anymore.
 
 ## Config you'll actually touch
 
@@ -44,10 +44,22 @@ hasn't closed). Two ways to check anyway:
 
 **CLI**:
 ```bash
-# Confirmed vote count per Legend
+# Total confirmed vote count (all legends)
+npx wrangler d1 execute mindloop-astro-legends --remote --command="SELECT COUNT(*) as total_votes FROM votes WHERE status='confirmed'"
+
+# Confirmed vote count per legend
 npx wrangler d1 execute mindloop-astro-legends --remote --command="SELECT legend_id, COUNT(*) as votes FROM votes WHERE status='confirmed' GROUP BY legend_id ORDER BY votes DESC"
 
-# Every row, including who hasn't confirmed yet
+# List every confirmed voter, grouped by legend
+npx wrangler d1 execute mindloop-astro-legends --remote --command="SELECT legend_id, email, created_at FROM votes WHERE status='confirmed' ORDER BY legend_id, created_at"
+
+# List every confirmed voter for one specific legend
+npx wrangler d1 execute mindloop-astro-legends --remote --command="SELECT email, created_at FROM votes WHERE status='confirmed' AND legend_id='LEGEND_SLUG_HERE' ORDER BY created_at"
+
+# Look up a single voter by email
+npx wrangler d1 execute mindloop-astro-legends --remote --command="SELECT email, legend_id, status, created_at, confirmed_at FROM votes WHERE email='someone@example.com'"
+
+# Every row regardless of status (in practice all rows are 'confirmed' now - see "How voting works" above)
 npx wrangler d1 execute mindloop-astro-legends --remote --command="SELECT email, legend_id, status, created_at, confirmed_at FROM votes ORDER BY created_at DESC"
 ```
 
@@ -62,7 +74,7 @@ local `npm run dev` testing, not real votes).
 | Turnstile site key | Done | `wrangler.jsonc` `vars.PUBLIC_TURNSTILE_SITE_KEY` (public, committed) |
 | Turnstile secret key | Done | `wrangler secret put TURNSTILE_SECRET_KEY` (not in any file) |
 | Turnstile widget domains | Done | Cloudflare dashboard -> Turnstile -> widget -> Settings -> Domains. Currently allows both `mindloop-astro.webdoordev.workers.dev` and `mldmarketing.co.za` - add the eventual custom domain there too if it changes again |
-| Resend confirm-email sending | Reused from careers form | `RESEND_API_KEY` (already set) |
+| Resend confirm-email sending | **Removed** (see `git show beec4a8`) | Votes count instantly now, no email sent. `confirm_token` column is still written (`NOT NULL` from the old schema) but nothing reads it - `src/pages/api/legends/confirm.ts` no longer exists, so any pre-Sep-13 "Confirm your vote" email still in someone's inbox links to a dead route. Safe to ignore / tell them their vote already counted. |
 
 ### A pattern worth remembering for next time
 
