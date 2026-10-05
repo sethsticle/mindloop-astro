@@ -29,14 +29,9 @@ solution: >-
   engaging social media presence that drives brand awareness, encourages
   customer loyalty and keeps Shell Whetstone top-of-mind long after customers
   leave the forecourt.
-results:
-  - value: TBD
-    label: growth in local engagement
-  - value: TBD
-    label: increase in page reach
-  - value: TBD
-    label: community follower growth
-  - value: TBD
-    label: content pieces delivered
+results: []
 gallery:
-  - /assets/images/mission-logs/shell-whetstone-service-station/gallery/0.png
+  - /assets/images/mission-logs/shell-whetstone-service-station/gallery/0.webp
+  - /assets/images/mission-logs/shell-whetstone-service-station/gallery/1.webp
+  - /assets/images/mission-logs/shell-whetstone-service-station/gallery/2.webp
+  - /assets/images/mission-logs/shell-whetstone-service-station/gallery/3.webp
