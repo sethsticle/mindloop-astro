@@ -21,6 +21,7 @@
   "dependencies": {
     "@astrojs/cloudflare": "^13.5.3",
     "@astrojs/react": "^5.0.5",
+    "@astrojs/sitemap": "^3.7.4",
     "@fontsource/instrument-serif": "^5.2.8",
     "@fontsource/inter": "^5.2.8",
     "@keystatic/astro": "^5.0.6",
