@@ -95,15 +95,20 @@ const faqs = [
       <form
         data-reveal
         data-delay="0.3"
-        onsubmit="return false"
+        data-enquiry-form
         class="liquid-glass mt-10 flex w-full max-w-lg flex-col items-stretch gap-2 rounded-3xl p-2 sm:flex-row sm:items-center sm:rounded-full">
-        <input type="email" placeholder="Enter your email" class="text-foreground placeholder:text-muted-foreground min-w-0 flex-1 bg-transparent px-4 py-3 outline-none sm:py-2" />
+        <input type="hidden" name="kind" value="newsletter" />
+        <!-- Honeypot - hidden from real users, bots tend to fill every field -->
+        <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+        <input type="email" name="email" required placeholder="Enter your email" class="text-foreground placeholder:text-muted-foreground min-w-0 flex-1 bg-transparent px-4 py-3 outline-none sm:py-2" />
         <button
           type="submit"
           class="bg-foreground text-background rounded-full px-8 py-3 text-sm font-semibold tracking-wide whitespace-nowrap transition-transform hover:scale-[1.03] active:scale-[0.98]">
           ENTER OUR ORBIT
         </button>
       </form>
+      <p data-enquiry-status class="text-muted-foreground mt-4 hidden text-sm" role="status"></p>
+      <script is:inline src="/scripts/enquiry-form.js"></script>
     </div>
   </section>
 

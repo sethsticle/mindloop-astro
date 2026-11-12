@@ -6,7 +6,7 @@ import tetheredAstronaut from '../assets/images/tethered-astronaut.png';
 
 const details = [
   { label: 'Michael Dolby', value: 'michael@mldmarketing.co.za', href: 'mailto:michael@mldmarketing.co.za' },
-  { label: 'Sasha Dolby',   value: 'sasha@mldmarketing.co.za',   href: 'mailto:sasha@mldmarketing.co.za' },
+  { label: 'Lara',          value: 'lara@mldmarketing.co.za',    href: 'mailto:lara@mldmarketing.co.za' },
   { label: 'Call / WhatsApp', value: '071 939 7108',             href: 'https://wa.me/27719397108' },
 ];
 
@@ -70,18 +70,22 @@ const inputCls = 'bg-transparent border-b border-border/50 text-foreground place
           <form
             data-reveal
             data-delay="0.2"
-            onsubmit="return false"
+            data-enquiry-form
             class="liquid-glass rounded-3xl p-8 md:p-12 w-full max-w-lg"
           >
-            <input type="text"   placeholder="Your Name"       class={inputCls} />
-            <input type="email"  placeholder="Email Address"   class={inputCls} />
-            <textarea rows={4}   placeholder="Tell us about your mission" class={inputCls}></textarea>
+            <input type="hidden" name="kind" value="contact" />
+            <!-- Honeypot - hidden from real users, bots tend to fill every field -->
+            <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+            <input type="text"   name="name"    placeholder="Your Name"       required class={inputCls} />
+            <input type="email"  name="email"   placeholder="Email Address"   required class={inputCls} />
+            <textarea rows={4}   name="message" placeholder="Tell us about your mission" required class={inputCls}></textarea>
             <button
               type="submit"
               class="w-full bg-foreground text-background rounded-full py-4 font-medium hover:scale-[1.02] transition-transform"
             >
               Send Transmission
             </button>
+            <p data-enquiry-status class="hidden mt-4 text-sm text-muted-foreground" role="status"></p>
           </form>
         </div>
 
@@ -89,6 +93,8 @@ const inputCls = 'bg-transparent border-b border-border/50 text-foreground place
     </section>
 
   </CTAV2>
+
+  <script is:inline src="/scripts/enquiry-form.js"></script>
 
   <!-- Pull quote — creates natural breathing room above the footer -->
   <section class="py-24 md:py-32 border-t border-border/30 px-8 md:px-28 text-center">
