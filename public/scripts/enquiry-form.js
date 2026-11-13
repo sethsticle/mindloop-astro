@@ -7,7 +7,10 @@
   document.querySelectorAll('[data-enquiry-form]').forEach(function (form) {
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      var status = form.querySelector('[data-enquiry-status]');
+      // Status line lives inside the form on the contact page, but beside it on
+      // the homepage (the form there is a flex pill), so fall back to the parent.
+      var status = form.querySelector('[data-enquiry-status]') ||
+        form.parentElement.querySelector('[data-enquiry-status]');
       var button = form.querySelector('button[type="submit"]');
       if (!status || !button) return;
 
