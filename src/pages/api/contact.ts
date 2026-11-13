@@ -5,7 +5,7 @@ export const prerender = false; // static output mode, server this route only
 
 // Resend-verified sender domain + the inbox all site enquiries are routed to.
 const FROM_ADDRESS = "admin@mldmarketing.co.za";
-const TO_ADDRESS = "lara@mldmarketing.co.za";
+const TO_ADDRESSES = ["michael@mldmarketing.co.za", "lara@mldmarketing.co.za"];
 
 // Length caps - server-side enforcement so a scripted POST can't dump huge payloads into the inbox.
 const MAX_NAME = 120;
@@ -16,7 +16,7 @@ const MAX_MESSAGE = 5000;
  * Handles both public enquiry forms, told apart by the `kind` field:
  *   contact    - contact page (name, email, message)
  *   newsletter - homepage "Enter our orbit" box (email only)
- * Both are emailed to TO_ADDRESS via Resend, with reply_to set to the sender.
+ * Both are emailed to TO_ADDRESSES via Resend, with reply_to set to the sender.
  */
 export const POST: APIRoute = async ({ request }) => {
   const apiKey = env.RESEND_API_KEY;
@@ -61,7 +61,7 @@ export const POST: APIRoute = async ({ request }) => {
     },
     body: JSON.stringify({
       from: `MLD Website <${FROM_ADDRESS}>`,
-      to: [TO_ADDRESS],
+      to: TO_ADDRESSES,
       reply_to: email,
       subject,
       html: buildEmailHtml({ heading, source, name, email, message }),

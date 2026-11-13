@@ -5,7 +5,7 @@ export const prerender = false; // static output mode, server this route only
 
 // Resend-verified sender domain + MLD's live careers inbox.
 const FROM_ADDRESS = "admin@mldmarketing.co.za";
-const TO_ADDRESS = "michael@mldmarketing.co.za";
+const TO_ADDRESSES = ["michael@mldmarketing.co.za", "lara@mldmarketing.co.za"];
 
 // Keep in sync with MAX_RESUME_BYTES in ApplicationForm.astro - that check is
 // a UX shortcut only, this is the real enforcement (client checks are bypassable).
@@ -56,7 +56,7 @@ export const POST: APIRoute = async ({ request }) => {
     },
     body: JSON.stringify({
       from: `MLD Careers <${FROM_ADDRESS}>`,
-      to: [TO_ADDRESS],
+      to: TO_ADDRESSES,
       reply_to: email,
       subject: `Application: ${role} - ${name}`,
       html,
