@@ -5,7 +5,8 @@ export const prerender = false; // static output mode, server this route only
 
 // Resend-verified sender domain + the inbox all site enquiries are routed to.
 const FROM_ADDRESS = "admin@mldmarketing.co.za";
-const TO_ADDRESSES = ["michael@mldmarketing.co.za", "lara@mldmarketing.co.za"];
+// TEMP: webdoordev@gmail.com added for testing - remove once Michael confirms delivery.
+const TO_ADDRESSES = ["michael@mldmarketing.co.za", "lara@mldmarketing.co.za", "webdoordev@gmail.com"];
 
 // Length caps - server-side enforcement so a scripted POST can't dump huge payloads into the inbox.
 const MAX_NAME = 120;
